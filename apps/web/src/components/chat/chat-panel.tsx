@@ -1,0 +1,68 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Maximize2 } from "lucide-react";
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { useChat } from "@/stores/chat";
+import { ChatView } from "./chat-view";
+import { Sparkle } from "./sparkle";
+
+/** Floating button on every page → drawer on desktop, full-screen sheet on mobile (FR-18). */
+export function ChatPanel() {
+  const open = useChat((s) => s.open);
+  const setOpen = useChat((s) => s.setOpen);
+  const pathname = usePathname();
+  const onAskPage = pathname === "/ask";
+
+  return (
+    <>
+      {!onAskPage && (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open Ask TRIYU"
+          className="ai-gradient h-13 shadow-ai-from/30 fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full pl-4 pr-5 font-medium text-white shadow-xl transition-transform hover:scale-[1.03] sm:bottom-6 sm:right-6"
+        >
+          <Sparkle className="size-5" />
+          <span>Ask TRIYU</span>
+        </button>
+      )}
+      <Sheet open={open && !onAskPage} onOpenChange={setOpen}>
+        <SheetContent className="sm:max-w-[440px]" hideClose>
+          <div className="border-border flex h-14 items-center gap-2 border-b px-4">
+            <span className="ai-gradient flex size-7 items-center justify-center rounded-full text-white">
+              <Sparkle className="size-3.5" />
+            </span>
+            <div className="min-w-0">
+              <SheetTitle className="text-sm font-semibold">Ask TRIYU</SheetTitle>
+              <SheetDescription className="text-muted text-[11px]">
+                AI market assistant · demo mode
+              </SheetDescription>
+            </div>
+            <Link
+              href="/ask"
+              onClick={() => setOpen(false)}
+              className="text-muted hover:bg-surface-2 hover:text-text ml-auto rounded-lg p-2"
+              aria-label="Open full page"
+              title="Open full page"
+            >
+              <Maximize2 className="size-4" />
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="text-muted hover:bg-surface-2 hover:text-text rounded-lg p-2"
+              aria-label="Close Ask TRIYU"
+            >
+              <span aria-hidden className="text-lg leading-none">
+                ×
+              </span>
+            </button>
+          </div>
+          <ChatView autoFocus />
+        </SheetContent>
+      </Sheet>
+    </>
+  );
+}

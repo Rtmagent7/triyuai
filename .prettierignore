@@ -1,0 +1,6 @@
+node_modules
+.next
+pnpm-lock.yaml
+**/mocks/fixtures/**
+**/public/mockServiceWorker.js
+PRDProject1.md
