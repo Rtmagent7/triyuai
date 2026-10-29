@@ -8,7 +8,9 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
-    "fixtures": "node scripts/fetch-fixtures.ts"
+    "fixtures": "node scripts/fetch-fixtures.ts",
+    "test": "turbo run test",
+    "test:e2e": "pnpm --filter @triyuai/web test:e2e"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

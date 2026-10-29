@@ -93,12 +93,11 @@ export function StatsGrid({ coin }: { coin: CoinDetail }) {
 
 function Row({ label, value, extra }: { label: string; value: string; extra?: React.ReactNode }) {
   return (
-    <div className="border-border border-b py-3 last:border-0">
-      <div className="flex items-baseline justify-between gap-4">
-        <dt className="text-muted text-sm">{label}</dt>
-        <dd className="tabular text-right text-sm font-medium">{value}</dd>
-      </div>
-      {extra}
+    // dt/dd must be direct children of the row <div> for a valid <dl>.
+    <div className="border-border grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b py-3 last:border-0">
+      <dt className="text-muted text-sm">{label}</dt>
+      <dd className="tabular text-right text-sm font-medium">{value}</dd>
+      {extra && <dd className="col-span-2">{extra}</dd>}
     </div>
   );
 }

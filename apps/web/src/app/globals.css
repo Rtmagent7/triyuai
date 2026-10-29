@@ -2,23 +2,25 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Design tokens from PRD §14. Light is the default, `.dark` on <html> switches. */
+/* Design tokens from PRD §14. Light is the default, `.dark` on <html> switches.
+   Light muted/brand/up/down are darker than the PRD draft so text meets WCAG AA (≥ 4.5:1)
+   on both --bg and --surface; verified by the axe e2e suite. */
 :root {
   --bg: #ffffff;
   --surface: #f6f7f9;
   --surface-2: #eceef2;
   --border: #e3e6ec;
   --text: #0f172a;
-  --muted: #64748b;
-  --brand: #5b5bf7;
+  --muted: #5b6577;
+  --brand: #4f46e5;
   --brand-fg: #ffffff;
   --ai-from: #8b5cf6;
   --ai-to: #06b6d4;
-  --up: #16a34a;
-  --down: #dc2626;
-  --up-soft: rgb(22 163 74 / 0.12);
-  --down-soft: rgb(220 38 38 / 0.12);
-  --ring: #5b5bf7;
+  --up: #15803d;
+  --down: #c81e1e;
+  --up-soft: rgb(21 128 61 / 0.07);
+  --down-soft: rgb(200 30 30 / 0.07);
+  --ring: #4f46e5;
   color-scheme: light;
 }
 

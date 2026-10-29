@@ -30,7 +30,7 @@ export function formatPrice(
   } else if (abs >= 1) {
     options = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
   } else if (abs === 0) {
-    options = { maximumFractionDigits: 2 };
+    options = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
   } else {
     options = { maximumSignificantDigits: 4 };
   }

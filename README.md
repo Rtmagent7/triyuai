@@ -64,6 +64,34 @@ scripts/fetch-fixtures.ts snapshot generator (CoinGecko public API)
 - **Logos load from the CDN, not through `next/image` optimisation.** The `small` CoinGecko variants are tiny already, and proxying 250+ images would use up the Vercel Hobby image quota.
 - **The chart is lazy-loaded.** Lightweight Charts loads after first paint, which keeps the coin page at about 181 kB of first-load JS (budget: 200 kB).
 
+## Testing (Phase 2)
+
+| Layer | Tooling | What it covers |
+| --- | --- | --- |
+| Unit & component | Vitest, React Testing Library, MSW (Node) | Formatters, sanitizer, Binance client (fake WebSocket), mock data layer, chat engine, Zustand stores (incl. SSE streaming, stop, regenerate, quota), hooks, and every UI component. Coverage gate is ≥ 80% (currently ~98%). |
+| End-to-end | Playwright | The five flows from the PRD's 60-second demo script, plus pagination, converter URL state and 404. The Binance socket is replaced with `routeWebSocket` so live-price flashes are deterministic. |
+| Accessibility | axe-core in Playwright | 8 pages × dark/light against WCAG 2.2 AA (fails on serious/critical), the chat dialog's keyboard flow, and mobile overflow on every page. |
+| Performance & SEO | Lighthouse CI (mobile) | Home and coin page. Accessibility, Best Practices and SEO must reach ≥ 0.95 and CLS < 0.1; Performance ≥ 0.9 is a warning because shared runners are noisy. |
+
+```bash
+pnpm test                         # unit + component
+pnpm --filter @triyuai/web test:coverage
+pnpm build && pnpm test:e2e       # E2E against the production build
+# locally, reuse installed Chrome instead of downloading Chromium:
+E2E_CHANNEL=chrome pnpm test:e2e
+```
+
+CI (`.github/workflows/ci.yml`) runs three parallel jobs on every PR and on every push to `main`: quality, E2E + accessibility, and Lighthouse. Dependabot opens weekly update PRs.
+
+**Bugs the tests caught:**
+- Light-mode text contrast was below WCAG AA, so the light tokens are darker than the PRD draft.
+- The ⌘K "Clear" button sat inside an `aria-hidden` heading.
+- Converter selects announced the coin logo's alt text as part of their name.
+- `/highlights` and `/converter` overflowed horizontally on phones.
+- The mobile menu stayed open after navigating.
+- Compact currency formatting differed between Node 22 and browsers, which caused a hydration error.
+- Coin descriptions lost links whose `href` contained `'`.
+
 ## Known limitations (Phase 1)
 
 - No login or account sync yet. The watchlist and chat quota live in `localStorage`.

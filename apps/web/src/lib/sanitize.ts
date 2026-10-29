@@ -15,15 +15,16 @@ const decodeEntities = (s: string) =>
 
 const stripTags = (s: string) => decodeEntities(s.replace(/<[^>]*>/g, ""));
 
-const LINK = /<a\s[^>]*?href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+// The closing quote must match the opening one, so `href="…'…"` is captured whole.
+const LINK = /<a\s[^>]*?href\s*=\s*(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/gi;
 
 function inline(html: string) {
   let out = "";
   let last = 0;
   for (const m of html.matchAll(LINK)) {
     out += escape(stripTags(html.slice(last, m.index)));
-    const href = m[1]!;
-    const text = escape(stripTags(m[2]!));
+    const href = m[2]!;
+    const text = escape(stripTags(m[3]!));
     out += /^https?:\/\//i.test(href)
       ? `<a href="${escape(href)}" target="_blank" rel="noopener noreferrer nofollow">${text}</a>`
       : text;

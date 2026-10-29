@@ -4,7 +4,7 @@ import { Command } from "cmdk";
 import { Dialog } from "radix-ui";
 import { Clock, Loader2, Search, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { CoinSummary } from "@triyuai/shared";
 import { CoinLogo } from "@/components/coin/coin-logo";
 import { PercentBadge } from "@/components/coin/percent-badge";
@@ -14,7 +14,7 @@ import { useMoney } from "@/hooks/use-money";
 import { useRecentSearches } from "@/stores/recent-searches";
 import { useUi } from "@/stores/ui";
 
-/** FR-03: ⌘K / Ctrl+K coin search with trending + recent searches when empty. */
+/** FR-03: coin search with trending + recent searches when empty. Opened via CommandPaletteLoader. */
 export function CommandPalette() {
   const open = useUi((s) => s.paletteOpen);
   const setOpen = useUi((s) => s.setPaletteOpen);
@@ -26,17 +26,6 @@ export function CommandPalette() {
   const recent = useRecentSearches((s) => s.items);
   const addRecent = useRecentSearches((s) => s.add);
   const clearRecent = useRecentSearches((s) => s.clear);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setOpen(!useUi.getState().paletteOpen);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [setOpen]);
 
   const select = (coin: CoinSummary) => {
     addRecent(coin);
@@ -93,20 +82,7 @@ export function CommandPalette() {
               ) : (
                 <>
                   {recent.length > 0 && (
-                    <Command.Group
-                      heading={
-                        <span className="flex items-center justify-between">
-                          Recent
-                          <button
-                            type="button"
-                            onClick={clearRecent}
-                            className="hover:text-text text-[11px] normal-case"
-                          >
-                            Clear
-                          </button>
-                        </span>
-                      }
-                    >
+                    <Command.Group heading="Recent">
                       {recent.map((c) => (
                         <CoinItem
                           key={`r-${c.id}`}
@@ -115,6 +91,14 @@ export function CommandPalette() {
                           icon={<Clock className="text-muted size-3.5" />}
                         />
                       ))}
+                      {/* An item, not a heading button: cmdk hides headings from assistive tech. */}
+                      <Command.Item
+                        value="clear-recent-searches"
+                        onSelect={clearRecent}
+                        className="text-muted data-[selected=true]:bg-surface-2 cursor-pointer rounded-lg px-3 py-2 text-xs"
+                      >
+                        Clear recent searches
+                      </Command.Item>
                     </Command.Group>
                   )}
                   <Command.Group heading="Trending">

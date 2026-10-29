@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { useTheme } from "next-themes";
 import { Menu, Monitor, Moon, Search, Sun, UserRound } from "lucide-react";
 import { toast } from "sonner";
-import { currencies, type Currency } from "@triyuai/shared";
+import type { Currency } from "@triyuai/shared";
+import { currencies } from "@triyuai/shared/constants";
 import { Sparkle } from "@/components/chat/sparkle";
 import { Button } from "@/components/ui/button";
 import {
@@ -68,12 +70,15 @@ export function Navbar() {
             type="button"
             onClick={() => setPaletteOpen(true)}
             className="border-border bg-surface text-muted hover:text-text flex h-9 items-center gap-2 rounded-lg border px-2.5 text-sm transition-colors md:w-56"
-            aria-label="Search coins"
             aria-keyshortcuts="Control+K Meta+K"
           >
-            <Search className="size-4" />
-            <span className="hidden md:inline">Search coins…</span>
-            <kbd className="border-border bg-bg ml-auto hidden rounded border px-1.5 font-sans text-[11px] md:inline">
+            <Search className="size-4" aria-hidden />
+            {/* Visible text doubles as the accessible name (WCAG 2.5.3 label-in-name). */}
+            <span className="sr-only md:not-sr-only">Search coins…</span>
+            <kbd
+              aria-hidden
+              className="border-border bg-bg ml-auto hidden rounded border px-1.5 font-sans text-[11px] md:inline"
+            >
               ⌘K
             </kbd>
           </button>
@@ -149,8 +154,10 @@ function ThemeToggle() {
 }
 
 function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
+  // Controlled so the sheet closes when a link navigates (client navigation keeps it mounted).
+  const [open, setOpen] = useState(false);
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="-ml-2 lg:hidden" aria-label="Open menu">
           <Menu />
@@ -165,6 +172,7 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
               <Link
                 key={l.href}
                 href={l.href}
+                onClick={() => setOpen(false)}
                 aria-current={isActive(l.href) ? "page" : undefined}
                 className={cn(
                   "text-muted hover:bg-surface-2 hover:text-text rounded-lg px-3 py-2.5 font-medium",
@@ -176,7 +184,14 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
             ),
           )}
         </nav>
-        <Button variant="outline" className="mt-6 w-full" onClick={loginSoon}>
+        <Button
+          variant="outline"
+          className="mt-6 w-full"
+          onClick={() => {
+            setOpen(false);
+            loginSoon();
+          }}
+        >
           <UserRound /> Log in
         </Button>
       </SheetContent>
