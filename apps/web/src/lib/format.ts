@@ -26,7 +26,7 @@ export function formatPrice(
   const abs = Math.abs(v);
   let options: Intl.NumberFormatOptions;
   if (currency === "idr" && abs >= 100) {
-    options = { maximumFractionDigits: 0 };
+    options = { minimumFractionDigits: 0, maximumFractionDigits: 0 };
   } else if (abs >= 1) {
     options = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
   } else if (abs === 0) {
@@ -55,6 +55,9 @@ export function formatCompact(
     currency: currency.toUpperCase(),
     currencyDisplay: "narrowSymbol",
     notation: "compact",
+    // Explicit minimum: older ICU (Node 22 on Vercel) pads currency to 2 decimals ("$1.00B")
+    // while browsers don't ("$1B"), which breaks hydration.
+    minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(toCurrency(usd, currency, rates));
 }
@@ -70,6 +73,7 @@ export function formatMoney(
     style: "currency",
     currency: currency.toUpperCase(),
     currencyDisplay: "narrowSymbol",
+    minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(toCurrency(usd, currency, rates));
 }
