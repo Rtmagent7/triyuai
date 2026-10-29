@@ -36,7 +36,7 @@ jobs:
       - name: Dependency audit (informational)
         run: pnpm audit --prod --audit-level high
         continue-on-error: true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage
@@ -72,7 +72,7 @@ jobs:
         run: pnpm --filter @triyuai/api db:migrate
       - name: Unit, contract and integration tests (coverage ≥ 80%)
         run: pnpm --filter @triyuai/api test:coverage
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: api-coverage
@@ -95,7 +95,7 @@ jobs:
       - name: Install Playwright Chromium
         run: pnpm --filter @triyuai/web exec playwright install --with-deps chromium
       - run: pnpm --filter @triyuai/web test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report
@@ -120,7 +120,7 @@ jobs:
       - name: Lighthouse (mobile) on home and coin page
         working-directory: apps/web
         run: pnpm exec lhci autorun --config=./lighthouserc.cjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: lighthouse-report
