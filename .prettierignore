@@ -4,3 +4,4 @@ pnpm-lock.yaml
 **/mocks/fixtures/**
 **/public/mockServiceWorker.js
 PRDProject1.md
+apps/web/src/mocks/fixtures
