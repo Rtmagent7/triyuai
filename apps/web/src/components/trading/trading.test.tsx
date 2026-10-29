@@ -157,10 +157,11 @@ describe("ChartLegend", () => {
     expect(screen.getByText("61.23")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Settings for RSI 14" }));
-    const input = await screen.findByRole("spinbutton");
+    const input = await screen.findByRole("spinbutton", { name: "Length" });
     await userEvent.clear(input);
     await userEvent.type(input, "21");
     expect(useChartLayout.getState().indicators[1]!.params).toEqual([21]);
+    await userEvent.click(screen.getByRole("button", { name: "OK" }));
 
     await userEvent.click(screen.getByRole("button", { name: "Hide RSI 21" }));
     expect(useChartLayout.getState().indicators[1]!.hidden).toBe(true);
@@ -189,8 +190,6 @@ describe("DrawingToolbar", () => {
     const props = {
       tool: "cursor" as const,
       onTool: vi.fn(),
-      color: "#2962ff",
-      onColor: vi.fn(),
       hasSelection: false,
       onDeleteSelected: vi.fn(),
       onClear: vi.fn(),
@@ -199,8 +198,16 @@ describe("DrawingToolbar", () => {
     const { rerender } = render(<DrawingToolbar {...props} />);
     await userEvent.click(screen.getByRole("button", { name: "Fibonacci retracement" }));
     expect(props.onTool).toHaveBeenCalledWith("fib");
-    await userEvent.click(screen.getByRole("radio", { name: "Colour #ef4444" }));
-    expect(props.onColor).toHaveBeenCalledWith("#ef4444");
+    // Style for new drawings: palette colour, then width and dash.
+    await userEvent.click(screen.getByRole("button", { name: /New drawing colour/ }));
+    await userEvent.click(await screen.findByRole("radio", { name: "#f23645" }));
+    expect(useChartLayout.getState().drawingStyle.color).toBe("#f23645");
+    await userEvent.keyboard("{Escape}");
+    await userEvent.click(screen.getByRole("button", { name: /New drawing line/ }));
+    await userEvent.click(await screen.findByRole("radio", { name: "3px" }));
+    await userEvent.click(screen.getByRole("radio", { name: "Dotted" }));
+    expect(useChartLayout.getState().drawingStyle).toMatchObject({ width: 3, dash: "dotted" });
+    await userEvent.keyboard("{Escape}");
     expect(screen.getByRole("button", { name: "Delete selected drawing" })).toBeDisabled();
     await userEvent.click(screen.getByRole("button", { name: "Magnet" }));
     expect(useChartLayout.getState().magnet).toBe(true);

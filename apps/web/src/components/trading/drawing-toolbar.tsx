@@ -15,8 +15,8 @@ import {
 import { toolLabel, type DrawingTool } from "@/lib/ta/drawings";
 import { cn } from "@/lib/utils";
 import { useChartLayout } from "@/stores/chart-layout";
-
-export const DRAWING_COLORS = ["#2962ff", "#f59e0b", "#22c55e", "#ef4444", "#a855f7", "#64748b"];
+import { ColorPicker } from "./color-picker";
+import { LineStylePicker } from "./line-style-picker";
 
 const tools: [DrawingTool, typeof Slash, string][] = [
   ["cursor", MousePointer2, "Esc"],
@@ -34,8 +34,6 @@ const btn =
 type Props = {
   tool: DrawingTool;
   onTool: (t: DrawingTool) => void;
-  color: string;
-  onColor: (c: string) => void;
   hasSelection: boolean;
   onDeleteSelected: () => void;
   onClear: () => void;
@@ -46,6 +44,8 @@ type Props = {
 export function DrawingToolbar(p: Props) {
   const magnet = useChartLayout((s) => s.magnet);
   const toggleMagnet = useChartLayout((s) => s.toggleMagnet);
+  const style = useChartLayout((s) => s.drawingStyle);
+  const setStyle = useChartLayout((s) => s.setDrawingStyle);
 
   return (
     <div
@@ -81,31 +81,21 @@ export function DrawingToolbar(p: Props) {
         <span className="sr-only">Magnet</span>
       </button>
 
-      <div
-        className="flex shrink-0 items-center gap-0.5 px-1 sm:flex-col sm:py-1"
-        role="radiogroup"
-        aria-label="Drawing colour"
-      >
-        {DRAWING_COLORS.map((c) => (
-          <button
-            key={c}
-            type="button"
-            role="radio"
-            aria-checked={p.color === c}
-            aria-label={`Colour ${c}`}
-            onClick={() => p.onColor(c)}
-            // 24 px target (WCAG 2.5.8) around a 16 px swatch.
-            className="flex size-6 shrink-0 items-center justify-center rounded-full"
-          >
-            <span
-              className={cn(
-                "size-4 rounded-full ring-offset-2 ring-offset-[var(--bg)]",
-                p.color === c && "ring-text ring-2",
-              )}
-              style={{ background: c }}
-            />
-          </button>
-        ))}
+      {/* Style for new drawings; a selected drawing is edited from its floating toolbar. */}
+      <div className="flex shrink-0 items-center gap-1 px-0.5 sm:flex-col sm:py-1">
+        <ColorPicker
+          label="New drawing colour"
+          value={style.color}
+          onChange={(color) => setStyle({ color })}
+          className="size-9 border-transparent"
+        />
+        <LineStylePicker
+          label="New drawing line"
+          width={style.width}
+          dash={style.dash}
+          onChange={setStyle}
+          className="h-9 w-9 border-transparent px-1.5"
+        />
       </div>
 
       <button

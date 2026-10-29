@@ -97,3 +97,52 @@ test("coin page: compact chart opens the full chart; unlisted coins fall back", 
   await expect(page.getByRole("radiogroup", { name: "Range" })).toBeVisible();
   await expect(page.getByTestId("trading-chart")).toHaveCount(0);
 });
+
+test("detailed styling: drawing toolbar, drawing settings and indicator settings", async ({
+  page,
+}) => {
+  await page.goto("/chart/bitcoin");
+  await expect(page.getByTestId("ohlc-legend")).toBeVisible();
+  const box = await chartBox(page);
+
+  // Style for the next drawing from the left toolbar.
+  await page.getByRole("button", { name: /New drawing colour/ }).click();
+  await page.getByRole("radio", { name: "#f23645" }).click();
+  await page.keyboard.press("Escape");
+
+  await page.getByRole("button", { name: "Rectangle" }).click();
+  await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.3);
+  await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.5);
+
+  // The new drawing is selected: floating toolbar → settings dialog.
+  const options = page.getByRole("toolbar", { name: "Rectangle options" });
+  await expect(options).toBeVisible();
+  await options.getByRole("button", { name: "Drawing settings" }).click();
+  const dialog = page.getByRole("dialog", { name: "Rectangle settings" });
+  await dialog.getByRole("checkbox", { name: "Lock in place" }).check();
+  await dialog.getByRole("button", { name: "OK" }).click();
+
+  const stored = () =>
+    page.evaluate(
+      () => JSON.parse(localStorage.getItem("triyu:chart-layout")!).state.drawings.bitcoin[0],
+    );
+  await expect
+    .poll(stored)
+    .toMatchObject({ type: "rect", color: "#f23645", locked: true, fillOpacity: 0.15 });
+
+  await options.getByRole("button", { name: "Clone drawing" }).click();
+  await expect.poll(() => drawings(page, "bitcoin")).toBe(2);
+
+  // Indicator settings: inputs and style.
+  await page.getByRole("button", { name: "Indicators" }).click();
+  await page.getByRole("menu").getByText("Relative Strength Index", { exact: true }).click();
+  await page.getByText("RSI 14").hover();
+  await page.getByRole("button", { name: "Settings for RSI 14" }).click();
+  const rsi = page.getByRole("dialog");
+  await rsi.getByRole("spinbutton", { name: "Length" }).fill("21");
+  await rsi.getByRole("combobox", { name: "Source" }).selectOption("hl2");
+  await rsi.getByRole("tab", { name: "Style" }).click();
+  await rsi.getByRole("spinbutton", { name: "Level 2" }).fill("80");
+  await rsi.getByRole("button", { name: "OK" }).click();
+  await expect(page.getByText("RSI 21")).toBeVisible();
+});

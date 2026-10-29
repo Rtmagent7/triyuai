@@ -1,12 +1,13 @@
 "use client";
 
 import { Eye, EyeOff, Settings2, X } from "lucide-react";
-import { Popover } from "radix-ui";
+import { useState } from "react";
 import { formatCompactNumber } from "@/lib/format";
 import type { Bar } from "@/lib/ta/indicators";
 import { INDICATORS, type IndicatorConfig, type IndicatorOutput } from "@/lib/ta/registry";
 import { cn } from "@/lib/utils";
 import { useChartLayout } from "@/stores/chart-layout";
+import { IndicatorSettings } from "./indicator-settings";
 
 type Props = {
   title: string;
@@ -63,7 +64,6 @@ export function ChartLegend({ title, bars, index, computed, formatPrice, editabl
           editable={editable}
           onToggle={() => update(cfg.id, { hidden: !cfg.hidden })}
           onRemove={() => remove(cfg.id)}
-          onParams={(params) => update(cfg.id, { params })}
         />
       ))}
     </div>
@@ -78,7 +78,6 @@ function IndicatorRow({
   editable,
   onToggle,
   onRemove,
-  onParams,
 }: {
   cfg: IndicatorConfig;
   outputs?: IndicatorOutput[];
@@ -87,9 +86,9 @@ function IndicatorRow({
   editable: boolean;
   onToggle: () => void;
   onRemove: () => void;
-  onParams: (p: number[]) => void;
 }) {
   const def = INDICATORS[cfg.type];
+  const [settings, setSettings] = useState(false);
   const label = def.short(cfg.params);
   const fmt = (v: number) =>
     def.placement === "main"
@@ -100,20 +99,33 @@ function IndicatorRow({
 
   return (
     <div className={cn("group flex items-center gap-1.5", cfg.hidden && "opacity-50")}>
-      <span className="text-muted">{label}</span>
+      {editable ? (
+        <button
+          type="button"
+          onDoubleClick={() => setSettings(true)}
+          title="Double-click for settings"
+          className="text-muted hover:text-text pointer-events-auto"
+        >
+          {label}
+        </button>
+      ) : (
+        <span className="text-muted">{label}</span>
+      )}
       {!cfg.hidden &&
-        outputs?.map((o) => {
-          const v = o.values[index];
-          return (
-            <span
-              key={o.key}
-              className="tabular"
-              style={{ color: o.kind === "line" ? o.color : undefined }}
-            >
-              {v == null ? "–" : fmt(v)}
-            </span>
-          );
-        })}
+        outputs
+          ?.filter((o) => !o.hidden)
+          .map((o) => {
+            const v = o.values[index];
+            return (
+              <span
+                key={o.key}
+                className="tabular"
+                style={{ color: o.kind === "line" ? o.color : undefined }}
+              >
+                {v == null ? "–" : fmt(v)}
+              </span>
+            );
+          })}
       {editable && (
         <span className="flex items-center opacity-100 sm:opacity-0 sm:group-focus-within:opacity-100 sm:group-hover:opacity-100">
           <button
@@ -124,7 +136,14 @@ function IndicatorRow({
           >
             {cfg.hidden ? <EyeOff /> : <Eye />}
           </button>
-          {def.params.length > 0 && <ParamsPopover cfg={cfg} label={label} onParams={onParams} />}
+          <button
+            type="button"
+            className={iconBtn}
+            onClick={() => setSettings(true)}
+            aria-label={`Settings for ${label}`}
+          >
+            <Settings2 />
+          </button>
           <button
             type="button"
             className={iconBtn}
@@ -135,52 +154,7 @@ function IndicatorRow({
           </button>
         </span>
       )}
+      {settings && <IndicatorSettings cfg={cfg} onClose={() => setSettings(false)} />}
     </div>
-  );
-}
-
-function ParamsPopover({
-  cfg,
-  label,
-  onParams,
-}: {
-  cfg: IndicatorConfig;
-  label: string;
-  onParams: (p: number[]) => void;
-}) {
-  const def = INDICATORS[cfg.type];
-  return (
-    <Popover.Root>
-      <Popover.Trigger className={iconBtn} aria-label={`Settings for ${label}`}>
-        <Settings2 />
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          sideOffset={6}
-          align="start"
-          className="border-border bg-bg z-50 w-56 space-y-3 rounded-xl border p-3 text-sm shadow-xl"
-        >
-          <p className="font-medium">{def.name}</p>
-          {def.params.map((p, n) => (
-            <label key={p.label} className="flex items-center justify-between gap-3">
-              <span className="text-muted text-xs">{p.label}</span>
-              <input
-                type="number"
-                min={p.min}
-                max={p.max}
-                step={p.step ?? 1}
-                defaultValue={cfg.params[n]}
-                onChange={(e) => {
-                  const v = Number(e.target.value);
-                  if (!Number.isFinite(v) || v < p.min || v > p.max) return;
-                  onParams(cfg.params.map((x, k) => (k === n ? v : x)));
-                }}
-                className="border-border bg-surface h-8 w-20 rounded-md border px-2 text-right tabular-nums"
-              />
-            </label>
-          ))}
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
   );
 }

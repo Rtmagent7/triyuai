@@ -18,7 +18,14 @@ import {
 } from "lightweight-charts";
 import type { Anchor, Pt } from "@/lib/ta/drawings";
 import { heikinAshi, type Bar } from "@/lib/ta/indicators";
-import { INDICATORS, type IndicatorConfig, type IndicatorOutput } from "@/lib/ta/registry";
+import type { LineDash } from "@/lib/ta/colors";
+import {
+  INDICATORS,
+  levelsOf,
+  resolveOutputs,
+  type IndicatorConfig,
+  type IndicatorOutput,
+} from "@/lib/ta/registry";
 import { logicalToTime, timeToLogical } from "@/lib/ta/time-index";
 import type { ChartStyle, ScaleMode } from "@/stores/chart-layout";
 import { DrawingsPrimitive, withAlpha, type DrawingsState } from "./drawings-primitive";
@@ -36,6 +43,12 @@ export type ChartColors = {
 type IndicatorSeries = { id: string; outputs: { key: string; series: ISeriesApi<SeriesType> }[] };
 
 const t = (s: number) => s as UTCTimestamp;
+
+const LINE_STYLE: Record<LineDash, LineStyle> = {
+  solid: LineStyle.Solid,
+  dashed: LineStyle.Dashed,
+  dotted: LineStyle.Dotted,
+};
 
 /** Decimal places that keep ~5 significant digits (BTC → 2, PEPE → 9). */
 export function pricePrecision(price: number) {
@@ -64,7 +77,7 @@ export class ChartEngine {
   constructor(
     el: HTMLElement,
     private colors: ChartColors,
-    getDrawings: () => Omit<DrawingsState, "toScreen" | "background">,
+    getDrawings: () => Omit<DrawingsState, "toScreen" | "background" | "step">,
   ) {
     this.chart = createChart(el, {
       autoSize: true,
@@ -77,6 +90,7 @@ export class ChartEngine {
       ...getDrawings(),
       toScreen: (a) => this.toScreen(a),
       background: this.colors.background,
+      step: this.step,
     }));
     this.applyTheme(colors);
     this.createMain();
@@ -227,10 +241,7 @@ export class ChartEngine {
     for (const cfg of this.indicators) {
       this.computed.set(
         cfg.id,
-        INDICATORS[cfg.type].compute(this.bars, cfg.params, cfg, {
-          up: this.colors.up,
-          down: this.colors.down,
-        }),
+        resolveOutputs(this.bars, cfg, { up: this.colors.up, down: this.colors.down }),
       );
     }
   }
@@ -250,9 +261,9 @@ export class ChartEngine {
 
     let pane = 1;
     for (const cfg of this.indicators) {
-      if (cfg.hidden) continue;
       const def = INDICATORS[cfg.type];
-      const outputs = this.computed.get(cfg.id) ?? [];
+      const outputs = (this.computed.get(cfg.id) ?? []).filter((o) => !o.hidden);
+      if (cfg.hidden || !outputs.length) continue;
       const paneIndex = def.placement === "pane" ? pane++ : 0;
       const entry: IndicatorSeries = { id: cfg.id, outputs: [] };
       outputs.forEach((o, n) => {
@@ -276,15 +287,20 @@ export class ChartEngine {
               )
             : this.chart.addSeries(
                 LineSeries,
-                { ...base, color: o.color, lineWidth: 1 },
+                {
+                  ...base,
+                  color: o.color,
+                  lineWidth: (o.width ?? 1) as 1 | 2 | 3 | 4,
+                  lineStyle: LINE_STYLE[o.dash ?? "solid"],
+                },
                 paneIndex,
               );
         series.setData(o.values.flatMap((v, i) => (v == null ? [] : [this.point(o, i, v)])));
         if (n === outputs.length - 1)
-          def.levels?.forEach((price) =>
+          levelsOf(cfg).forEach((price) =>
             series.createPriceLine({
               price,
-              color: this.colors.muted,
+              color: cfg.levelColor ?? this.colors.muted,
               lineStyle: LineStyle.Dashed,
               lineWidth: 1,
               axisLabelVisible: false,

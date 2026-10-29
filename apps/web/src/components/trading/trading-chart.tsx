@@ -8,12 +8,15 @@ import { ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { binanceSymbol, intervalLabel, intervalSeconds } from "@/lib/ta/binance";
 import {
+  drawingDefaults,
   hitTest,
   moveDrawing,
   pointsNeeded,
   type Anchor,
   type Drawing,
+  type DrawingStyle,
   type DrawingTool,
+  type DrawingType,
   type Hit,
   type Pt,
 } from "@/lib/ta/drawings";
@@ -22,8 +25,10 @@ import { newDrawingId, useChartLayout } from "@/stores/chart-layout";
 import { ChartEngine, pricePrecision, type ChartColors } from "./chart-engine";
 import { ChartLegend } from "./chart-legend";
 import { ChartToolbar } from "./chart-toolbar";
-import { DRAWING_COLORS, DrawingToolbar } from "./drawing-toolbar";
+import { DrawingSettings } from "./drawing-settings";
+import { DrawingToolbar } from "./drawing-toolbar";
 import { textBox } from "./drawings-primitive";
+import { SelectionToolbar } from "./selection-toolbar";
 import { useKlines } from "./use-klines";
 
 type Props = {
@@ -51,6 +56,23 @@ const readColors = (): ChartColors => ({
 });
 
 type Drag = { original: Drawing; hit: Hit; from: Anchor; current: Drawing };
+/** A new drawing with the current style and per-type defaults. */
+const makeDrawing = (
+  type: DrawingType,
+  points: Anchor[],
+  st: DrawingStyle,
+  text?: string,
+): Drawing => ({
+  id: newDrawingId(),
+  type,
+  points,
+  ...drawingDefaults(type),
+  color: st.color,
+  width: st.width,
+  dash: st.dash,
+  ...(text != null ? { text } : {}),
+});
+
 type TextEdit = { x: number; y: number; anchor: Anchor; id?: string; value: string };
 
 /**
@@ -74,7 +96,8 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
   const container = useRef<HTMLDivElement>(null);
   const engine = useRef<ChartEngine | null>(null);
   const [tool, setTool] = useState<DrawingTool>("cursor");
-  const [color, setColor] = useState(DRAWING_COLORS[0]!);
+  const drawingStyle = useChartLayout((s) => s.drawingStyle);
+  const [settingsId, setSettingsId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [, setTick] = useState(0);
@@ -88,14 +111,14 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
     drawings,
     selectedId,
     tool,
-    color,
+    drawingStyle,
     magnet,
     preview: null as Drawing | null,
     placing: null as Anchor | null,
     drag: null as Drag | null,
     frame: 0,
   });
-  Object.assign(live.current, { drawings, selectedId, tool, color, magnet });
+  Object.assign(live.current, { drawings, selectedId, tool, drawingStyle, magnet });
 
   const lastClose = engine.current?.bars.at(-1)?.close ?? 1;
   const precision = pricePrecision(lastClose);
@@ -206,7 +229,7 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
       const d = list[i]!;
       const pts = d.points.map((a) => e.toScreen(a));
       if (pts.some((x) => !x)) continue;
-      const box = d.type === "text" ? textBox(d.text || "Note") : undefined;
+      const box = d.type === "text" ? textBox(d.text || "Note", d.fontSize) : undefined;
       // Text labels are drawn above their anchor.
       const probe = d.type === "text" ? { x: p.x, y: p.y + 2 } : p;
       const hit = hitTest(d, pts as Pt[], probe, width, box);
@@ -262,7 +285,7 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
         if (pointsNeeded[type] === 1) {
           if (type === "text") setTextEdit({ x: p.x, y: p.y, anchor, value: "" });
           else {
-            const d: Drawing = { id: newDrawingId(), type, points: [anchor], color: s.color };
+            const d = makeDrawing(type, [anchor], s.drawingStyle);
             addDrawing(coinId, d);
             setSelectedId(d.id);
           }
@@ -271,16 +294,11 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
         }
         if (!s.placing) {
           s.placing = anchor;
-          s.preview = { id: "preview", type, points: [anchor, anchor], color: s.color };
+          s.preview = { ...makeDrawing(type, [anchor, anchor], s.drawingStyle), id: "preview" };
           setPlacing(true);
           e.redrawDrawings();
         } else {
-          const d: Drawing = {
-            id: newDrawingId(),
-            type,
-            points: [s.placing, anchor],
-            color: s.color,
-          };
+          const d = makeDrawing(type, [s.placing, anchor], s.drawingStyle);
           s.placing = null;
           s.preview = null;
           setPlacing(false);
@@ -300,7 +318,6 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
       ev.stopPropagation();
       e.setInteractive(false);
       setSelectedId(found.d.id);
-      setColor(found.d.color);
       s.drag = { original: found.d, hit: found.hit, from, current: found.d };
       el.setPointerCapture?.(ev.pointerId);
     };
@@ -387,7 +404,7 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
     if (!full) return;
     const key = (ev: KeyboardEvent) => {
       const target = ev.target as HTMLElement | null;
-      if (target?.closest("input, textarea, [contenteditable=true]")) return;
+      if (target?.closest("input, textarea, select, [role=dialog], [contenteditable=true]")) return;
       if (ev.key === "Escape") {
         cancelPlacing();
         setSelectedId(null);
@@ -408,10 +425,21 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
     return () => window.removeEventListener("keydown", key);
   }, [full, cancelPlacing, deleteSelected, chooseTool]);
 
-  const pickColor = (c: string) => {
-    setColor(c);
-    const d = drawings.find((x) => x.id === selectedId);
-    if (d) updateDrawing(coinId, { ...d, color: c });
+  const selected = drawings.find((x) => x.id === selectedId) ?? null;
+  const settingsDrawing = drawings.find((x) => x.id === settingsId) ?? null;
+
+  const cloneSelected = () => {
+    if (!selected) return;
+    // Offset the copy by a few bars so it is visible next to the original.
+    const shift = 5 * (engine.current?.step ?? 3600);
+    const copy: Drawing = {
+      ...selected,
+      id: newDrawingId(),
+      locked: false,
+      points: selected.points.map((p) => ({ ...p, time: p.time + shift })),
+    };
+    addDrawing(coinId, copy);
+    setSelectedId(copy.id);
   };
 
   const saveText = () => {
@@ -424,13 +452,7 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
         else removeDrawing(coinId, d.id);
       }
     } else if (text) {
-      const d: Drawing = {
-        id: newDrawingId(),
-        type: "text",
-        points: [textEdit.anchor],
-        color,
-        text,
-      };
+      const d = makeDrawing("text", [textEdit.anchor], drawingStyle, text);
       addDrawing(coinId, d);
       setSelectedId(d.id);
     }
@@ -489,8 +511,6 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
           <DrawingToolbar
             tool={tool}
             onTool={chooseTool}
-            color={color}
-            onColor={pickColor}
             hasSelection={!!selectedId}
             onDeleteSelected={deleteSelected}
             onClear={clearAll}
@@ -532,6 +552,22 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
             <p className="text-muted absolute inset-0 flex items-center justify-center p-6 text-center text-sm">
               {pair} is not traded on Binance, so candles aren&apos;t available for this coin.
             </p>
+          )}
+          {full && selected && !textEdit && (
+            <SelectionToolbar
+              drawing={selected}
+              onChange={(d) => updateDrawing(coinId, d)}
+              onSettings={() => setSettingsId(selected.id)}
+              onClone={cloneSelected}
+              onDelete={deleteSelected}
+            />
+          )}
+          {settingsDrawing && (
+            <DrawingSettings
+              coinId={coinId}
+              drawing={settingsDrawing}
+              onClose={() => setSettingsId(null)}
+            />
           )}
           {textEdit && (
             <input

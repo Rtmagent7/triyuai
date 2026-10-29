@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { Interval } from "@/lib/ta/binance";
-import type { Drawing } from "@/lib/ta/drawings";
+import type { Drawing, DrawingStyle } from "@/lib/ta/drawings";
 import {
   defaultParams,
   OVERLAY_PALETTE,
@@ -22,6 +22,12 @@ type ChartLayoutState = {
   indicators: IndicatorConfig[];
   /** Drawings belong to one coin. */
   drawings: Record<string, Drawing[]>;
+  /** Style for the next drawing. */
+  drawingStyle: DrawingStyle;
+  /** Last custom colours picked, newest first. */
+  recentColors: string[];
+  setDrawingStyle: (patch: Partial<DrawingStyle>) => void;
+  addRecentColor: (color: string) => void;
   setInterval: (interval: Interval) => void;
   setStyle: (style: ChartStyle) => void;
   setScale: (scale: ScaleMode) => void;
@@ -46,6 +52,13 @@ export const useChartLayout = create<ChartLayoutState>()(
       magnet: false,
       indicators: [{ id: "volume", type: "volume", params: [] }],
       drawings: {},
+      drawingStyle: { color: "#2962ff", width: 2, dash: "solid" },
+      recentColors: [],
+      setDrawingStyle: (patch) => set({ drawingStyle: { ...get().drawingStyle, ...patch } }),
+      addRecentColor: (color) =>
+        set({
+          recentColors: [color, ...get().recentColors.filter((c) => c !== color)].slice(0, 10),
+        }),
       setInterval: (interval) => set({ interval }),
       setStyle: (style) => set({ style }),
       setScale: (scale) => set({ scale }),
@@ -96,14 +109,16 @@ export const useChartLayout = create<ChartLayoutState>()(
       version: 1,
       storage: createJSONStorage(() => localStorage),
       // Only read by client-only chart components, so it hydrates on creation.
-      partialize: ({ interval, style, scale, magnet, indicators, drawings }) => ({
+      partialize: ({
         interval,
         style,
         scale,
         magnet,
         indicators,
         drawings,
-      }),
+        drawingStyle,
+        recentColors,
+      }) => ({ interval, style, scale, magnet, indicators, drawings, drawingStyle, recentColors }),
     },
   ),
 );

@@ -9,16 +9,42 @@ import {
   type Bar,
   type Series,
 } from "./indicators";
+import { withAlpha, type LineDash } from "./colors";
 
 export type IndicatorType = "sma" | "ema" | "bb" | "vwap" | "volume" | "rsi" | "macd" | "stoch";
+
+export const SOURCES = ["close", "open", "high", "low", "hl2", "hlc3", "ohlc4"] as const;
+export type Source = (typeof SOURCES)[number];
+
+export const sourceLabel: Record<Source, string> = {
+  close: "Close",
+  open: "Open",
+  high: "High",
+  low: "Low",
+  hl2: "(H + L) / 2",
+  hlc3: "(H + L + C) / 3",
+  ohlc4: "(O + H + L + C) / 4",
+};
+
+/** Per-output style overrides from the settings dialog. */
+export type PlotStyle = { color?: string; width?: number; dash?: LineDash; hidden?: boolean };
 
 export type IndicatorConfig = {
   id: string;
   type: IndicatorType;
   params: number[];
-  /** Line colour for single-line overlays (SMA, EMA, VWAP). */
+  /** Line colour for single-line overlays (SMA, EMA, VWAP), set when added. */
   color?: string;
   hidden?: boolean;
+  /** Price input for price-based indicators (default close). */
+  source?: Source;
+  styles?: Record<string, PlotStyle>;
+  /** Histogram bar colours (Volume, MACD). */
+  upColor?: string;
+  downColor?: string;
+  /** Guide levels, e.g. RSI 30/70; defaults to the definition's. */
+  levels?: number[];
+  levelColor?: string;
 };
 
 export type IndicatorOutput = {
@@ -29,6 +55,9 @@ export type IndicatorOutput = {
   values: Series;
   /** Per-bar colours for histograms (volume, MACD). */
   colors?: string[];
+  width?: number;
+  dash?: LineDash;
+  hidden?: boolean;
 };
 
 type Param = { label: string; default: number; min: number; max: number; step?: number };
@@ -40,6 +69,8 @@ export type IndicatorDef = {
   /** main: drawn over price; volume: bottom of the price pane; pane: its own pane below. */
   placement: "main" | "volume" | "pane";
   params: Param[];
+  /** Has a "Source" input (close, hl2, …). */
+  usesSource?: boolean;
   /** Dashed guide lines in the indicator pane (e.g. RSI 30/70). */
   levels?: number[];
   short: (params: number[]) => string;
@@ -55,12 +86,30 @@ export type TaColors = { up: string; down: string };
 
 export const OVERLAY_PALETTE = ["#f59e0b", "#3b82f6", "#ec4899", "#14b8a6", "#a855f7", "#84cc16"];
 
-const closes = (bars: Bar[]) => bars.map((b) => b.close);
-const alpha = (hex: string, a: number) => {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
-};
-const toHex = (c: string) => (c.startsWith("#") && c.length === 7 ? c : "#888888");
+export function sourceValues(bars: Bar[], source: Source = "close"): number[] {
+  return bars.map((b) => {
+    switch (source) {
+      case "open":
+        return b.open;
+      case "high":
+        return b.high;
+      case "low":
+        return b.low;
+      case "hl2":
+        return (b.high + b.low) / 2;
+      case "hlc3":
+        return (b.high + b.low + b.close) / 3;
+      case "ohlc4":
+        return (b.open + b.high + b.low + b.close) / 4;
+      default:
+        return b.close;
+    }
+  });
+}
+
+const closes = (bars: Bar[], cfg?: IndicatorConfig) => sourceValues(bars, cfg?.source);
+const alpha = withAlpha;
+const toHex = (c: string) => (/^#[0-9a-f]{6}$/i.test(c) ? c : "#888888");
 
 export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
   sma: {
@@ -70,13 +119,14 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
     placement: "main",
     params: [{ label: "Length", default: 20, min: 1, max: 500 }],
     short: ([n]) => `SMA ${n}`,
+    usesSource: true,
     compute: (bars, [n], cfg) => [
       {
         key: "sma",
         label: `SMA ${n}`,
         kind: "line",
         color: cfg.color ?? OVERLAY_PALETTE[0]!,
-        values: sma(closes(bars), n!),
+        values: sma(closes(bars, cfg), n!),
       },
     ],
   },
@@ -87,13 +137,14 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
     placement: "main",
     params: [{ label: "Length", default: 50, min: 1, max: 500 }],
     short: ([n]) => `EMA ${n}`,
+    usesSource: true,
     compute: (bars, [n], cfg) => [
       {
         key: "ema",
         label: `EMA ${n}`,
         kind: "line",
         color: cfg.color ?? OVERLAY_PALETTE[1]!,
-        values: ema(closes(bars), n!),
+        values: ema(closes(bars, cfg), n!),
       },
     ],
   },
@@ -107,8 +158,9 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
       { label: "StdDev", default: 2, min: 0.5, max: 5, step: 0.1 },
     ],
     short: ([n, m]) => `BB ${n} ${m}`,
-    compute: (bars, [n, m]) => {
-      const b = bollinger(closes(bars), n!, m!);
+    usesSource: true,
+    compute: (bars, [n, m], cfg) => {
+      const b = bollinger(closes(bars, cfg), n!, m!);
       return [
         { key: "upper", label: "Upper", kind: "line", color: "#3b82f6", values: b.upper },
         { key: "mid", label: "Basis", kind: "line", color: "#f59e0b", values: b.mid },
@@ -159,8 +211,15 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
     params: [{ label: "Length", default: 14, min: 2, max: 100 }],
     levels: [30, 70],
     short: ([n]) => `RSI ${n}`,
-    compute: (bars, [n]) => [
-      { key: "rsi", label: "RSI", kind: "line", color: "#a855f7", values: rsi(closes(bars), n!) },
+    usesSource: true,
+    compute: (bars, [n], cfg) => [
+      {
+        key: "rsi",
+        label: "RSI",
+        kind: "line",
+        color: "#a855f7",
+        values: rsi(closes(bars, cfg), n!),
+      },
     ],
   },
   macd: {
@@ -175,8 +234,9 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
     ],
     levels: [0],
     short: ([f, s, g]) => `MACD ${f} ${s} ${g}`,
-    compute: (bars, [f, s, g], _cfg, c) => {
-      const m = macd(closes(bars), f!, s!, g!);
+    usesSource: true,
+    compute: (bars, [f, s, g], cfg, c) => {
+      const m = macd(closes(bars, cfg), f!, s!, g!);
       return [
         {
           key: "hist",
@@ -214,3 +274,24 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
 };
 
 export const defaultParams = (type: IndicatorType) => INDICATORS[type].params.map((p) => p.default);
+
+export const levelsOf = (cfg: IndicatorConfig) => cfg.levels ?? INDICATORS[cfg.type].levels ?? [];
+
+/** Computes an indicator and applies the user's style overrides (colours, widths, visibility). */
+export function resolveOutputs(
+  bars: Bar[],
+  cfg: IndicatorConfig,
+  theme: TaColors,
+): IndicatorOutput[] {
+  const colors = { up: cfg.upColor ?? theme.up, down: cfg.downColor ?? theme.down };
+  return INDICATORS[cfg.type].compute(bars, cfg.params, cfg, colors).map((o) => {
+    const st = cfg.styles?.[o.key];
+    return {
+      ...o,
+      color: st?.color ?? o.color,
+      width: st?.width ?? 1,
+      dash: st?.dash ?? "solid",
+      hidden: st?.hidden ?? false,
+    };
+  });
+}
