@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { serverApi } from "@/lib/api/server";
-import { formatPercent, formatPrice } from "@/lib/format";
+import { formatPrice, formatSignedPercent } from "@/lib/format";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -44,8 +44,9 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
           </div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 28 }}>
             <div style={{ fontSize: 96, fontWeight: 700 }}>{formatPrice(coin.price)}</div>
+            {/* Satori needs a single text child here, and its default font has no ▲/▼ glyphs. */}
             <div style={{ fontSize: 48, color: up ? "#22c55e" : "#ef4444" }}>
-              {up ? "▲" : "▼"} {formatPercent(coin.change24h)}
+              {`${formatSignedPercent(coin.change24h)} 24h`}
             </div>
           </div>
         </div>
