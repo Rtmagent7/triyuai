@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { chartRanges, chatToolNames, currencies } from "./constants";
+import { WATCHLIST_MAX, chartRanges, chatToolNames, currencies } from "./constants";
 
 /**
  * API contract for TRIYUAI (PRD §13). Prices are always in USD;
@@ -8,7 +8,7 @@ import { chartRanges, chatToolNames, currencies } from "./constants";
 
 export const metaSchema = z.object({
   fetchedAt: z.string(),
-  source: z.enum(["coingecko", "snapshot", "mock"]),
+  source: z.enum(["coingecko", "snapshot", "mock", "database"]),
   stale: z.boolean(),
 });
 export type Meta = z.infer<typeof metaSchema>;
@@ -170,3 +170,42 @@ export const chatStreamEventSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("error"), code: z.string(), message: z.string() }),
 ]);
 export type ChatStreamEvent = z.infer<typeof chatStreamEventSchema>;
+
+/* ---------- Accounts & watchlist (Phase 3) ---------- */
+
+/** CoinGecko ids: lowercase letters, digits and dashes. */
+export const coinIdSchema = z.string().regex(/^[a-z0-9][a-z0-9-]{0,99}$/, "Invalid coin id");
+
+export const passwordSchema = z
+  .string()
+  .min(8, "At least 8 characters")
+  .max(128, "At most 128 characters")
+  .regex(/[a-z]/, "Add a lowercase letter")
+  .regex(/[A-Z]/, "Add an uppercase letter")
+  .regex(/\d/, "Add a number");
+
+export const registerSchema = z.object({
+  name: z.string().trim().min(1, "Enter your name").max(50),
+  email: z.email("Enter a valid email").max(254).transform((e) => e.toLowerCase()),
+  password: passwordSchema,
+});
+export type RegisterInput = z.input<typeof registerSchema>;
+
+export const loginSchema = z.object({
+  email: z.email("Enter a valid email").max(254).transform((e) => e.toLowerCase()),
+  password: z.string().min(1, "Enter your password").max(128),
+});
+export type LoginInput = z.input<typeof loginSchema>;
+
+export const userSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  name: z.string(),
+  isDemo: z.boolean(),
+});
+export type User = z.infer<typeof userSchema>;
+
+export const watchlistSchema = z.array(coinIdSchema);
+export const watchlistMergeSchema = z.object({
+  coinIds: z.array(coinIdSchema).max(WATCHLIST_MAX),
+});

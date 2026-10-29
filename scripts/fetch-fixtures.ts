@@ -10,6 +10,18 @@
 import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import {
+  mapDetailExtras,
+  mapGlobal,
+  mapMarket,
+  mapRates,
+  mapTrending,
+  type RawDetail,
+  type RawGlobal,
+  type RawMarket,
+  type RawRates,
+  type RawTrending,
+} from "../packages/shared/src/coingecko.ts";
 
 const API = "https://api.coingecko.com/api/v3";
 const OUT = path.resolve(import.meta.dirname, "../apps/web/src/mocks/fixtures");
@@ -46,33 +58,6 @@ const sig = (n: number | null | undefined, digits = 6): number | null =>
 const json = (file: string, data: unknown) =>
   writeFile(path.join(OUT, file), JSON.stringify(data), "utf8");
 
-type RawMarket = {
-  id: string;
-  symbol: string;
-  name: string;
-  image: string;
-  current_price: number;
-  market_cap: number;
-  market_cap_rank: number | null;
-  fully_diluted_valuation: number | null;
-  total_volume: number;
-  high_24h: number | null;
-  low_24h: number | null;
-  circulating_supply: number | null;
-  total_supply: number | null;
-  max_supply: number | null;
-  ath: number | null;
-  ath_change_percentage: number | null;
-  ath_date: string | null;
-  atl: number | null;
-  atl_change_percentage: number | null;
-  atl_date: string | null;
-  sparkline_in_7d?: { price: number[] };
-  price_change_percentage_1h_in_currency?: number | null;
-  price_change_percentage_24h_in_currency?: number | null;
-  price_change_percentage_7d_in_currency?: number | null;
-};
-
 async function main() {
   await mkdir(path.join(OUT, "details"), { recursive: true });
   await mkdir(path.join(OUT, "charts"), { recursive: true });
@@ -87,95 +72,18 @@ async function main() {
       )),
     );
   }
-  const markets = raw.map((c, i) => ({
-    id: c.id,
-    symbol: c.symbol.toUpperCase(),
-    name: c.name,
-    image: c.image,
-    rank: c.market_cap_rank ?? i + 1,
-    price: sig(c.current_price) ?? 0,
-    change1h: sig(c.price_change_percentage_1h_in_currency, 4),
-    change24h: sig(c.price_change_percentage_24h_in_currency, 4),
-    change7d: sig(c.price_change_percentage_7d_in_currency, 4),
-    marketCap: c.market_cap,
-    volume24h: c.total_volume,
-    high24h: sig(c.high_24h),
-    low24h: sig(c.low_24h),
-    circulatingSupply: c.circulating_supply,
-    totalSupply: c.total_supply,
-    maxSupply: c.max_supply,
-    fdv: c.fully_diluted_valuation,
-    ath: sig(c.ath),
-    athDate: c.ath_date,
-    athChangePct: sig(c.ath_change_percentage, 4),
-    atl: sig(c.atl),
-    atlDate: c.atl_date,
-    atlChangePct: sig(c.atl_change_percentage, 4),
-    // Hourly 7d series → every 2nd point (84 points) is smooth enough for sparklines.
-    sparkline7d: (c.sparkline_in_7d?.price ?? [])
-      .filter((_, idx) => idx % 2 === 0)
-      .map((p) => sig(p, 5) ?? 0),
-  }));
+  const markets = raw.map((c, i) => mapMarket(c, i + 1, sig));
   await json("markets.json", markets);
 
   console.log("Fetching global stats…");
-  const g = await get<{
-    data: {
-      active_cryptocurrencies: number;
-      total_market_cap: Record<string, number>;
-      total_volume: Record<string, number>;
-      market_cap_percentage: Record<string, number>;
-      market_cap_change_percentage_24h_usd: number;
-      updated_at: number;
-    };
-  }>("/global");
-  await json("global.json", {
-    totalMarketCap: g.data.total_market_cap.usd,
-    marketCapChange24h: sig(g.data.market_cap_change_percentage_24h_usd, 4),
-    totalVolume24h: g.data.total_volume.usd,
-    btcDominance: sig(g.data.market_cap_percentage.btc, 4),
-    ethDominance: sig(g.data.market_cap_percentage.eth, 4),
-    activeCoins: g.data.active_cryptocurrencies,
-    updatedAt: new Date(g.data.updated_at * 1000).toISOString(),
-  });
+  await json("global.json", mapGlobal(await get<RawGlobal>("/global"), sig));
 
   console.log("Fetching trending…");
-  const t = await get<{
-    coins: {
-      item: {
-        id: string;
-        name: string;
-        symbol: string;
-        small: string;
-        market_cap_rank: number | null;
-        data?: { price?: number; price_change_percentage_24h?: { usd?: number } };
-      };
-    }[];
-  }>("/search/trending");
-  await json(
-    "trending.json",
-    t.coins.map(({ item }) => {
-      const m = markets.find((x) => x.id === item.id);
-      return {
-        id: item.id,
-        symbol: item.symbol.toUpperCase(),
-        name: item.name,
-        image: m?.image ?? item.small,
-        rank: item.market_cap_rank,
-        price: m?.price ?? sig(item.data?.price) ?? 0,
-        change24h: m?.change24h ?? sig(item.data?.price_change_percentage_24h?.usd, 4),
-      };
-    }),
-  );
+  const trending = await get<RawTrending>("/search/trending");
+  await json("trending.json", mapTrending(trending, markets, sig));
 
   console.log("Fetching exchange rates…");
-  const r = await get<{ rates: Record<string, { value: number }> }>("/exchange_rates");
-  const usd = r.rates.usd!.value;
-  await json("rates.json", {
-    usd: 1,
-    idr: sig(r.rates.idr!.value / usd),
-    eur: sig(r.rates.eur!.value / usd),
-  });
+  await json("rates.json", mapRates(await get<RawRates>("/exchange_rates"), sig));
 
   const detailed: string[] = [];
   for (const coin of markets.slice(0, DETAIL_COUNT)) {
@@ -190,40 +98,11 @@ async function main() {
     }
     console.log(`Fetching detail + charts for ${coin.id}…`);
     try {
-      const d = await get<{
-        description: { en: string };
-        categories: (string | null)[];
-        genesis_date: string | null;
-        links: {
-          homepage: string[];
-          whitepaper?: string;
-          blockchain_site: string[];
-          twitter_screen_name?: string;
-          subreddit_url?: string;
-          repos_url?: { github?: string[] };
-        };
-      }>(
+      const d = await get<RawDetail>(
         `/coins/${coin.id}?localization=false&tickers=false&market_data=false` +
           `&community_data=false&developer_data=false&sparkline=false`,
       );
-      await json(`details/${coin.id}.json`, {
-        description: d.description.en.trim(),
-        categories: d.categories.filter((c): c is string => !!c).slice(0, 8),
-        genesisDate: d.genesis_date,
-        links: {
-          homepage: d.links.homepage.find(Boolean) ?? null,
-          whitepaper: d.links.whitepaper || null,
-          explorers: d.links.blockchain_site.filter(Boolean).slice(0, 3),
-          twitter: d.links.twitter_screen_name
-            ? `https://x.com/${d.links.twitter_screen_name}`
-            : null,
-          reddit:
-            d.links.subreddit_url && d.links.subreddit_url !== "https://www.reddit.com"
-              ? d.links.subreddit_url
-              : null,
-          github: d.links.repos_url?.github?.find(Boolean) ?? null,
-        },
-      });
+      await json(`details/${coin.id}.json`, mapDetailExtras(d));
 
       // 1 day ≈ 5-min points, 90 days ≈ hourly, 365 days ≈ daily (keyless API caps history at 365 days). 7D/1M/3M/1Y are sliced from these.
       const charts: Record<string, [number, number][]> = {};
