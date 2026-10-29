@@ -30,7 +30,7 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
       }}
     >
       <div
-        style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 34, fontWeight: 700 }}
+        style={{ display: "flex", alignItems: "center", fontSize: 34, fontWeight: 700 }}
       >
         TRIYU<span style={{ color: "#7c7cff" }}>AI</span>
       </div>
