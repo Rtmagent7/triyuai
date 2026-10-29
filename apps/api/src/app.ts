@@ -50,7 +50,8 @@ export function createApp(deps: Deps) {
   app.use(cors({ origin: env.WEB_ORIGIN.split(","), credentials: true }));
   app.use(express.json({ limit: "32kb" }));
   app.use(cookieParser());
-  if (env.NODE_ENV !== "test") app.use(pinoHttp({ logger, autoLogging: { ignore: (req) => req.url === "/api/v1/health" } }));
+  if (env.NODE_ENV !== "test")
+    app.use(pinoHttp({ logger, autoLogging: { ignore: (req) => req.url === "/api/v1/health" } }));
 
   app.get("/", (_req, res) => res.redirect("/docs"));
   app.get("/api/v1/health", (_req, res) => {
@@ -62,7 +63,16 @@ export function createApp(deps: Deps) {
   app.get("/docs/init.js", (_req, res) => res.type("js").send(swaggerInit));
 
   const v1 = express.Router();
-  v1.use(rateLimit({ cache: deps.cache, logger, salt: env.IP_HASH_SALT, limit: 120, windowS: 60 }));
+  v1.use(
+    rateLimit({
+      cache: deps.cache,
+      logger,
+      salt: env.IP_HASH_SALT,
+      limit: 120,
+      windowS: 60,
+      internalKey: env.INTERNAL_API_KEY,
+    }),
+  );
   v1.use(optionalUser(deps.auth));
   v1.use(marketRoutes(deps.market));
   v1.use("/auth", authRoutes(deps.auth, deps.watchlist, env.NODE_ENV === "production"));

@@ -2,22 +2,27 @@
 
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { useEffect, useState } from "react";
 import { EmptyState, ErrorState } from "@/components/common/states";
 import { Button } from "@/components/ui/button";
 import { useCoinsByIds } from "@/hooks/queries";
 import { useLivePriceFeed } from "@/hooks/use-live-prices";
-import { useWatchlist } from "@/stores/watchlist";
+import { useWatchlistIds } from "@/hooks/use-watchlist";
 import { MarketTable } from "./market-table";
 
-/** FR-30: reuses the market table for the locally stored watchlist. */
+export function WatchlistSubtitle() {
+  const { signedIn } = useWatchlistIds();
+  return (
+    <p className="text-muted mt-1 text-sm">
+      {signedIn
+        ? "Coins you starred, synced to your account."
+        : "Coins you starred, saved on this device. Sign in to sync them across devices."}
+    </p>
+  );
+}
+
+/** FR-30/32: reuses the market table for the device or account watchlist. */
 export function WatchlistView() {
-  const ids = useWatchlist((s) => s.ids);
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(useWatchlist.persist.hasHydrated());
-    return useWatchlist.persist.onFinishHydration(() => setHydrated(true));
-  }, []);
+  const { ids, ready, isError, refetch } = useWatchlistIds();
 
   const query = useCoinsByIds(ids);
   // Drop coins removed since the last fetch (placeholder data) and order by rank.
@@ -26,7 +31,7 @@ export function WatchlistView() {
     .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
   useLivePriceFeed(coins);
 
-  if (!hydrated) return <MarketTable coins={[]} isLoading />;
+  if (!ready && !isError) return <MarketTable coins={[]} isLoading />;
   if (ids.length === 0)
     return (
       <div className="border-border rounded-2xl border border-dashed">
@@ -42,10 +47,10 @@ export function WatchlistView() {
         />
       </div>
     );
-  if (query.isError)
+  if (query.isError || isError)
     return (
       <ErrorState
-        onRetry={() => void query.refetch()}
+        onRetry={() => void (isError ? refetch() : query.refetch())}
         className="border-border rounded-2xl border"
       />
     );

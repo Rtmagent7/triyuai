@@ -1,5 +1,5 @@
 import request from "supertest";
-import { beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { apiResponse, userSchema } from "@triyuai/shared";
 import { DEMO_EMAIL, DEMO_WATCHLIST } from "../src/services/auth";
 import { createTestContext, type TestContext } from "./helpers";
@@ -23,7 +23,8 @@ describe("register & login", () => {
     expect(() => apiResponse(userSchema).parse(res.body)).not.toThrow();
     expect(res.body.data).toMatchObject({ name: "Rekha", isDemo: false });
     expect(res.body.data).not.toHaveProperty("passwordHash");
-    expect(cookieNames(res)).toEqual(["triyu_at", "triyu_rt"]);
+    expect(cookieNames(res)).toEqual(["triyu_at", "triyu_rt", "triyu_session"]);
+    expect(cookie(res, "triyu_session")).not.toMatch(/HttpOnly/);
     expect(cookie(res, "triyu_at")).toMatch(/HttpOnly/);
     expect(cookie(res, "triyu_at")).toMatch(/SameSite=Lax/);
     expect(cookie(res, "triyu_rt")).toMatch(/Path=\/api\/v1\/auth/);
@@ -74,7 +75,10 @@ describe("register & login", () => {
       .expect(200);
     expect(ok.body.data.email).toBe(u.email);
 
-    const wrong = await request(ctx.app).post("/api/v1/auth/login").send({ ...u, password: "Wrong1234" }).expect(401);
+    const wrong = await request(ctx.app)
+      .post("/api/v1/auth/login")
+      .send({ ...u, password: "Wrong1234" })
+      .expect(401);
     const unknown = await request(ctx.app)
       .post("/api/v1/auth/login")
       .send({ email: "ghost@example.com", password: "Whatever1" })
@@ -86,7 +90,10 @@ describe("register & login", () => {
     const u = newUser();
     await request(ctx.app).post("/api/v1/auth/register").send(u).expect(201);
     for (let i = 0; i < 10; i++) {
-      await request(ctx.app).post("/api/v1/auth/login").send({ ...u, password: "Wrong1234" }).expect(401);
+      await request(ctx.app)
+        .post("/api/v1/auth/login")
+        .send({ ...u, password: "Wrong1234" })
+        .expect(401);
     }
     const res = await request(ctx.app).post("/api/v1/auth/login").send(u).expect(429);
     expect(res.body.error.code).toBe("TOO_MANY_ATTEMPTS");
@@ -96,7 +103,10 @@ describe("register & login", () => {
 describe("session", () => {
   it("me requires a valid access token", async () => {
     await request(ctx.app).get("/api/v1/auth/me").expect(401);
-    await request(ctx.app).get("/api/v1/auth/me").set("Cookie", "triyu_at=forged.token.value").expect(401);
+    await request(ctx.app)
+      .get("/api/v1/auth/me")
+      .set("Cookie", "triyu_at=forged.token.value")
+      .expect(401);
 
     const agent = request.agent(ctx.app);
     await agent.post("/api/v1/auth/register").send(newUser()).expect(201);
@@ -108,19 +118,28 @@ describe("session", () => {
     const res = await request(ctx.app).post("/api/v1/auth/register").send(newUser()).expect(201);
     const first = cookie(res, "triyu_rt").split(";")[0]!;
 
-    const rotated = await request(ctx.app).post("/api/v1/auth/refresh").set("Cookie", first).expect(200);
+    const rotated = await request(ctx.app)
+      .post("/api/v1/auth/refresh")
+      .set("Cookie", first)
+      .expect(200);
     const second = cookie(rotated, "triyu_rt").split(";")[0]!;
     expect(second).not.toBe(first);
 
     // Replaying the first token revokes the whole family, including the newest token.
     await request(ctx.app).post("/api/v1/auth/refresh").set("Cookie", first).expect(401);
-    const after = await request(ctx.app).post("/api/v1/auth/refresh").set("Cookie", second).expect(401);
-    expect(cookieNames(after)).toEqual(["triyu_at", "triyu_rt"]); // cleared
+    const after = await request(ctx.app)
+      .post("/api/v1/auth/refresh")
+      .set("Cookie", second)
+      .expect(401);
+    expect(cookieNames(after)).toEqual(["triyu_at", "triyu_rt", "triyu_session"]); // cleared
   });
 
   it("rejects missing, unknown and expired refresh tokens", async () => {
     await request(ctx.app).post("/api/v1/auth/refresh").expect(401);
-    await request(ctx.app).post("/api/v1/auth/refresh").set("Cookie", "triyu_rt=unknown").expect(401);
+    await request(ctx.app)
+      .post("/api/v1/auth/refresh")
+      .set("Cookie", "triyu_rt=unknown")
+      .expect(401);
 
     const res = await request(ctx.app).post("/api/v1/auth/register").send(newUser()).expect(201);
     await ctx.db.refreshToken.updateMany({
@@ -162,7 +181,10 @@ describe("demo account", () => {
 
   it("cannot be entered with a password", async () => {
     await request(ctx.app).post("/api/v1/auth/demo").expect(200);
-    await request(ctx.app).post("/api/v1/auth/login").send({ email: DEMO_EMAIL, password: "Anything1" }).expect(401);
+    await request(ctx.app)
+      .post("/api/v1/auth/login")
+      .send({ email: DEMO_EMAIL, password: "Anything1" })
+      .expect(401);
   });
 });
 
@@ -211,22 +233,42 @@ describe("watchlist", () => {
     await agent.post("/api/v1/watchlist/merge").send({ coinIds: ids }).expect(200);
     const full = await agent.post("/api/v1/watchlist").send({ coinId: "one-more" }).expect(422);
     expect(full.body.error.code).toBe("WATCHLIST_FULL");
-    const merged = await agent.post("/api/v1/watchlist/merge").send({ coinIds: ["one-more"] }).expect(200);
+    const merged = await agent
+      .post("/api/v1/watchlist/merge")
+      .send({ coinIds: ["one-more"] })
+      .expect(200);
     expect(merged.body.data).toHaveLength(100);
   });
 });
 
 describe("rate limiting", () => {
   it("allows 120 requests per minute per client, then 429", async () => {
-    const ip = "203.0.113.9";
-    let last!: request.Response;
-    for (let i = 0; i < 121; i++) {
-      last = await request(ctx.app).get("/api/v1/rates").set("X-Forwarded-For", ip);
+    // Pin the clock mid-window so a slow run cannot cross into the next minute.
+    vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-01-01T00:00:10Z") });
+    try {
+      const ip = "203.0.113.9";
+      let last!: request.Response;
+      for (let i = 0; i < 121; i++) {
+        last = await request(ctx.app).get("/api/v1/rates").set("X-Forwarded-For", ip);
+      }
+      expect(last.status).toBe(429);
+      expect(last.body.error.code).toBe("RATE_LIMITED");
+      expect(last.headers["retry-after"]).toBe("50");
+      // Other clients are unaffected.
+      await request(ctx.app).get("/api/v1/rates").set("X-Forwarded-For", "203.0.113.10").expect(200);
+    } finally {
+      vi.useRealTimers();
     }
-    expect(last.status).toBe(429);
-    expect(last.body.error.code).toBe("RATE_LIMITED");
-    expect(Number(last.headers["retry-after"])).toBeGreaterThan(0);
-    // Other clients are unaffected.
-    await request(ctx.app).get("/api/v1/rates").set("X-Forwarded-For", "203.0.113.10").expect(200);
+  });
+
+  it("exempts server-rendered requests that carry the internal key", async () => {
+    const internal = await createTestContext({ internalKey: "internal-key-0123456789" });
+    for (let i = 0; i < 125; i++) {
+      await request(internal.app)
+        .get("/api/v1/rates")
+        .set("x-internal-key", "internal-key-0123456789")
+        .expect(200);
+    }
+    await request(internal.app).get("/api/v1/rates").set("x-internal-key", "wrong").expect(200);
   });
 });

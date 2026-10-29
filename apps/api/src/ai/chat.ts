@@ -59,10 +59,15 @@ export function createChatService(deps: {
     return {
       tools: {
         getMarketOverview: tool({
-          description: "Global crypto market stats, the top 5 coins by market cap and today's biggest movers.",
+          description:
+            "Global crypto market stats, the top 5 coins by market cap and today's biggest movers.",
           inputSchema: z.object({}),
           execute: async () => {
-            const [g, h, top] = await Promise.all([market.global(), market.highlights(), market.markets()]);
+            const [g, h, top] = await Promise.all([
+              market.global(),
+              market.highlights(),
+              market.markets(),
+            ]);
             track(g.meta.fetchedAt);
             return {
               fetchedAt: g.meta.fetchedAt,
@@ -159,7 +164,10 @@ export function createChatService(deps: {
           .catch(() => req.context!.coinId);
         system += `\n\nThe user is on the ${name} page (id: ${req.context.coinId}); "it" or "this coin" means ${name}.`;
       }
-      const messages: ModelMessage[] = req.messages.map((m) => ({ role: m.role, content: m.content }));
+      const messages: ModelMessage[] = req.messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
 
       for (const [i, { name, model }] of deps.models.entries()) {
         let emitted = false;

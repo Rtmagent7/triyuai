@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ConverterPage } from "@/components/converter/converter-page";
 import { serverApi } from "@/lib/api/server";
-import { toSummary } from "@/mocks/data";
+import { toSummary } from "@triyuai/shared/coingecko";
 
 export const metadata: Metadata = {
   title: "Crypto converter",

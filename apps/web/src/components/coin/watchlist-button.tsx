@@ -1,15 +1,14 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { toast } from "sonner";
-import { useWatchlist } from "@/stores/watchlist";
+import { useToggleWatchlist, useWatchlistIds } from "@/hooks/use-watchlist";
 import { cn } from "@/lib/utils";
 
 type Props = { id: string; name: string; className?: string; withLabel?: boolean };
 
 export function WatchlistButton({ id, name, className, withLabel }: Props) {
-  const active = useWatchlist((s) => s.ids.includes(id));
-  const toggle = useWatchlist((s) => s.toggle);
+  const active = useWatchlistIds().ids.includes(id);
+  const toggle = useToggleWatchlist();
   return (
     <button
       type="button"
@@ -18,8 +17,7 @@ export function WatchlistButton({ id, name, className, withLabel }: Props) {
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        const added = toggle(id);
-        toast(added ? `${name} added to your watchlist` : `${name} removed from your watchlist`);
+        void toggle(id, name, active);
       }}
       className={cn(
         "text-muted hover:bg-surface-2 hover:text-text inline-flex items-center gap-1.5 rounded-lg p-1.5 transition-colors",

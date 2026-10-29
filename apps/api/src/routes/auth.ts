@@ -1,7 +1,7 @@
 import { Router, type CookieOptions, type Response } from "express";
 import { loginSchema, registerSchema } from "@triyuai/shared";
 import { dbMeta, parse } from "../lib/http";
-import { ACCESS_COOKIE, REFRESH_COOKIE, requireUser } from "../middleware";
+import { ACCESS_COOKIE, REFRESH_COOKIE, SESSION_HINT_COOKIE, requireUser } from "../middleware";
 import { ACCESS_TTL_S, REFRESH_TTL_S, type AuthService, type Session } from "../services/auth";
 import type { WatchlistService } from "../services/watchlist";
 
@@ -18,6 +18,13 @@ export function authRoutes(auth: AuthService, watchlist: WatchlistService, secur
       path: refreshPath,
       maxAge: REFRESH_TTL_S * 1000,
     });
+    // Readable by the page so guests can skip calling /auth/me; it carries no secret.
+    res.cookie(SESSION_HINT_COOKIE, "1", {
+      secure,
+      sameSite: "lax",
+      path: "/",
+      maxAge: REFRESH_TTL_S * 1000,
+    });
     res.setHeader("Cache-Control", "no-store");
     res.json({ data: s.user, meta: dbMeta() });
   }
@@ -25,6 +32,7 @@ export function authRoutes(auth: AuthService, watchlist: WatchlistService, secur
   function clearSession(res: Response) {
     res.clearCookie(ACCESS_COOKIE, { ...base, path: "/" });
     res.clearCookie(REFRESH_COOKIE, { ...base, path: refreshPath });
+    res.clearCookie(SESSION_HINT_COOKIE, { secure, sameSite: "lax", path: "/" });
   }
 
   r.post("/register", async (req, res) => {

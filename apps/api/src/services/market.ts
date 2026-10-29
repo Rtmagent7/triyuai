@@ -75,6 +75,23 @@ const respond = <T>(e: Entry<T>): ApiResponse<T> => ({
   meta: { fetchedAt: e.fetchedAt, source: e.source, stale: e.source === "snapshot" },
 });
 
+/** Market-only detail for when CoinGecko's coin endpoint is unavailable. */
+const partialDetail = (c: Coin): CoinDetail => ({
+  ...c,
+  description: `${c.name} (${c.symbol}) is ranked #${c.rank} by market capitalization. Project details are temporarily unavailable.`,
+  categories: [],
+  genesisDate: null,
+  links: {
+    homepage: null,
+    whitepaper: null,
+    explorers: [],
+    twitter: null,
+    reddit: null,
+    github: null,
+  },
+  hasFullDetail: false,
+});
+
 /** The older and staler of two metas, for responses built from several sources. */
 const mergeMeta = (a: Meta, b: Meta): Meta => ({
   fetchedAt: a.fetchedAt < b.fetchedAt ? a.fetchedAt : b.fetchedAt,
@@ -191,7 +208,8 @@ export function createMarketService(deps: {
     return cached(
       "cg:trending",
       TTL.trending,
-      async () => mapTrending(await coingecko.get<RawTrending>("/search/trending"), top?.data ?? []),
+      async () =>
+        mapTrending(await coingecko.get<RawTrending>("/search/trending"), top?.data ?? []),
       { snapshot: true },
     );
   };
@@ -210,9 +228,14 @@ export function createMarketService(deps: {
     },
 
     global: (): Promise<ApiResponse<GlobalStats>> =>
-      cached("cg:global", TTL.global, async () => mapGlobal(await coingecko.get<RawGlobal>("/global")), {
-        snapshot: true,
-      }),
+      cached(
+        "cg:global",
+        TTL.global,
+        async () => mapGlobal(await coingecko.get<RawGlobal>("/global")),
+        {
+          snapshot: true,
+        },
+      ),
 
     rates: (): Promise<ApiResponse<Rates>> =>
       cached(
@@ -278,23 +301,33 @@ export function createMarketService(deps: {
       }
     },
 
-    coin: (id: string): Promise<ApiResponse<CoinDetail>> =>
-      cached(
-        `cg:coin:${id}`,
-        TTL.coin,
-        async () =>
-          mapDetail(
-            await coingecko.get<RawDetail>(`/coins/${encodeURIComponent(id)}`, {
-              localization: false,
-              tickers: false,
-              market_data: true,
-              community_data: false,
-              developer_data: false,
-              sparkline: true,
-            }),
-          ),
-        { snapshot: true },
-      ),
+    async coin(id: string): Promise<ApiResponse<CoinDetail>> {
+      try {
+        return await cached(
+          `cg:coin:${id}`,
+          TTL.coin,
+          async () =>
+            mapDetail(
+              await coingecko.get<RawDetail>(`/coins/${encodeURIComponent(id)}`, {
+                localization: false,
+                tickers: false,
+                market_data: true,
+                community_data: false,
+                developer_data: false,
+                sparkline: true,
+              }),
+            ),
+          { snapshot: true },
+        );
+      } catch (err) {
+        // Rate-limited with no snapshot yet: a top-250 coin can still show its market data.
+        if (err instanceof NotFoundError) throw err;
+        const top = await markets().catch(() => null);
+        const row = top?.data.find((c) => c.id === id);
+        if (!top || !row) throw err;
+        return { data: partialDetail(row), meta: { ...top.meta, stale: true } };
+      }
+    },
 
     chart: (id: string, range: ChartRange): Promise<ApiResponse<ChartData>> =>
       cached(`cg:chart:${id}:${range}`, TTL.chart[range], async () => {

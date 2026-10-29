@@ -26,7 +26,14 @@ beforeEach(async () => {
   ctx.cg.calls.length = 0;
   ctx.cg.state.fail = null;
   // Clear cached market keys per test; snapshots in Postgres persist on purpose.
-  for (const key of ["cg:markets:usd", "cg:global", "cg:trending", "cg:rates", "cg:coin:bitcoin", "cg:search:sol"]) {
+  for (const key of [
+    "cg:markets:usd",
+    "cg:global",
+    "cg:trending",
+    "cg:rates",
+    "cg:coin:bitcoin",
+    "cg:search:sol",
+  ]) {
     await ctx.cache.del(key);
   }
 });
@@ -92,7 +99,9 @@ describe("market data", () => {
   });
 
   it("fetches coins outside the top list by id", async () => {
-    const res = await request(ctx.app).get("/api/v1/coins?ids=bitcoin,extra-coin,unknown").expect(200);
+    const res = await request(ctx.app)
+      .get("/api/v1/coins?ids=bitcoin,extra-coin,unknown")
+      .expect(200);
     expect(res.body.data.map((c: { id: string }) => c.id)).toEqual(["bitcoin", "extra-coin"]);
     expect(ctx.cg.calls).toContain("/coins/markets?ids=extra-coin,unknown");
   });
@@ -152,7 +161,9 @@ describe("market data", () => {
   });
 
   it("serves charts with derived candles; MAX falls back to 1 year without an API key", async () => {
-    const { body } = await request(ctx.app).get("/api/v1/coins/bitcoin/chart?range=max").expect(200);
+    const { body } = await request(ctx.app)
+      .get("/api/v1/coins/bitcoin/chart?range=max")
+      .expect(200);
     expect(body.data.range).toBe("max");
     expect(body.data.line).toHaveLength(365 * 24 + 1);
     expect(body.data.ohlc.length).toBeGreaterThan(80);
@@ -172,12 +183,27 @@ describe("snapshot fallback (PRD §11)", () => {
 
     const res = await request(ctx.app).get("/api/v1/global").expect(200);
     expect(res.body.data).toEqual(fresh.body.data);
-    expect(res.body.meta).toEqual({ fetchedAt: fresh.body.meta.fetchedAt, source: "snapshot", stale: true });
+    expect(res.body.meta).toEqual({
+      fetchedAt: fresh.body.meta.fetchedAt,
+      source: "snapshot",
+      stale: true,
+    });
 
     // The snapshot is re-served from cache briefly instead of retrying CoinGecko on every request.
     const callsBefore = ctx.cg.calls.length;
     await request(ctx.app).get("/api/v1/global").expect(200);
     expect(ctx.cg.calls.length).toBe(callsBefore);
+  });
+
+  it("builds a market-only coin detail when the coin endpoint fails without a snapshot", async () => {
+    await request(ctx.app).get("/api/v1/coins").expect(200);
+    ctx.cg.state.fail = new UpstreamError(429);
+    const { body } = await request(ctx.app).get("/api/v1/coins/litecoin").expect(200);
+    expect(() => apiResponse(coinDetailSchema).parse(body)).not.toThrow();
+    expect(body.data).toMatchObject({ id: "litecoin", hasFullDetail: false, categories: [] });
+    expect(body.meta.stale).toBe(true);
+    // Coins outside the top list have nothing to fall back on.
+    await request(ctx.app).get("/api/v1/coins/extra-unknown").expect(503);
   });
 
   it("returns 503 when there is no snapshot either", async () => {
@@ -220,7 +246,9 @@ describe("CoinGecko client", () => {
 
   it("maps 404, rate limits and network errors", async () => {
     const cache = new MemoryCache();
-    await expect(createCoinGecko({ cache, fetch: ok({}, 404) }).get("/x")).rejects.toMatchObject({ status: 404 });
+    await expect(createCoinGecko({ cache, fetch: ok({}, 404) }).get("/x")).rejects.toMatchObject({
+      status: 404,
+    });
     await expect(createCoinGecko({ cache, fetch: ok({}, 429) }).get("/x")).rejects.toMatchObject({
       status: 503,
       upstreamStatus: 429,
@@ -228,7 +256,9 @@ describe("CoinGecko client", () => {
     const offline = vi.fn(async () => {
       throw new TypeError("fetch failed");
     });
-    await expect(createCoinGecko({ cache, fetch: offline }).get("/x")).rejects.toBeInstanceOf(UpstreamError);
+    await expect(createCoinGecko({ cache, fetch: offline }).get("/x")).rejects.toBeInstanceOf(
+      UpstreamError,
+    );
   });
 });
 

@@ -49,7 +49,8 @@ export function createAuthService(deps: { db: Db; cache: Cache; jwtSecret: strin
 
   return {
     async register(input: { name: string; email: string; password: string }) {
-      if (input.email === DEMO_EMAIL) throw new AppError(409, "EMAIL_TAKEN", "Email is already registered");
+      if (input.email === DEMO_EMAIL)
+        throw new AppError(409, "EMAIL_TAKEN", "Email is already registered");
       const exists = await db.user.findUnique({ where: { email: input.email } });
       if (exists) throw new AppError(409, "EMAIL_TAKEN", "Email is already registered");
       const user = await db.user.create({
@@ -62,11 +63,19 @@ export function createAuthService(deps: { db: Db; cache: Cache; jwtSecret: strin
       // 10 attempts per 15 minutes per IP + email blunts password guessing.
       const attempts = await cache.incr(`ratelimit:login:${sha256(`${ip}:${input.email}`)}`, 900);
       if (attempts > 10) {
-        throw new AppError(429, "TOO_MANY_ATTEMPTS", "Too many sign-in attempts. Try again in 15 minutes.");
+        throw new AppError(
+          429,
+          "TOO_MANY_ATTEMPTS",
+          "Too many sign-in attempts. Try again in 15 minutes.",
+        );
       }
       const user = await db.user.findUnique({ where: { email: input.email } });
-      const ok = await verify(user && !user.isDemo ? user.passwordHash : await dummyHash, input.password);
-      if (!user || user.isDemo || !ok) throw new UnauthorizedError("Email or password is incorrect");
+      const ok = await verify(
+        user && !user.isDemo ? user.passwordHash : await dummyHash,
+        input.password,
+      );
+      if (!user || user.isDemo || !ok)
+        throw new UnauthorizedError("Email or password is incorrect");
       return issue(toUser(user));
     },
 

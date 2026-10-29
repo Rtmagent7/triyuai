@@ -36,7 +36,13 @@ export function buildOpenApi(version: string) {
     required: true,
     content: { "application/json": { schema: json(schema, "input") } },
   });
-  const coinId = { name: "id", in: "path", required: true, schema: { type: "string" }, example: "solana" };
+  const coinId = {
+    name: "id",
+    in: "path",
+    required: true,
+    schema: { type: "string" },
+    example: "solana",
+  };
   const auth = [{ cookieAuth: [] }];
 
   return {
@@ -65,15 +71,27 @@ export function buildOpenApi(version: string) {
     },
     paths: {
       "/api/v1/global": {
-        get: { tags: ["Market"], summary: "Global market stats", responses: { 200: ok(globalStatsSchema) } },
+        get: {
+          tags: ["Market"],
+          summary: "Global market stats",
+          responses: { 200: ok(globalStatsSchema) },
+        },
       },
       "/api/v1/coins": {
         get: {
           tags: ["Market"],
           summary: "Market table (top 250), or specific coins with ?ids=",
           parameters: [
-            { name: "page", in: "query", schema: { type: "integer", minimum: 1, maximum: 3, default: 1 } },
-            { name: "perPage", in: "query", schema: { type: "integer", minimum: 1, maximum: 250, default: 100 } },
+            {
+              name: "page",
+              in: "query",
+              schema: { type: "integer", minimum: 1, maximum: 3, default: 1 },
+            },
+            {
+              name: "perPage",
+              in: "query",
+              schema: { type: "integer", minimum: 1, maximum: 250, default: 100 },
+            },
             { name: "ids", in: "query", schema: { type: "string" }, example: "bitcoin,solana" },
           ],
           responses: {
@@ -81,7 +99,12 @@ export function buildOpenApi(version: string) {
               description: "A page of coins, or an array when `ids` is given",
               content: {
                 "application/json": {
-                  schema: { oneOf: [json(apiResponse(coinsPageSchema)), json(apiResponse(z.array(coinSchema)))] },
+                  schema: {
+                    oneOf: [
+                      json(apiResponse(coinsPageSchema)),
+                      json(apiResponse(z.array(coinSchema))),
+                    ],
+                  },
                 },
               },
             },
@@ -103,13 +126,21 @@ export function buildOpenApi(version: string) {
           summary: "Price history (line + derived OHLC candles)",
           parameters: [
             coinId,
-            { name: "range", in: "query", schema: { type: "string", enum: ["24h", "7d", "1m", "3m", "1y", "max"] } },
+            {
+              name: "range",
+              in: "query",
+              schema: { type: "string", enum: ["24h", "7d", "1m", "3m", "1y", "max"] },
+            },
           ],
           responses: { 200: ok(chartDataSchema), 404: err("Unknown coin") },
         },
       },
       "/api/v1/highlights": {
-        get: { tags: ["Market"], summary: "Trending, top gainers/losers, highest volume", responses: { 200: ok(highlightsSchema) } },
+        get: {
+          tags: ["Market"],
+          summary: "Trending, top gainers/losers, highest volume",
+          responses: { 200: ok(highlightsSchema) },
+        },
       },
       "/api/v1/search": {
         get: {
@@ -120,14 +151,22 @@ export function buildOpenApi(version: string) {
         },
       },
       "/api/v1/rates": {
-        get: { tags: ["Market"], summary: "USD → IDR/EUR exchange rates", responses: { 200: ok(ratesSchema) } },
+        get: {
+          tags: ["Market"],
+          summary: "USD → IDR/EUR exchange rates",
+          responses: { 200: ok(ratesSchema) },
+        },
       },
       "/api/v1/auth/register": {
         post: {
           tags: ["Auth"],
           summary: "Create an account (sets session cookies)",
           requestBody: body(registerSchema),
-          responses: { 201: ok(userSchema, "Created"), 400: err("Invalid input"), 409: err("Email taken") },
+          responses: {
+            201: ok(userSchema, "Created"),
+            400: err("Invalid input"),
+            409: err("Email taken"),
+          },
         },
       },
       "/api/v1/auth/login": {
@@ -135,11 +174,19 @@ export function buildOpenApi(version: string) {
           tags: ["Auth"],
           summary: "Sign in (sets session cookies)",
           requestBody: body(loginSchema),
-          responses: { 200: ok(userSchema), 401: err("Wrong email or password"), 429: err("Too many attempts") },
+          responses: {
+            200: ok(userSchema),
+            401: err("Wrong email or password"),
+            429: err("Too many attempts"),
+          },
         },
       },
       "/api/v1/auth/demo": {
-        post: { tags: ["Auth"], summary: "Sign in to the shared demo account", responses: { 200: ok(userSchema) } },
+        post: {
+          tags: ["Auth"],
+          summary: "Sign in to the shared demo account",
+          responses: { 200: ok(userSchema) },
+        },
       },
       "/api/v1/auth/refresh": {
         post: {
@@ -149,7 +196,11 @@ export function buildOpenApi(version: string) {
         },
       },
       "/api/v1/auth/logout": {
-        post: { tags: ["Auth"], summary: "Revoke the session", responses: { 204: { description: "Signed out" } } },
+        post: {
+          tags: ["Auth"],
+          summary: "Revoke the session",
+          responses: { 204: { description: "Signed out" } },
+        },
       },
       "/api/v1/auth/me": {
         get: {
@@ -163,13 +214,22 @@ export function buildOpenApi(version: string) {
         },
       },
       "/api/v1/watchlist": {
-        get: { tags: ["Watchlist"], summary: "Coin ids on the watchlist", security: auth, responses: { 200: ok(watchlistSchema), 401: err("Not signed in") } },
+        get: {
+          tags: ["Watchlist"],
+          summary: "Coin ids on the watchlist",
+          security: auth,
+          responses: { 200: ok(watchlistSchema), 401: err("Not signed in") },
+        },
         post: {
           tags: ["Watchlist"],
           summary: "Add a coin",
           security: auth,
           requestBody: body(z.object({ coinId: z.string() })),
-          responses: { 201: ok(watchlistSchema, "Added"), 401: err("Not signed in"), 422: err("Watchlist full") },
+          responses: {
+            201: ok(watchlistSchema, "Added"),
+            401: err("Not signed in"),
+            422: err("Watchlist full"),
+          },
         },
       },
       "/api/v1/watchlist/merge": {

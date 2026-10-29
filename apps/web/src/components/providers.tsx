@@ -13,7 +13,7 @@ import { useWatchlist } from "@/stores/watchlist";
 
 type Props = {
   children: React.ReactNode;
-  initial: { rates: ApiResponse<Rates>; global: ApiResponse<GlobalStats> };
+  initial: { rates?: ApiResponse<Rates>; global?: ApiResponse<GlobalStats> };
 };
 
 /** Persisted stores skip SSR hydration; load them once on the client to avoid mismatches. */
@@ -38,8 +38,8 @@ export function Providers({ children, initial }: Props) {
         queries: { staleTime: 60_000, refetchOnWindowFocus: false, retry: 1 },
       },
     });
-    qc.setQueryData(queryKeys.rates, initial.rates);
-    qc.setQueryData(queryKeys.global, initial.global);
+    if (initial.rates) qc.setQueryData(queryKeys.rates, initial.rates);
+    if (initial.global) qc.setQueryData(queryKeys.global, initial.global);
     return qc;
   });
   useRehydrateStores();

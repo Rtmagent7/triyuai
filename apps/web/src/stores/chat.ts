@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { ChatStreamEvent } from "@triyuai/shared";
-import { CHAT_CONTEXT_MESSAGES, GUEST_DAILY_CHAT_QUOTA } from "@triyuai/shared/constants";
+import {
+  CHAT_CONTEXT_MESSAGES,
+  GUEST_DAILY_CHAT_QUOTA,
+  USER_DAILY_CHAT_QUOTA,
+} from "@triyuai/shared/constants";
 import { api } from "@/lib/api/client";
 
 export type ToolChip = { id: string; label: string; done: boolean };
@@ -20,7 +24,8 @@ type ChatState = {
   messages: ChatMessage[];
   /** Coin page the chat was opened from (FR-16). */
   coinContext: CoinContext | null;
-  quota: { day: string; used: number };
+  /** Local mirror of the server's daily quota; `owner` is "guest" or the user id. */
+  quota: Quota;
   setOpen: (open: boolean) => void;
   openWith: (opts?: { prompt?: string; coin?: CoinContext | null }) => void;
   setCoinContext: (coin: CoinContext | null) => void;
@@ -29,9 +34,18 @@ type ChatState = {
   regenerate: () => Promise<void>;
   clear: () => void;
   remaining: () => number;
+  /** Switches the quota to the signed-in user (30/day) or back to guest (10/day). */
+  syncQuota: (owner: string, limit: number) => void;
 };
 
+type Quota = { day: string; used: number; owner?: string; limit?: number };
+
 const today = () => new Date().toISOString().slice(0, 10);
+const limitOf = (q: Quota) => q.limit ?? GUEST_DAILY_CHAT_QUOTA;
+const quotaMessage = (q: Quota) =>
+  (q.owner ?? "guest") === "guest"
+    ? `You've used all ${limitOf(q)} guest messages for today. Sign in to get ${USER_DAILY_CHAT_QUOTA} messages a day, or come back tomorrow.`
+    : `You've used all ${limitOf(q)} messages for today. Come back tomorrow.`;
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 let controller: AbortController | null = null;
@@ -90,9 +104,25 @@ export const useChat = create<ChatState>()(
             { messages: history, ...(coinId ? { context: { coinId } } : {}) },
             controller.signal,
           );
-          if (res.status === 429)
-            throw new Error("AI is busy right now. Please try again in a minute.");
-          if (!res.ok || !res.body) throw new Error("Ask TRIYU couldn't answer. Please try again.");
+          // The server is the source of truth for the quota (it counts per account or IP).
+          const limit = Number(res.headers.get("x-quota-limit"));
+          const left = res.headers.get("x-quota-remaining");
+          if (limit && left !== null) {
+            set((s) => ({ quota: { ...s.quota, limit, used: limit - Number(left) } }));
+          }
+          if (!res.ok || !res.body) {
+            const body = (await res.json().catch(() => null)) as {
+              error?: { code?: string; message?: string };
+            } | null;
+            if (body?.error?.code === "QUOTA_EXCEEDED")
+              set((s) => ({ quota: { ...s.quota, used: limitOf(s.quota) } }));
+            throw new Error(
+              body?.error?.message ??
+                (res.status === 429
+                  ? "AI is busy right now. Please try again in a minute."
+                  : "Ask TRIYU couldn't answer. Please try again."),
+            );
+          }
           for await (const ev of readEvents(res.body)) {
             if (ev.type === "tool-call") {
               patchLast((m) => ({
@@ -126,10 +156,14 @@ export const useChat = create<ChatState>()(
         }
       }
 
+      const currentQuota = (): Quota => {
+        const q = get().quota;
+        return q.day === today() ? q : { ...q, day: today(), used: 0 };
+      };
       const consumeQuota = () => {
-        const q = get().quota.day === today() ? get().quota : { day: today(), used: 0 };
-        if (q.used >= GUEST_DAILY_CHAT_QUOTA) return false;
-        set({ quota: { day: q.day, used: q.used + 1 } });
+        const q = currentQuota();
+        if (q.used >= limitOf(q)) return false;
+        set({ quota: { ...q, used: q.used + 1 } });
         return true;
       };
 
@@ -137,7 +171,7 @@ export const useChat = create<ChatState>()(
         open: false,
         messages: [],
         coinContext: null,
-        quota: { day: today(), used: 0 },
+        quota: { day: today(), used: 0, owner: "guest", limit: GUEST_DAILY_CHAT_QUOTA },
         setOpen: (open) => set({ open }),
         setCoinContext: (coinContext) => set({ coinContext }),
         openWith: (opts) => {
@@ -145,10 +179,19 @@ export const useChat = create<ChatState>()(
           set({ open: true });
           if (opts?.prompt) void get().send(opts.prompt);
         },
-        remaining: () =>
-          get().quota.day === today()
-            ? Math.max(0, GUEST_DAILY_CHAT_QUOTA - get().quota.used)
-            : GUEST_DAILY_CHAT_QUOTA,
+        remaining: () => Math.max(0, limitOf(currentQuota()) - currentQuota().used),
+        syncQuota: (owner, limit) => {
+          const q = currentQuota();
+          if ((q.owner ?? "guest") === owner && limitOf(q) === limit) return;
+          set({
+            quota: {
+              day: today(),
+              used: (q.owner ?? "guest") === owner ? q.used : 0,
+              owner,
+              limit,
+            },
+          });
+        },
         send: async (text) => {
           const content = text.trim().slice(0, 2000);
           if (!content || controller) return;
@@ -163,7 +206,7 @@ export const useChat = create<ChatState>()(
                   content: "",
                   tools: [],
                   status: "error",
-                  error: `You've used all ${GUEST_DAILY_CHAT_QUOTA} guest messages for today. Log in (coming in Phase 3) to get 30 messages a day, or come back tomorrow.`,
+                  error: quotaMessage(currentQuota()),
                 },
               ],
             }));

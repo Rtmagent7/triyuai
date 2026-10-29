@@ -35,7 +35,9 @@ export async function buildDeps(env: Env): Promise<Deps> {
       ? [
           {
             name: "gemini",
-            model: createGoogleGenerativeAI({ apiKey: env.GOOGLE_GENERATIVE_AI_API_KEY })(env.GEMINI_MODEL),
+            model: createGoogleGenerativeAI({ apiKey: env.GOOGLE_GENERATIVE_AI_API_KEY })(
+              env.GEMINI_MODEL,
+            ),
           },
         ]
       : []),

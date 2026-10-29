@@ -121,3 +121,48 @@ test("pagination, highlights, converter URL state and 404", async ({ page }) => 
   expect(res?.status()).toBe(404);
   await expect(page.getByText("This page went to the moon without us")).toBeVisible();
 });
+
+test("6 · demo account: watchlist syncs to the account and signs out cleanly", async ({ page }) => {
+  await page.goto("/coins/tron");
+  await hydrated(page);
+  await page.getByRole("button", { name: "Add TRON to watchlist" }).click();
+
+  await page.goto("/login");
+  await page.getByRole("button", { name: "Try the demo account" }).click();
+  await expect(page).toHaveURL(/\/watchlist$/);
+  await expect(page.getByText("synced to your account")).toBeVisible();
+  // The shared demo account keeps its own list; the device list is not merged into it.
+  await expect(page.getByRole("row", { name: /Bitcoin BTC/ })).toBeVisible();
+  await expect(page.getByRole("row", { name: /TRON TRX/ })).toBeHidden();
+
+  await page.goto("/coins/cardano");
+  await hydrated(page);
+  const saved = page.waitForResponse(
+    (r) => r.url().endsWith("/api/v1/watchlist") && r.request().method() === "POST",
+  );
+  await page.getByRole("button", { name: "Add Cardano to watchlist" }).click();
+  // The star fills immediately (optimistic); wait for the API before leaving the page.
+  await expect(page.getByRole("button", { name: "Remove Cardano from watchlist" })).toBeVisible();
+  expect((await saved).status()).toBe(201);
+  await page.goto("/watchlist");
+  await expect(page.getByRole("row", { name: /Cardano ADA/ })).toBeVisible();
+
+  // Signing out falls back to the device watchlist.
+  await page.getByRole("button", { name: "Account: Demo Recruiter" }).click();
+  await page.getByRole("menuitem", { name: "Sign out" }).click();
+  await expect(page.getByRole("link", { name: "Log in" })).toBeVisible();
+  await expect(page.getByRole("row", { name: /TRON TRX/ })).toBeVisible();
+  await expect(page.getByRole("row", { name: /Cardano ADA/ })).toBeHidden();
+});
+
+test("7 · register validates input and signs in", async ({ page }) => {
+  await page.goto("/register");
+  await page.getByRole("button", { name: "Create account" }).click();
+  await expect(page.getByText("Enter your name")).toBeVisible();
+  await page.getByLabel("Name").fill("Rekha");
+  await page.getByLabel("Email").fill("rekha@example.com");
+  await page.getByLabel("Password").fill("Sup3rsecret");
+  await page.getByRole("button", { name: "Create account" }).click();
+  await expect(page).toHaveURL(/\/watchlist$/);
+  await expect(page.getByText("Signed in as Rekha")).toBeVisible();
+});

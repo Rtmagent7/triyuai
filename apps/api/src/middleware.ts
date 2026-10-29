@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import type { ErrorRequestHandler, RequestHandler } from "express";
 import type { Cache } from "./cache";
 import { AppError, UnauthorizedError } from "./lib/errors";
@@ -7,6 +8,7 @@ import type { AuthService } from "./services/auth";
 
 export const ACCESS_COOKIE = "triyu_at";
 export const REFRESH_COOKIE = "triyu_rt";
+export const SESSION_HINT_COOKIE = "triyu_session";
 
 /** Fixed-window limit per client (PRD §13: 120 requests/min per IP). Fails open if Redis is down. */
 export function rateLimit(opts: {
@@ -15,11 +17,21 @@ export function rateLimit(opts: {
   salt: string;
   limit: number;
   windowS: number;
+  internalKey?: string;
 }): RequestHandler {
+  const internal = opts.internalKey ? Buffer.from(opts.internalKey) : null;
   return async (req, res, next) => {
+    const presented = Buffer.from(req.get("x-internal-key") ?? "");
+    if (internal && presented.length === internal.length && timingSafeEqual(presented, internal)) {
+      next();
+      return;
+    }
     const window = Math.floor(Date.now() / 1000 / opts.windowS);
     try {
-      const n = await opts.cache.incr(`ratelimit:api:${clientKey(req, opts.salt)}:${window}`, opts.windowS);
+      const n = await opts.cache.incr(
+        `ratelimit:api:${clientKey(req, opts.salt)}:${window}`,
+        opts.windowS,
+      );
       res.setHeader("RateLimit-Limit", opts.limit);
       res.setHeader("RateLimit-Remaining", Math.max(0, opts.limit - n));
       if (n > opts.limit) {
@@ -63,7 +75,9 @@ export const errorHandler =
       return;
     }
     if ((err as { type?: string }).type === "entity.too.large") {
-      res.status(413).json({ error: { code: "PAYLOAD_TOO_LARGE", message: "Request body is too large" } });
+      res
+        .status(413)
+        .json({ error: { code: "PAYLOAD_TOO_LARGE", message: "Request body is too large" } });
       return;
     }
     logger.error({ err, path: req.path }, "unhandled error");

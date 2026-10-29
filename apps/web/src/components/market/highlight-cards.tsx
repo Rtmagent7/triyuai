@@ -83,6 +83,8 @@ function HighlightList({
           <li key={c.id}>
             <Link
               href={`/coins/${c.id}`}
+              // Lists show many coins; prefetching each would render every page (and call the API) up front.
+              prefetch={false}
               className="hover:bg-surface-2 flex items-center gap-2.5 rounded-lg px-1 py-1.5 text-sm"
             >
               <CoinLogo src={c.image} name={c.name} size={20} />

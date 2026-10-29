@@ -19,6 +19,7 @@ import type {
 } from "@triyuai/shared";
 import { sliceRange, toLine, toOhlc } from "@triyuai/shared/chart";
 import { toSummary } from "@triyuai/shared/coingecko";
+import { NotFoundError } from "@/lib/api/errors";
 import { hashString, seededRandom } from "@/lib/utils";
 import marketsJson from "./fixtures/markets.json";
 import globalJson from "./fixtures/global.json";
@@ -35,7 +36,7 @@ export const snapshotAt: string = metaJson.fetchedAt;
 
 const byId = new Map(markets.map((c) => [c.id, c]));
 
-export class NotFoundError extends Error {}
+export { NotFoundError };
 
 const meta = (): ApiResponse<unknown>["meta"] => ({
   fetchedAt: snapshotAt,

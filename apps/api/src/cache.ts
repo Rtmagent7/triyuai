@@ -35,7 +35,10 @@ export class MemoryCache implements Cache {
   }
 
   async set(key: string, value: unknown, ttlSeconds: number) {
-    this.store.set(key, { value: structuredClone(value), expiresAt: this.now() + ttlSeconds * 1000 });
+    this.store.set(key, {
+      value: structuredClone(value),
+      expiresAt: this.now() + ttlSeconds * 1000,
+    });
   }
 
   async incr(key: string, ttlSeconds: number) {

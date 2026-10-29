@@ -87,7 +87,14 @@ const raw = {
       },
     ],
   } satisfies RawTrending,
-  rates: { rates: { btc: { value: 1 }, usd: { value: 100_000 }, idr: { value: 1.6e9 }, eur: { value: 92_000 } } } satisfies RawRates,
+  rates: {
+    rates: {
+      btc: { value: 1 },
+      usd: { value: 100_000 },
+      idr: { value: 1.6e9 },
+      eur: { value: 92_000 },
+    },
+  } satisfies RawRates,
 };
 
 export function rawDetail(id: string): RawDetail {
@@ -138,7 +145,9 @@ export function fakeCoinGecko() {
   const state = { fail: null as AppError | null };
   const client: CoinGeckoClient = {
     async get<T>(path: string, params: Record<string, string | number | boolean> = {}) {
-      calls.push(path + (params.ids ? `?ids=${params.ids}` : params.query ? `?query=${params.query}` : ""));
+      calls.push(
+        path + (params.ids ? `?ids=${params.ids}` : params.query ? `?query=${params.query}` : ""),
+      );
       if (state.fail) throw state.fail;
       const out = (): unknown => {
         if (path === "/coins/markets") {
@@ -152,13 +161,19 @@ export function fakeCoinGecko() {
         if (path === "/search/trending") return raw.trending;
         if (path === "/exchange_rates") return raw.rates;
         if (path === "/search") {
-          return { coins: [{ id: "extra-sol-fork", name: "Sol Fork", symbol: "solf", market_cap_rank: 900 }] };
+          return {
+            coins: [
+              { id: "extra-sol-fork", name: "Sol Fork", symbol: "solf", market_cap_rank: 900 },
+            ],
+          };
         }
         const chart = path.match(/^\/coins\/([^/]+)\/market_chart$/);
         if (chart) {
           const now = 1_790_000_000_000;
           const n = Number(params.days === "max" ? 2000 : params.days) * 24;
-          return { prices: Array.from({ length: n + 1 }, (_, k) => [now - (n - k) * 3_600_000, 100 + k]) };
+          return {
+            prices: Array.from({ length: n + 1 }, (_, k) => [now - (n - k) * 3_600_000, 100 + k]),
+          };
         }
         const coin = path.match(/^\/coins\/([^/]+)$/);
         if (coin) {
@@ -190,11 +205,17 @@ export function mockModel(steps: Step[] | (() => never)): LanguageModel {
     doStream: steps.map((step, s) => {
       const parts: unknown[] = [{ type: "stream-start", warnings: [] }];
       step.tools?.forEach((t, k) =>
-        parts.push({ type: "tool-call", toolCallId: `call_${s}_${k}`, toolName: t.name, input: JSON.stringify(t.input) }),
+        parts.push({
+          type: "tool-call",
+          toolCallId: `call_${s}_${k}`,
+          toolName: t.name,
+          input: JSON.stringify(t.input),
+        }),
       );
       if (step.text) {
         parts.push({ type: "text-start", id: `t${s}` });
-        for (const word of step.text.split(/(?<= )/)) parts.push({ type: "text-delta", id: `t${s}`, delta: word });
+        for (const word of step.text.split(/(?<= )/))
+          parts.push({ type: "text-delta", id: `t${s}`, delta: word });
         parts.push({ type: "text-end", id: `t${s}` });
       }
       parts.push({
@@ -217,8 +238,15 @@ export function mockModel(steps: Step[] | (() => never)): LanguageModel {
 export type TestContext = Awaited<ReturnType<typeof createTestContext>>;
 
 /** A full app on an in-memory Postgres (PGlite), memory cache and fake CoinGecko. */
-export async function createTestContext(opts: { models?: { name: string; model: LanguageModel }[]; db?: Db } = {}) {
-  const env = loadEnv({ NODE_ENV: "test", DATABASE_URL: "pglite:memory", JWT_SECRET: "test-secret-0123456789abcdef0123456789" });
+export async function createTestContext(
+  opts: { models?: { name: string; model: LanguageModel }[]; db?: Db; internalKey?: string } = {},
+) {
+  const env = loadEnv({
+    NODE_ENV: "test",
+    DATABASE_URL: "pglite:memory",
+    JWT_SECRET: "test-secret-0123456789abcdef0123456789",
+    INTERNAL_API_KEY: opts.internalKey,
+  });
   const db = opts.db ?? (await createDb("pglite:memory"));
   const cache = new MemoryCache();
   const cg = fakeCoinGecko();

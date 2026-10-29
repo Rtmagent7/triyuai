@@ -57,14 +57,24 @@ describe("UpstashCache", () => {
 
 describe("loadEnv", () => {
   it("has working development defaults", () => {
-    expect(loadEnv({})).toMatchObject({ PORT: 4000, DATABASE_URL: "pglite:./.pglite", GROQ_MODEL: "openai/gpt-oss-120b" });
+    expect(loadEnv({})).toMatchObject({
+      PORT: 4000,
+      DATABASE_URL: "pglite:./.pglite",
+      GROQ_MODEL: "openai/gpt-oss-120b",
+    });
   });
 
   it("refuses insecure defaults in production", () => {
     expect(() => loadEnv({ NODE_ENV: "production" })).toThrow(/JWT_SECRET/);
-    expect(() => loadEnv({ NODE_ENV: "production", JWT_SECRET: "x".repeat(40) })).toThrow(/DATABASE_URL/);
+    expect(() => loadEnv({ NODE_ENV: "production", JWT_SECRET: "x".repeat(40) })).toThrow(
+      /DATABASE_URL/,
+    );
     expect(() =>
-      loadEnv({ NODE_ENV: "production", JWT_SECRET: "x".repeat(40), DATABASE_URL: "postgresql://db/x" }),
+      loadEnv({
+        NODE_ENV: "production",
+        JWT_SECRET: "x".repeat(40),
+        DATABASE_URL: "postgresql://db/x",
+      }),
     ).not.toThrow();
     expect(() => loadEnv({ JWT_SECRET: "short" })).toThrow();
   });

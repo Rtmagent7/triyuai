@@ -19,6 +19,8 @@ const envSchema = z.object({
   COINGECKO_MONTHLY_BUDGET: z.coerce.number().default(10_000),
 
   JWT_SECRET: z.string().min(32).default("dev-only-secret-change-me-0123456789abcdef"),
+  /** Shared with the Next.js server so server-rendered pages skip the per-IP rate limit. */
+  INTERNAL_API_KEY: z.string().min(16).optional(),
   /** Salt for hashing guest IPs before they are used as quota keys. */
   IP_HASH_SALT: z.string().default("dev-salt"),
 
@@ -33,8 +35,10 @@ export type Env = z.infer<typeof envSchema>;
 export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   const env = envSchema.parse(source);
   if (env.NODE_ENV === "production") {
-    if (env.JWT_SECRET.startsWith("dev-only")) throw new Error("JWT_SECRET must be set in production");
-    if (env.DATABASE_URL.startsWith("pglite:")) throw new Error("DATABASE_URL must be set in production");
+    if (env.JWT_SECRET.startsWith("dev-only"))
+      throw new Error("JWT_SECRET must be set in production");
+    if (env.DATABASE_URL.startsWith("pglite:"))
+      throw new Error("DATABASE_URL must be set in production");
   }
   return env;
 }

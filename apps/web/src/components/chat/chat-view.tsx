@@ -2,8 +2,9 @@
 
 import { ArrowUp, Square, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { GUEST_DAILY_CHAT_QUOTA } from "@triyuai/shared/constants";
+import { GUEST_DAILY_CHAT_QUOTA, USER_DAILY_CHAT_QUOTA } from "@triyuai/shared/constants";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 import { useChat } from "@/stores/chat";
 import { ChatMessage } from "./chat-message";
@@ -30,6 +31,12 @@ export function ChatView({ className, autoFocus }: { className?: string; autoFoc
   const clear = useChat((s) => s.clear);
   const coinContext = useChat((s) => s.coinContext);
   const remaining = useChat((s) => s.remaining());
+  const syncQuota = useChat((s) => s.syncQuota);
+  const user = useSession().data;
+  const limit = user ? USER_DAILY_CHAT_QUOTA : GUEST_DAILY_CHAT_QUOTA;
+  useEffect(() => {
+    syncQuota(user ? user.id : "guest", limit);
+  }, [user, limit, syncQuota]);
   const [input, setInput] = useState("");
   const scroller = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
@@ -137,7 +144,7 @@ export function ChatView({ className, autoFocus }: { className?: string; autoFoc
         </form>
         <div className="text-muted mt-2 flex items-center justify-between gap-2 px-1 text-[11px]">
           <span>
-            Not financial advice · {remaining}/{GUEST_DAILY_CHAT_QUOTA} guest messages left today
+            Not financial advice · {remaining}/{limit} {user ? "" : "guest "}messages left today
           </span>
           {messages.length > 0 && (
             <button

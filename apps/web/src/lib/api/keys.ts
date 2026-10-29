@@ -9,4 +9,6 @@ export const queryKeys = {
   chart: (id: string, range: ChartRange) => ["chart", id, range] as const,
   highlights: ["highlights"] as const,
   search: (q: string) => ["search", q] as const,
+  me: ["me"] as const,
+  watchlist: ["watchlist"] as const,
 };
