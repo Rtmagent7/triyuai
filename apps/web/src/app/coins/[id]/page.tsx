@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { ChevronRight, ExternalLink } from "lucide-react";
 import { CoinHeader } from "@/components/coin/coin-header";
 import { MiniConverter } from "@/components/coin/mini-converter";
-import { PriceChartLazy as PriceChart } from "@/components/coin/price-chart-lazy";
+import { PriceChartLazy } from "@/components/coin/price-chart-lazy";
+import { TradingChartLazy } from "@/components/trading/trading-chart-lazy";
 import { StatsGrid } from "@/components/coin/stats-grid";
 import { mockingEnabled } from "@/lib/api/mocking";
 import { NotFoundError, serverApi } from "@/lib/api/server";
@@ -74,7 +75,13 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 space-y-6">
-          <PriceChart coinId={coin.id} />
+          {/* Binance candles with indicators; coins without a USDT pair keep the CoinGecko chart. */}
+          <TradingChartLazy
+            coinId={coin.id}
+            ticker={coin.symbol}
+            variant="compact"
+            fallback={<PriceChartLazy coinId={coin.id} />}
+          />
           <section
             aria-labelledby="about-heading"
             className="border-border rounded-2xl border p-4 sm:p-5"

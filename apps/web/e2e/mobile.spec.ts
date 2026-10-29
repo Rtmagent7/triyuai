@@ -4,6 +4,7 @@ const pages = [
   "/",
   "/coins/bitcoin",
   "/coins/monero",
+  "/chart/bitcoin",
   "/highlights",
   "/converter",
   "/watchlist",

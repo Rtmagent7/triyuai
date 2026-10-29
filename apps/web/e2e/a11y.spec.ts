@@ -5,6 +5,7 @@ import { expect, hydrated, test } from "./fixtures";
 const pages = [
   "/",
   "/coins/bitcoin",
+  "/chart/bitcoin",
   "/highlights",
   "/converter",
   "/watchlist",

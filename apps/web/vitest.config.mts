@@ -37,6 +37,10 @@ export default defineConfig({
         // Canvas chart and the lazy wrapper are covered by Playwright (e2e/), not jsdom.
         "src/components/coin/price-chart.tsx",
         "src/components/coin/price-chart-lazy.tsx",
+        "src/components/trading/chart-engine.ts",
+        "src/components/trading/drawings-primitive.ts",
+        "src/components/trading/trading-chart.tsx",
+        "src/components/trading/trading-chart-lazy.tsx",
       ],
     },
   },

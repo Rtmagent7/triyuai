@@ -39,8 +39,9 @@ test("2 · ⌘K search opens the coin page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Solana");
 });
 
-test("3 · chart switches range and line/candlestick", async ({ page }) => {
-  await page.goto("/coins/solana");
+// Coins listed on Binance get the TA chart (e2e/chart.spec.ts); the rest keep this CoinGecko chart.
+test("3 · fallback chart switches range and line/candlestick", async ({ page }) => {
+  await page.goto("/coins/monero");
   const chart = page.locator("canvas").first();
   await expect(chart).toBeVisible();
   await expect(page.getByText("7D change")).toBeVisible();
@@ -126,6 +127,7 @@ test("6 · demo account: watchlist syncs to the account and signs out cleanly", 
   await page.goto("/coins/tron");
   await hydrated(page);
   await page.getByRole("button", { name: "Add TRON to watchlist" }).click();
+  await expect(page.getByRole("button", { name: "Remove TRON from watchlist" })).toBeVisible();
 
   await page.goto("/login");
   await page.getByRole("button", { name: "Try the demo account" }).click();
