@@ -52,7 +52,7 @@ export function DrawingToolbar(p: Props) {
       role="toolbar"
       aria-label="Drawing tools"
       aria-orientation="vertical"
-      className="border-border flex shrink-0 gap-0.5 overflow-x-auto border-b p-1 [scrollbar-width:none] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r"
+      className="border-border relative flex shrink-0 gap-0.5 overflow-x-auto border-b p-1 [scrollbar-width:none] sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r"
     >
       {tools.map(([t, Icon, key]) => (
         <button

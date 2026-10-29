@@ -60,7 +60,7 @@ export function ChatMessage({ message, isLast, onRegenerate }: Props) {
                   </a>
                 ),
                 table: ({ children }) => (
-                  <div className="overflow-x-auto">
+                  <div className="relative overflow-x-auto">
                     <table>{children}</table>
                   </div>
                 ),

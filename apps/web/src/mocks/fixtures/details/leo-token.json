@@ -1,1 +1,22 @@
-{"description":"","categories":["Exchange-based Tokens","Centralized Exchange (CEX) Token","Ethereum Ecosystem","Sora Ecosystem"],"genesisDate":"2019-05-20","links":{"homepage":"https://www.bitfinex.com/","whitepaper":"https://www.bitfinex.com/wp-2019-05.pdf","explorers":["https://eosflare.io/account/bitfinexleo1","https://intel.arkm.com/explorer/token/leo-token","https://etherscan.io/token/0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3"],"twitter":"https://x.com/bitfinex","reddit":"https://www.reddit.com/r/bitfinex/","github":null}}
+{
+  "description": "",
+  "categories": [
+    "Exchange-based Tokens",
+    "Centralized Exchange (CEX) Token",
+    "Ethereum Ecosystem",
+    "Sora Ecosystem"
+  ],
+  "genesisDate": "2019-05-20",
+  "links": {
+    "homepage": "https://www.bitfinex.com/",
+    "whitepaper": "https://www.bitfinex.com/wp-2019-05.pdf",
+    "explorers": [
+      "https://eosflare.io/account/bitfinexleo1",
+      "https://intel.arkm.com/explorer/token/leo-token",
+      "https://etherscan.io/token/0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3"
+    ],
+    "twitter": "https://x.com/bitfinex",
+    "reddit": "https://www.reddit.com/r/bitfinex/",
+    "github": null
+  }
+}

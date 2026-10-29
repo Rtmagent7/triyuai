@@ -19,7 +19,7 @@ type Props = {
 };
 
 const iconBtn =
-  "text-muted hover:text-text hover:bg-surface-2 pointer-events-auto rounded p-0.5 [&_svg]:size-3.5";
+  "text-muted hover:text-text hover:bg-surface-2 pointer-events-auto flex size-6 items-center justify-center rounded [&_svg]:size-3.5";
 
 /** OHLC and indicator values for the bar under the crosshair (or the latest bar). */
 export function ChartLegend({ title, bars, index, computed, formatPrice, editable }: Props) {
@@ -104,7 +104,7 @@ function IndicatorRow({
           type="button"
           onDoubleClick={() => setSettings(true)}
           title="Double-click for settings"
-          className="text-muted hover:text-text pointer-events-auto"
+          className="text-muted hover:text-text pointer-events-auto min-h-6"
         >
           {label}
         </button>

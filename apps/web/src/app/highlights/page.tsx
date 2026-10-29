@@ -25,7 +25,8 @@ export default async function HighlightsPage() {
           What&apos;s trending and moving most within the top 250 coins.
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* Two columns only from lg: at tablet width coin names would be truncated. */}
+      <div className="grid gap-4 lg:grid-cols-2">
         <List
           title="Trending"
           icon={<Flame className="size-4 text-orange-500" />}

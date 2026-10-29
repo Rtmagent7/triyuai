@@ -17,9 +17,9 @@ for (const path of pages) {
   test(`mobile: ${path} has no horizontal page scroll`, async ({ page }) => {
     await page.goto(path);
     await hydrated(page);
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth - window.innerWidth,
-    );
+    // Compare with the device width: mobile emulation widens innerWidth to fit overflowing content.
+    const width = page.viewportSize()!.width;
+    const overflow = await page.evaluate((w) => document.documentElement.scrollWidth - w, width);
     expect(overflow).toBeLessThanOrEqual(0);
   });
 }

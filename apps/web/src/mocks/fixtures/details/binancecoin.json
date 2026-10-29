@@ -1,1 +1,26 @@
-{"description":"BNB is the native utility token of the BNB Chain ecosystem, acting as a multi-chain asset that powers decentralized applications and facilitates value exchange across its network. It serves as the primary asset for paying transaction gas and smart contract deployment fees while providing users with tiered fee discounts on the Binance exchange. The project’s main value proposition lies in its unified multi-chain architecture, which integrates a smart contract platform, a Layer 2 scaling solution, and a decentralized data storage network into a cohesive settlement and data availability layer.\n\nThe network operates on a Proof of Staked Authority consensus mechanism, utilizing a group of 21 active validators known as the Cabinet to verify transactions and produce blocks every 3 seconds. Validators are elected daily based on the amount of BNB staked or delegated to them, and the system employs fast finality and slashing penalties to maintain security and integrity. To manage its long-term economy, the project uses a programmatic dual-burn strategy that permanently removes tokens through real-time fee destruction and quarterly buybacks.\n\nLaunched in 2017 by the Binance platform, the project initially distributed 50% of its 200 million token supply to the public, while the founding team received 40% and angel investors were allocated 10%. Though it began as a token on the Ethereum network, it eventually migrated to its own autonomous architecture that remains fully compatible with the Ethereum Virtual Machine. Today, the token's utility includes paying for network gas, participating in staking rewards, and enabling decentralized governance through which holders can vote on technical upgrades and economic changes.","categories":["Smart Contract Platform","Exchange-based Tokens","BNB Chain Ecosystem","Centralized Exchange (CEX) Token","Layer 1 (L1)","Ethereum Ecosystem","Alleged SEC Securities","FTX Holdings"],"genesisDate":"2017-07-08","links":{"homepage":"https://www.binance.com?ref=37754157","whitepaper":"https://github.com/bnb-chain/whitepaper/blob/master/WHITEPAPER.md","explorers":["https://bscscan.com","https://intel.arkm.com/explorer/token/binancecoin","https://explorer.binance.org/"],"twitter":"https://x.com/binance","reddit":"https://www.reddit.com/r/binance","github":"https://github.com/binance"}}
+{
+  "description": "BNB is the native utility token of the BNB Chain ecosystem, acting as a multi-chain asset that powers decentralized applications and facilitates value exchange across its network. It serves as the primary asset for paying transaction gas and smart contract deployment fees while providing users with tiered fee discounts on the Binance exchange. The project’s main value proposition lies in its unified multi-chain architecture, which integrates a smart contract platform, a Layer 2 scaling solution, and a decentralized data storage network into a cohesive settlement and data availability layer.\n\nThe network operates on a Proof of Staked Authority consensus mechanism, utilizing a group of 21 active validators known as the Cabinet to verify transactions and produce blocks every 3 seconds. Validators are elected daily based on the amount of BNB staked or delegated to them, and the system employs fast finality and slashing penalties to maintain security and integrity. To manage its long-term economy, the project uses a programmatic dual-burn strategy that permanently removes tokens through real-time fee destruction and quarterly buybacks.\n\nLaunched in 2017 by the Binance platform, the project initially distributed 50% of its 200 million token supply to the public, while the founding team received 40% and angel investors were allocated 10%. Though it began as a token on the Ethereum network, it eventually migrated to its own autonomous architecture that remains fully compatible with the Ethereum Virtual Machine. Today, the token's utility includes paying for network gas, participating in staking rewards, and enabling decentralized governance through which holders can vote on technical upgrades and economic changes.",
+  "categories": [
+    "Smart Contract Platform",
+    "Exchange-based Tokens",
+    "BNB Chain Ecosystem",
+    "Centralized Exchange (CEX) Token",
+    "Layer 1 (L1)",
+    "Ethereum Ecosystem",
+    "Alleged SEC Securities",
+    "FTX Holdings"
+  ],
+  "genesisDate": "2017-07-08",
+  "links": {
+    "homepage": "https://www.binance.com?ref=37754157",
+    "whitepaper": "https://github.com/bnb-chain/whitepaper/blob/master/WHITEPAPER.md",
+    "explorers": [
+      "https://bscscan.com",
+      "https://intel.arkm.com/explorer/token/binancecoin",
+      "https://explorer.binance.org/"
+    ],
+    "twitter": "https://x.com/binance",
+    "reddit": "https://www.reddit.com/r/binance",
+    "github": "https://github.com/binance"
+  }
+}

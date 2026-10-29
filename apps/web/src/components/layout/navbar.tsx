@@ -74,18 +74,25 @@ export function Navbar() {
           >
             <Search className="size-4" aria-hidden />
             {/* Visible text doubles as the accessible name (WCAG 2.5.3 label-in-name). */}
-            <span className="sr-only md:not-sr-only">Search coins…</span>
+            <span className="sr-only whitespace-nowrap md:not-sr-only">Search coins…</span>
             <kbd
               aria-hidden
-              className="border-border bg-bg ml-auto hidden rounded border px-1.5 font-sans text-[11px] md:inline"
+              className="border-border bg-bg ml-auto hidden rounded border px-1.5 font-sans text-[11px] md:inline lg:hidden xl:inline"
             >
               ⌘K
             </kbd>
           </button>
           <CurrencySwitch />
           <ThemeToggle />
-          <Button variant="ai" onClick={() => openChat()} className="hidden sm:inline-flex">
-            <Sparkle className="text-white" /> Ask TRIYU
+          {/* Icon-only between lg and xl, where the nav links take the room. */}
+          <Button
+            variant="ai"
+            onClick={() => openChat()}
+            aria-label="Ask TRIYU"
+            className="hidden sm:inline-flex lg:px-2.5 xl:px-3.5"
+          >
+            <Sparkle className="text-white" />
+            <span className="lg:hidden xl:inline">Ask TRIYU</span>
           </Button>
           <AccountMenu />
         </div>

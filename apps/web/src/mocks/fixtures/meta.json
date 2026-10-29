@@ -1,1 +1,25 @@
-{"fetchedAt":"2026-10-28T15:19:18.542Z","detailed":["bitcoin","ethereum","tether","binancecoin","ripple","usd-coin","solana","tron","figure-heloc","zcash","hyperliquid","dogecoin","monero","usds","whitebit","chainlink","leo-token","cardano","near","stellar"]}
+{
+  "fetchedAt": "2026-10-28T15:19:18.542Z",
+  "detailed": [
+    "bitcoin",
+    "ethereum",
+    "tether",
+    "binancecoin",
+    "ripple",
+    "usd-coin",
+    "solana",
+    "tron",
+    "figure-heloc",
+    "zcash",
+    "hyperliquid",
+    "dogecoin",
+    "monero",
+    "usds",
+    "whitebit",
+    "chainlink",
+    "leo-token",
+    "cardano",
+    "near",
+    "stellar"
+  ]
+}

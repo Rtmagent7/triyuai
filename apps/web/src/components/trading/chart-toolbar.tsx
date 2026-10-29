@@ -80,8 +80,13 @@ export function ChartToolbar({
       : [...COMPACT_INTERVALS, interval];
 
   return (
-    <div className="border-border flex h-[45px] shrink-0 items-center gap-1 overflow-x-auto border-b px-2 [scrollbar-width:none]">
-      {full && <span className="whitespace-nowrap pr-2 text-sm font-semibold">{pair}</span>}
+    <div className="border-border relative flex h-[45px] shrink-0 items-center gap-1 overflow-x-auto border-b px-2 [scrollbar-width:none] max-md:[mask-image:linear-gradient(to_right,black_88%,transparent)]">
+      {/* The page title already names the pair on phones. */}
+      {full && (
+        <span className="hidden whitespace-nowrap pr-2 text-sm font-semibold sm:inline">
+          {pair}
+        </span>
+      )}
 
       <div role="radiogroup" aria-label="Timeframe" className="flex items-center">
         {shown.map((iv) => (

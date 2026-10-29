@@ -1,33 +1,35 @@
+import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import mark from "@/assets/brand/logo-mark.png";
+import wordDark from "@/assets/brand/logo-wordmark-dark.png";
+import wordLight from "@/assets/brand/logo-wordmark-light.png";
 
-export function Logo() {
+/** Brand logo: emblem + wordmark (white letters in dark mode, navy in light mode). */
+export function Logo({ className }: { className?: string }) {
   return (
     <Link
       href="/"
-      className="flex items-center gap-2 font-semibold tracking-tight"
       aria-label="TRIYUAI home"
+      className={cn("flex shrink-0 items-center gap-2", className)}
     >
-      <svg viewBox="0 0 32 32" className="size-7" aria-hidden>
-        <defs>
-          <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="var(--brand)" />
-            <stop offset="1" stopColor="var(--ai-to)" />
-          </linearGradient>
-        </defs>
-        <rect width="32" height="32" rx="9" fill="url(#logo-g)" />
-        <path
-          d="M8 20.5 13 14l4 4 7-9"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="24" cy="9" r="2" fill="#fff" />
-      </svg>
-      <span className="text-[17px]">
-        TRIYU<span className="text-brand">AI</span>
-      </span>
+      <Image src={mark} alt="" width={34} height={34} priority className="size-[34px]" />
+      <Image
+        src={wordLight}
+        alt=""
+        width={102}
+        height={17}
+        priority
+        className="h-[17px] w-auto dark:hidden"
+      />
+      <Image
+        src={wordDark}
+        alt=""
+        width={102}
+        height={17}
+        priority
+        className="hidden h-[17px] w-auto dark:block"
+      />
     </Link>
   );
 }

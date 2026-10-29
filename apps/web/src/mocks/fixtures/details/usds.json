@@ -1,1 +1,25 @@
-{"description":"USDS is the stablecoin of the decentralized Sky ecosystem, designed to maintain a soft peg (a value intended to stay close) to the U.S. dollar. It functions as a versatile tool for&nbsp;decentralized finance (DeFi), allowing value to move through the system via peer-to-peer lending and saving without a middleman. The token is 'put to work' by being supplied to various protocol modules; for example, users can convert USDS into sUSDS to earn interest from protocol revenue or lock it to receive&nbsp;SKY governance tokens. As the ecosystem grows, this scales through \"Sky Stars,\" which are semi-autonomous projects that expand the stablecoin’s utility into specialized areas like institutional credit and advanced lending.","categories":["Stablecoins","USD Stablecoin","Solana Ecosystem","Arbitrum Ecosystem","Ethereum Ecosystem","Fiat-backed Stablecoin","Base Native"],"genesisDate":null,"links":{"homepage":"https://sky.money/","whitepaper":"https://developers.sky.money/","explorers":["https://etherscan.io/token/0xdc035d45d973e3ec169d2276ddab16f1e407384f","https://intel.arkm.com/explorer/token/usds","https://ethplorer.io/address/0xdc035d45d973e3ec169d2276ddab16f1e407384f"],"twitter":"https://x.com/SkyEcosystem","reddit":null,"github":null}}
+{
+  "description": "USDS is the stablecoin of the decentralized Sky ecosystem, designed to maintain a soft peg (a value intended to stay close) to the U.S. dollar. It functions as a versatile tool for&nbsp;decentralized finance (DeFi), allowing value to move through the system via peer-to-peer lending and saving without a middleman. The token is 'put to work' by being supplied to various protocol modules; for example, users can convert USDS into sUSDS to earn interest from protocol revenue or lock it to receive&nbsp;SKY governance tokens. As the ecosystem grows, this scales through \"Sky Stars,\" which are semi-autonomous projects that expand the stablecoin’s utility into specialized areas like institutional credit and advanced lending.",
+  "categories": [
+    "Stablecoins",
+    "USD Stablecoin",
+    "Solana Ecosystem",
+    "Arbitrum Ecosystem",
+    "Ethereum Ecosystem",
+    "Fiat-backed Stablecoin",
+    "Base Native"
+  ],
+  "genesisDate": null,
+  "links": {
+    "homepage": "https://sky.money/",
+    "whitepaper": "https://developers.sky.money/",
+    "explorers": [
+      "https://etherscan.io/token/0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      "https://intel.arkm.com/explorer/token/usds",
+      "https://ethplorer.io/address/0xdc035d45d973e3ec169d2276ddab16f1e407384f"
+    ],
+    "twitter": "https://x.com/SkyEcosystem",
+    "reddit": null,
+    "github": null
+  }
+}
