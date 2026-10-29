@@ -1,12 +1,23 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Maximize2 } from "lucide-react";
+import { Loader2, Maximize2 } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { useChat } from "@/stores/chat";
-import { ChatView } from "./chat-view";
 import { Sparkle } from "./sparkle";
+
+// The conversation UI pulls in react-markdown; load it when the panel first opens.
+const loadChatView = () => import("./chat-view").then((m) => m.ChatView);
+const ChatView = dynamic(loadChatView, {
+  ssr: false,
+  loading: () => (
+    <div className="flex flex-1 items-center justify-center" aria-label="Loading Ask TRIYU">
+      <Loader2 className="text-muted size-5 animate-spin" />
+    </div>
+  ),
+});
 
 /** Floating button on every page → drawer on desktop, full-screen sheet on mobile (FR-18). */
 export function ChatPanel() {
@@ -21,6 +32,8 @@ export function ChatPanel() {
         <button
           type="button"
           onClick={() => setOpen(true)}
+          onPointerEnter={() => void loadChatView()}
+          onFocus={() => void loadChatView()}
           aria-label="Open Ask TRIYU"
           className="ai-gradient h-13 shadow-ai-from/30 fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full pl-4 pr-5 font-medium text-white shadow-xl transition-transform hover:scale-[1.03] sm:bottom-6 sm:right-6"
         >

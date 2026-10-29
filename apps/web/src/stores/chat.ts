@@ -1,11 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import {
-  CHAT_CONTEXT_MESSAGES,
-  GUEST_DAILY_CHAT_QUOTA,
-  chatStreamEventSchema,
-  type ChatStreamEvent,
-} from "@triyuai/shared";
+import type { ChatStreamEvent } from "@triyuai/shared";
+import { CHAT_CONTEXT_MESSAGES, GUEST_DAILY_CHAT_QUOTA } from "@triyuai/shared/constants";
 import { api } from "@/lib/api/client";
 
 export type ToolChip = { id: string; label: string; done: boolean };
@@ -42,6 +38,8 @@ let controller: AbortController | null = null;
 
 /** Parses an SSE body (`data: {json}\n\n`) into typed stream events. */
 async function* readEvents(body: ReadableStream<Uint8Array>): AsyncGenerator<ChatStreamEvent> {
+  // Zod is only needed once someone chats, so it stays out of the initial bundle.
+  const { chatStreamEventSchema } = await import("@triyuai/shared");
   const reader = body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";

@@ -89,7 +89,7 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
 
       <div className="flex flex-wrap items-center gap-2">
         <WatchlistButton id={coin.id} name={coin.name} withLabel className="h-9" />
-        <Button variant="outline" onClick={share} aria-label="Copy link to this page">
+        <Button variant="outline" onClick={share} title="Copy link to this page">
           {copied ? <Check /> : <Link2 />} {copied ? "Copied" : "Share"}
         </Button>
         <Button

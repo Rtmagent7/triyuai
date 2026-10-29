@@ -64,7 +64,7 @@ function List({
   volume?: boolean;
 }) {
   return (
-    <Card className="p-4">
+    <Card className="min-w-0 p-4">
       <h2 className="mb-2 flex items-center gap-2 px-2 font-semibold">
         {icon}
         {title}

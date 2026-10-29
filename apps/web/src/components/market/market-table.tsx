@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import type { Coin } from "@triyuai/shared";
 import { CoinLogo } from "@/components/coin/coin-logo";
 import { PercentBadge } from "@/components/coin/percent-badge";
@@ -50,8 +50,15 @@ type Props = {
 };
 
 /** FR-08: market table with sorting, filtering, sparklines and a live price column. */
+/** Rows rendered on the server and during hydration; the rest follow in a transition. */
+const FIRST_PAINT_ROWS = 20;
+
 export function MarketTable({ coins, filter = "", isLoading, emptyState, className }: Props) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  // Hydrating 100 rows of sparklines at once blocks the main thread on mobile;
+  // render what is above the fold first and stream in the rest without blocking input.
+  const [rowLimit, setRowLimit] = useState(FIRST_PAINT_ROWS);
+  useEffect(() => startTransition(() => setRowLimit(Number.POSITIVE_INFINITY)), []);
 
   const columns = useMemo(
     () => [
@@ -134,7 +141,8 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  const rows = table.getRowModel().rows;
+  const allRows = table.getRowModel().rows;
+  const rows = allRows.slice(0, rowLimit);
 
   return (
     <div
@@ -228,7 +236,7 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
               ))}
         </tbody>
       </table>
-      {!isLoading && rows.length === 0 && emptyState}
+      {!isLoading && allRows.length === 0 && emptyState}
     </div>
   );
 }

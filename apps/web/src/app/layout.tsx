@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { GlobalStatsBar } from "@/components/layout/global-stats-bar";
 import { Navbar } from "@/components/layout/navbar";
 import { Providers } from "@/components/providers";
-import { CommandPalette } from "@/components/search/command-palette";
+import { CommandPaletteLoader } from "@/components/search/command-palette-loader";
 import { serverApi } from "@/lib/api/server";
 import "./globals.css";
 
@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {children}
           </main>
           <Footer />
-          <CommandPalette />
+          <CommandPaletteLoader />
           <ChatPanel />
         </Providers>
       </body>

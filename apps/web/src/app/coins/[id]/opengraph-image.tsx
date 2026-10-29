@@ -29,9 +29,7 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
         fontFamily: "sans-serif",
       }}
     >
-      <div
-        style={{ display: "flex", alignItems: "center", fontSize: 34, fontWeight: 700 }}
-      >
+      <div style={{ display: "flex", alignItems: "center", fontSize: 34, fontWeight: 700 }}>
         TRIYU<span style={{ color: "#7c7cff" }}>AI</span>
       </div>
       {coin ? (

@@ -14,7 +14,8 @@ import {
 } from "lightweight-charts";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
-import { chartRanges, type ChartRange, type ChartType } from "@triyuai/shared";
+import type { ChartRange, ChartType } from "@triyuai/shared";
+import { chartRanges } from "@triyuai/shared/constants";
 import { ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useChart } from "@/hooks/queries";

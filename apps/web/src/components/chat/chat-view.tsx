@@ -2,7 +2,7 @@
 
 import { ArrowUp, Square, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { GUEST_DAILY_CHAT_QUOTA } from "@triyuai/shared";
+import { GUEST_DAILY_CHAT_QUOTA } from "@triyuai/shared/constants";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useChat } from "@/stores/chat";

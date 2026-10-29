@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { chartRanges, chatToolNames, currencies } from "./constants";
 
 /**
  * API contract for TRIYUAI (PRD §13). Prices are always in USD;
@@ -93,7 +94,6 @@ export const highlightsSchema = z.object({
 });
 export type Highlights = z.infer<typeof highlightsSchema>;
 
-export const chartRanges = ["24h", "7d", "1m", "3m", "1y", "max"] as const;
 export const chartRangeSchema = z.enum(chartRanges);
 export type ChartRange = z.infer<typeof chartRangeSchema>;
 
@@ -122,7 +122,6 @@ export const chartDataSchema = z.object({
 });
 export type ChartData = z.infer<typeof chartDataSchema>;
 
-export const currencies = ["usd", "idr", "eur"] as const;
 export const currencySchema = z.enum(currencies);
 export type Currency = z.infer<typeof currencySchema>;
 
@@ -155,13 +154,6 @@ export const chatRequestSchema = z.object({
 });
 export type ChatRequest = z.infer<typeof chatRequestSchema>;
 
-export const chatToolNames = [
-  "getMarketOverview",
-  "getCoinDetails",
-  "getTopMovers",
-  "searchCoin",
-  "compareCoins",
-] as const;
 export type ChatToolName = (typeof chatToolNames)[number];
 
 /** One event per SSE `data:` line on POST /api/v1/ai/chat. */
@@ -178,7 +170,3 @@ export const chatStreamEventSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("error"), code: z.string(), message: z.string() }),
 ]);
 export type ChatStreamEvent = z.infer<typeof chatStreamEventSchema>;
-
-export const GUEST_DAILY_CHAT_QUOTA = 10;
-export const USER_DAILY_CHAT_QUOTA = 30;
-export const CHAT_CONTEXT_MESSAGES = 10;

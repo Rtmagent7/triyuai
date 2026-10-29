@@ -2,7 +2,8 @@
 
 import { ArrowLeftRight, ArrowUpDown } from "lucide-react";
 import { useMemo } from "react";
-import { currencies, type CoinSummary, type Rates } from "@triyuai/shared";
+import type { CoinSummary, Rates } from "@triyuai/shared";
+import { currencies } from "@triyuai/shared/constants";
 import { CoinLogo } from "@/components/coin/coin-logo";
 import { useRatesData } from "@/hooks/queries";
 import { currencyLabel, formatNumber } from "@/lib/format";
@@ -129,7 +130,7 @@ export function Converter({ coins, from, to, amount, onChange, compact }: Props)
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-1">
+    <div className="min-w-0 space-y-1">
       <span className="text-muted text-xs font-medium">{label}</span>
       {children}
     </div>
@@ -151,8 +152,8 @@ function AssetSelect({
   return (
     <label className="border-border relative flex items-center gap-1.5 border-l pl-2.5 pr-2">
       {current?.image && <CoinLogo src={current.image} name={current.name} size={18} />}
-      <span className="sr-only">{label}</span>
       <select
+        aria-label={label}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="h-11 max-w-28 cursor-pointer appearance-none bg-transparent pr-4 text-sm font-semibold outline-none"
