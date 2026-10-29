@@ -33,7 +33,11 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [rates, global] = await Promise.all([serverApi.rates(), serverApi.global()]);
+  // The shell still renders if the API is down; the client refetches these.
+  const [rates, global] = await Promise.all([
+    serverApi.rates().catch(() => undefined),
+    serverApi.global().catch(() => undefined),
+  ]);
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="min-h-dvh">

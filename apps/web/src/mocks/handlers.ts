@@ -1,5 +1,6 @@
 import { http, HttpResponse, delay } from "msw";
 import { chartRangeSchema, chatRequestSchema, coinsQuerySchema } from "@triyuai/shared";
+import { authHandlers } from "./auth-handlers";
 import { answerEvents } from "./chat-engine";
 import {
   NotFoundError,
@@ -26,6 +27,7 @@ const notFound = (err: unknown) => {
 };
 
 export const handlers = [
+  ...authHandlers,
   http.get(`${BASE}/global`, async () => {
     await latency();
     return HttpResponse.json(getGlobal());

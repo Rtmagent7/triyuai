@@ -9,6 +9,7 @@ const pages = [
   "/watchlist",
   "/ask",
   "/about",
+  "/login",
 ];
 
 for (const path of pages) {

@@ -11,6 +11,8 @@ const pages = [
   "/ask",
   "/about",
   "/disclaimer",
+  "/login",
+  "/register",
 ];
 
 for (const theme of ["dark", "light"] as const) {

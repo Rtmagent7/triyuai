@@ -96,7 +96,7 @@ describe("Price / Money", () => {
 
 describe("WatchlistButton", () => {
   it("toggles the coin and updates its label", async () => {
-    render(<WatchlistButton id="solana" name="Solana" withLabel />);
+    renderWithClient(<WatchlistButton id="solana" name="Solana" withLabel />);
     const btn = screen.getByRole("button", { name: "Add Solana to watchlist" });
     expect(btn).toHaveAttribute("aria-pressed", "false");
     await userEvent.click(btn);

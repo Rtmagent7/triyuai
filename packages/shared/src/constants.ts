@@ -15,3 +15,4 @@ export const chatToolNames = [
 export const GUEST_DAILY_CHAT_QUOTA = 10;
 export const USER_DAILY_CHAT_QUOTA = 30;
 export const CHAT_CONTEXT_MESSAGES = 10;
+export const WATCHLIST_MAX = 100;

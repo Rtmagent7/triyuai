@@ -1,7 +1,11 @@
 import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, vi } from "vitest";
 import { server } from "./server";
+
+// MSW adds 150–400 ms of fake latency per call; flows that chain several calls (session →
+// watchlist → coins) need more than the 1 s default, especially under coverage.
+configure({ asyncUtilTimeout: 4000 });
 
 // Node ≥ 25 ships an experimental global localStorage that is undefined without
 // --localstorage-file and shadows jsdom's; provide an in-memory Storage instead.
@@ -77,6 +81,7 @@ afterEach(() => {
   cleanup();
   server.resetHandlers();
   localStorage.clear();
+  document.cookie = "triyu_session=; path=/; max-age=0";
   vi.useRealTimers();
 });
 afterAll(() => server.close());

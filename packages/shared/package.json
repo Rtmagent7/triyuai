@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./constants": "./src/constants.ts"
+    "./constants": "./src/constants.ts",
+    "./chart": "./src/chart.ts",
+    "./coingecko": "./src/coingecko.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

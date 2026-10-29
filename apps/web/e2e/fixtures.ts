@@ -10,7 +10,20 @@ type BinanceMock = {
  * Replaces the Binance WebSocket with a controllable fake so live-price tests are
  * deterministic and never depend on the network (or on binance.com being reachable).
  */
-export const test = base.extend<{ binance: BinanceMock }>({
+const COIN_IMAGE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><circle cx=".5" cy=".5" r=".5" fill="#888"/></svg>`;
+
+export const test = base.extend<{ binance: BinanceMock; offlineImages: void }>({
+  // Coin logos come from CoinGecko's CDN; serving a placeholder keeps runs deterministic
+  // (one malformed logo URL in the snapshot makes the CDN hang, stalling networkidle).
+  offlineImages: [
+    async ({ page }, use) => {
+      await page.route(/^https:\/\/(coin-images|assets)\.coingecko\.com\//, (route) =>
+        route.fulfill({ contentType: "image/svg+xml", body: COIN_IMAGE }),
+      );
+      await use();
+    },
+    { auto: true },
+  ],
   binance: async ({ page }, use) => {
     let socket: WebSocketRoute | undefined;
     let resolve!: () => void;

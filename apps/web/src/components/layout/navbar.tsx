@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useTheme } from "next-themes";
-import { Menu, Monitor, Moon, Search, Sun, UserRound } from "lucide-react";
-import { toast } from "sonner";
+import { LogOut, Menu, Monitor, Moon, Search, Star, Sun, UserRound } from "lucide-react";
 import type { Currency } from "@triyuai/shared";
 import { currencies } from "@triyuai/shared/constants";
 import { Sparkle } from "@/components/chat/sparkle";
@@ -13,12 +12,14 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useAuthActions, useSession } from "@/hooks/use-session";
 import { currencyLabel, currencySymbol } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useChat } from "@/stores/chat";
@@ -32,11 +33,6 @@ const links = [
   { href: "/converter", label: "Converter" },
   { href: "/watchlist", label: "Watchlist" },
 ];
-
-const loginSoon = () =>
-  toast("Accounts are coming soon", {
-    description: "Your watchlist is saved on this device for now.",
-  });
 
 export function Navbar() {
   const pathname = usePathname();
@@ -87,12 +83,54 @@ export function Navbar() {
           <Button variant="ai" onClick={() => openChat()} className="hidden sm:inline-flex">
             <Sparkle className="text-white" /> Ask TRIYU
           </Button>
-          <Button variant="outline" onClick={loginSoon} className="hidden xl:inline-flex">
-            Log in
-          </Button>
+          <AccountMenu />
         </div>
       </div>
     </header>
+  );
+}
+
+function AccountMenu() {
+  const { data: user } = useSession();
+  const { logout } = useAuthActions();
+  if (!user) {
+    return (
+      <Button asChild variant="outline" className="hidden lg:inline-flex" aria-label="Log in">
+        <Link href="/login">
+          <UserRound /> <span className="hidden xl:inline">Log in</span>
+        </Link>
+      </Button>
+    );
+  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={`Account: ${user.name}`}
+          className="hidden lg:inline-flex"
+        >
+          <span className="bg-brand text-brand-fg flex size-7 items-center justify-center rounded-full text-xs font-semibold">
+            {user.name.slice(0, 1).toUpperCase()}
+          </span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-52">
+        <DropdownMenuLabel>
+          <span className="text-text block text-sm font-medium">{user.name}</span>
+          <span className="text-muted block truncate text-xs font-normal">{user.email}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuItem asChild>
+          <Link href="/watchlist">
+            <Star className="size-4" /> Watchlist
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void logout()}>
+          <LogOut className="size-4" /> Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -156,6 +194,8 @@ function ThemeToggle() {
 function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
   // Controlled so the sheet closes when a link navigates (client navigation keeps it mounted).
   const [open, setOpen] = useState(false);
+  const { data: user } = useSession();
+  const { logout } = useAuthActions();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -184,16 +224,28 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
             ),
           )}
         </nav>
-        <Button
-          variant="outline"
-          className="mt-6 w-full"
-          onClick={() => {
-            setOpen(false);
-            loginSoon();
-          }}
-        >
-          <UserRound /> Log in
-        </Button>
+        {user ? (
+          <div className="border-border mt-6 border-t pt-4">
+            <p className="text-muted text-xs">Signed in as</p>
+            <p className="truncate font-medium">{user.name}</p>
+            <Button
+              variant="outline"
+              className="mt-3 w-full"
+              onClick={() => {
+                setOpen(false);
+                void logout();
+              }}
+            >
+              <LogOut /> Sign out
+            </Button>
+          </div>
+        ) : (
+          <Button asChild variant="outline" className="mt-6 w-full">
+            <Link href="/login" onClick={() => setOpen(false)}>
+              <UserRound /> Log in
+            </Link>
+          </Button>
+        )}
       </SheetContent>
     </Sheet>
   );

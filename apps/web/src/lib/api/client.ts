@@ -9,11 +9,15 @@ import type {
   CoinsPage,
   GlobalStats,
   Highlights,
+  LoginInput,
   Rates,
+  RegisterInput,
+  User,
 } from "@triyuai/shared";
 
 import { ensureMocks } from "./mocking";
 
+/** Same-origin by default: Next.js proxies /api/v1 to the Express API, so auth cookies are first-party. */
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api/v1";
 
 export class ApiRequestError extends Error {
@@ -26,12 +30,46 @@ export class ApiRequestError extends Error {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<ApiResponse<T>> {
+export type Me = User & { watchlist: string[] };
+
+/** Non-secret cookie set next to the httpOnly session cookies; guests skip /auth/me entirely. */
+export const hasSessionHint = () =>
+  typeof document !== "undefined" && /(?:^|;s*)triyu_session=/.test(document.cookie);
+
+let refreshing: Promise<boolean> | null = null;
+
+/** Rotates the refresh token once for any number of concurrent 401s. */
+function refreshSession(): Promise<boolean> {
+  refreshing ??= fetch(`${API_URL}/auth/refresh`, { method: "POST", credentials: "include" })
+    .then((r) => r.ok)
+    .catch(() => false)
+    .finally(() => {
+      refreshing = null;
+    });
+  return refreshing;
+}
+
+async function request<T>(
+  path: string,
+  init?: RequestInit & { json?: unknown },
+  retried = false,
+): Promise<ApiResponse<T>> {
   await ensureMocks();
+  const { json, ...rest } = init ?? {};
   const res = await fetch(`${API_URL}${path}`, {
-    ...init,
-    headers: { accept: "application/json", ...init?.headers },
+    ...rest,
+    credentials: "include",
+    headers: {
+      accept: "application/json",
+      ...(json !== undefined ? { "Content-Type": "application/json" } : {}),
+      ...rest.headers,
+    },
+    body: json !== undefined ? JSON.stringify(json) : rest.body,
   });
+  // Access tokens last 15 minutes; refresh silently and retry once.
+  if (res.status === 401 && !retried && !path.startsWith("/auth/") && (await refreshSession())) {
+    return request<T>(path, init, true);
+  }
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as {
       error?: { code: string; message: string };
@@ -42,10 +80,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<ApiResponse
       body?.error?.message ?? res.statusText,
     );
   }
+  if (res.status === 204)
+    return { data: undefined as T, meta: { fetchedAt: "", source: "database", stale: false } };
   return (await res.json()) as ApiResponse<T>;
 }
 
-/** Browser API client. In Phase 1 every call is answered by MSW (src/mocks). */
+const post = <T>(path: string, json?: unknown) =>
+  request<T>(path, { method: "POST", json: json ?? {} });
+
+/** Browser API client. With NEXT_PUBLIC_API_MOCKING enabled every call is answered by MSW (src/mocks). */
 export const api = {
   global: () => request<GlobalStats>("/global"),
   rates: () => request<Rates>("/rates"),
@@ -57,10 +100,39 @@ export const api = {
     request<ChartData>(`/coins/${encodeURIComponent(id)}/chart?range=${range}`),
   highlights: () => request<Highlights>("/highlights"),
   search: (q: string) => request<CoinSummary[]>(`/search?q=${encodeURIComponent(q)}`),
+
+  auth: {
+    me: async (): Promise<Me | null> => {
+      if (!hasSessionHint()) return null;
+      try {
+        return (await request<Me>("/auth/me")).data;
+      } catch (err) {
+        // Signed out, or the access token expired: try one refresh before giving up.
+        if (err instanceof ApiRequestError && err.status === 401) {
+          return (await refreshSession()) ? (await request<Me>("/auth/me")).data : null;
+        }
+        throw err;
+      }
+    },
+    register: (input: RegisterInput) => post<User>("/auth/register", input),
+    login: (input: LoginInput) => post<User>("/auth/login", input),
+    demo: () => post<User>("/auth/demo"),
+    logout: () => post<void>("/auth/logout"),
+  },
+
+  watchlist: {
+    list: () => request<string[]>("/watchlist"),
+    add: (coinId: string) => post<string[]>("/watchlist", { coinId }),
+    remove: (coinId: string) =>
+      request<string[]>(`/watchlist/${encodeURIComponent(coinId)}`, { method: "DELETE" }),
+    merge: (coinIds: string[]) => post<string[]>("/watchlist/merge", { coinIds }),
+  },
+
   chat: async (body: ChatRequest, signal?: AbortSignal) => {
     await ensureMocks();
     return fetch(`${API_URL}/ai/chat`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json", accept: "text/event-stream" },
       body: JSON.stringify(body),
       signal,

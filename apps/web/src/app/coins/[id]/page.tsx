@@ -6,16 +6,22 @@ import { CoinHeader } from "@/components/coin/coin-header";
 import { MiniConverter } from "@/components/coin/mini-converter";
 import { PriceChartLazy as PriceChart } from "@/components/coin/price-chart-lazy";
 import { StatsGrid } from "@/components/coin/stats-grid";
+import { mockingEnabled } from "@/lib/api/mocking";
 import { NotFoundError, serverApi } from "@/lib/api/server";
 import { formatPercent, formatPrice } from "@/lib/format";
 import { plainText, sanitizeDescription } from "@/lib/sanitize";
-import { toSummary } from "@/mocks/data";
+import { toSummary } from "@triyuai/shared/coingecko";
 
 export const revalidate = 60;
 export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return serverApi.topIds(100).map((id) => ({ id }));
+/**
+ * Prototype mode pre-renders the top 100 from fixtures. With the real API, pages render on
+ * first visit and are cached (ISR): 100 detail calls at build time would hit CoinGecko's rate limit.
+ */
+export async function generateStaticParams() {
+  if (!mockingEnabled) return [];
+  return (await serverApi.topIds(100)).map((id) => ({ id }));
 }
 
 type Props = { params: Promise<{ id: string }> };

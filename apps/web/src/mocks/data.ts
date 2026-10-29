@@ -15,9 +15,11 @@ import type {
   GlobalStats,
   Highlights,
   LinePoint,
-  OhlcPoint,
   Rates,
 } from "@triyuai/shared";
+import { sliceRange, toLine, toOhlc } from "@triyuai/shared/chart";
+import { toSummary } from "@triyuai/shared/coingecko";
+import { NotFoundError } from "@/lib/api/errors";
 import { hashString, seededRandom } from "@/lib/utils";
 import marketsJson from "./fixtures/markets.json";
 import globalJson from "./fixtures/global.json";
@@ -34,7 +36,7 @@ export const snapshotAt: string = metaJson.fetchedAt;
 
 const byId = new Map(markets.map((c) => [c.id, c]));
 
-export class NotFoundError extends Error {}
+export { NotFoundError };
 
 const meta = (): ApiResponse<unknown>["meta"] => ({
   fetchedAt: snapshotAt,
@@ -43,15 +45,7 @@ const meta = (): ApiResponse<unknown>["meta"] => ({
 });
 const ok = <T>(data: T): ApiResponse<T> => ({ data, meta: meta() });
 
-export const toSummary = (c: Coin): CoinSummary => ({
-  id: c.id,
-  symbol: c.symbol,
-  name: c.name,
-  image: c.image,
-  rank: c.rank,
-  price: c.price,
-  change24h: c.change24h,
-});
+export { toOhlc, toSummary };
 
 export const findCoin = (id: string) => byId.get(id);
 
@@ -140,54 +134,8 @@ export async function getCoinDetail(id: string): Promise<ApiResponse<CoinDetail>
 /* ---------------- Charts ---------------- */
 
 const DAY = 86_400;
-const rangeSeconds: Record<ChartRange, number> = {
-  "24h": DAY,
-  "7d": 7 * DAY,
-  "1m": 30 * DAY,
-  "3m": 90 * DAY,
-  "1y": 365 * DAY,
-  max: Number.POSITIVE_INFINITY,
-};
-
 /** The keyless CoinGecko API caps history at 365 days, so MAX shows the full snapshot (1 year). */
 type ChartFixture = Record<"1" | "90" | "365", [number, number][]>;
-
-const toLine = (pts: [number, number][]): LinePoint[] => {
-  const out: LinePoint[] = [];
-  for (const [time, value] of pts) {
-    // lightweight-charts requires strictly increasing timestamps
-    if (out.length && time <= out[out.length - 1]!.time) continue;
-    out.push({ time, value });
-  }
-  return out;
-};
-
-/** Groups consecutive points into ~90 candles; each candle opens at the previous close. */
-export function toOhlc(line: LinePoint[], targetCandles = 90): OhlcPoint[] {
-  if (line.length < 2) return [];
-  const size = Math.max(2, Math.ceil(line.length / targetCandles));
-  const out: OhlcPoint[] = [];
-  for (let i = 0; i < line.length; i += size) {
-    const chunk = line.slice(i, i + size);
-    const values = chunk.map((p) => p.value);
-    const open = out.length ? out[out.length - 1]!.close : values[0]!;
-    const close = values[values.length - 1]!;
-    out.push({
-      time: chunk[0]!.time,
-      open,
-      high: Math.max(open, ...values),
-      low: Math.min(open, ...values),
-      close,
-    });
-  }
-  return out;
-}
-
-function sliceRange(line: LinePoint[], range: ChartRange) {
-  if (range === "max" || !line.length) return line;
-  const end = line[line.length - 1]!.time;
-  return line.filter((p) => p.time >= end - rangeSeconds[range]);
-}
 
 /** For coins without chart fixtures: a deterministic walk anchored on the real 7d sparkline. */
 function simulatedSeries(coin: Coin): LinePoint[] {

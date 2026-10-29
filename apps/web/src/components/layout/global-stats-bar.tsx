@@ -3,7 +3,7 @@
 import { PercentBadge } from "@/components/coin/percent-badge";
 import { useGlobalStats } from "@/hooks/queries";
 import { useMoney } from "@/hooks/use-money";
-import { formatNumber, formatPercent } from "@/lib/format";
+import { formatNumber, formatPercent, timeAgo } from "@/lib/format";
 import { LiveIndicator } from "./live-indicator";
 
 /** FR-02: refreshes every 60 s via React Query. */
@@ -28,7 +28,17 @@ export function GlobalStatsBar() {
         ) : (
           <span>Loading market stats…</span>
         )}
-        <div className="ml-auto pl-4">
+        <div className="ml-auto flex items-center gap-3 pl-4">
+          {data?.meta.stale && (
+            // PRD §11: CoinGecko is rate-limited, so the API serves its last saved snapshot.
+            <span
+              suppressHydrationWarning
+              className="rounded-full bg-amber-500/15 px-2 py-0.5 font-medium text-amber-700 dark:text-amber-400"
+              title={`Market data provider is busy. Showing data saved ${timeAgo(data.meta.fetchedAt)}.`}
+            >
+              Data delayed
+            </span>
+          )}
           <LiveIndicator />
         </div>
       </div>

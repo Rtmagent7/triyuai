@@ -9,6 +9,8 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     css: false,
+    // Form tests type character by character; leave headroom when suites run in parallel.
+    testTimeout: 15_000,
     env: {
       // Tests talk to MSW's Node server instead of the browser service worker.
       NEXT_PUBLIC_API_MOCKING: "disabled",

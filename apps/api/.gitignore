@@ -1,0 +1,4 @@
+.pglite
+src/generated
+coverage
+.env

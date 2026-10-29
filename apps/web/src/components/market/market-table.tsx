@@ -79,6 +79,8 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
           return (
             <Link
               href={`/coins/${c.id}`}
+              // Lists show many coins; prefetching each would render every page (and call the API) up front.
+              prefetch={false}
               className="hover:text-brand flex min-w-0 items-center gap-2.5 font-medium"
             >
               <CoinLogo src={c.image} name={c.name} size={24} />

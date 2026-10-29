@@ -74,6 +74,8 @@ function List({
           <li key={c.id}>
             <Link
               href={`/coins/${c.id}`}
+              // Lists show many coins; prefetching each would render every page (and call the API) up front.
+              prefetch={false}
               className="hover:bg-surface-2 flex items-center gap-3 rounded-lg px-2 py-2 text-sm"
             >
               <span className="text-muted tabular w-4 text-xs">{i + 1}</span>
