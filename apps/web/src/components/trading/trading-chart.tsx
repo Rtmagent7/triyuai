@@ -483,7 +483,8 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
         onFullscreen={toggleFullscreen}
         onScreenshot={screenshot}
       />
-      <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
+      {/* Full: fills the fixed-height frame. Compact: fixed plot height (flex-1 would collapse it in an auto-height column). */}
+      <div className={cn("flex", full && "min-h-0 flex-1 flex-col sm:flex-row")}>
         {full && (
           <DrawingToolbar
             tool={tool}
@@ -496,7 +497,12 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
             count={drawings.length}
           />
         )}
-        <div className={cn("relative min-h-0 flex-1", !full && "h-[360px] sm:h-[420px]")}>
+        <div
+          className={cn(
+            "relative min-w-0",
+            full ? "min-h-0 flex-1" : "h-[360px] w-full sm:h-[420px]",
+          )}
+        >
           <div
             ref={container}
             data-testid="trading-chart"

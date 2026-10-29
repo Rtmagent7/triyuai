@@ -51,3 +51,15 @@ test("mobile: menu closes after navigating, chat opens full-screen", async ({ pa
   const box = (await sheet.boundingBox())!;
   expect(Math.round(box.width)).toBe(page.viewportSize()!.width);
 });
+
+test("mobile: compact and full TA charts keep a usable height", async ({ page }) => {
+  for (const [path, min] of [
+    ["/coins/bitcoin", 340],
+    ["/chart/bitcoin", 300],
+  ] as const) {
+    await page.goto(path);
+    await expect(page.getByTestId("ohlc-legend")).toBeVisible();
+    const box = await page.getByTestId("trading-chart").boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(min);
+  }
+});

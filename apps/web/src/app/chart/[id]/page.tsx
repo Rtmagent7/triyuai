@@ -49,13 +49,16 @@ export default async function ChartPage({ params }: Props) {
           Candles from Binance · layout saved in this browser · not financial advice
         </p>
       </div>
-      <TradingChartLazy
-        coinId={coin.id}
-        ticker={coin.symbol}
-        variant="full"
-        className="h-[calc(100dvh-12rem)] min-h-[520px]"
-        fallback={<PriceChartLazy coinId={coin.id} />}
-      />
+      {/* Fixed-height frame: the chart and its loading skeleton fill it, so nothing shifts. */}
+      <div className="h-[calc(100dvh-12rem)] min-h-[520px]">
+        <TradingChartLazy
+          coinId={coin.id}
+          ticker={coin.symbol}
+          variant="full"
+          className="h-full"
+          fallback={<PriceChartLazy coinId={coin.id} />}
+        />
+      </div>
     </div>
   );
 }

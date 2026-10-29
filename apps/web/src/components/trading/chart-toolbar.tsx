@@ -80,7 +80,7 @@ export function ChartToolbar({
       : [...COMPACT_INTERVALS, interval];
 
   return (
-    <div className="border-border flex items-center gap-1 overflow-x-auto border-b px-2 py-1.5 [scrollbar-width:none]">
+    <div className="border-border flex h-[45px] shrink-0 items-center gap-1 overflow-x-auto border-b px-2 [scrollbar-width:none]">
       {full && <span className="whitespace-nowrap pr-2 text-sm font-semibold">{pair}</span>}
 
       <div role="radiogroup" aria-label="Timeframe" className="flex items-center">
