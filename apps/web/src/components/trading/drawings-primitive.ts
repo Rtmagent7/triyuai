@@ -7,7 +7,6 @@ import type {
 } from "lightweight-charts";
 import { dashPattern, withAlpha } from "@/lib/ta/colors";
 import {
-  FIB_TIME,
   changeLabel,
   channelOffset,
   extendLine,
@@ -19,6 +18,7 @@ import {
   rayEnd,
   type Anchor,
   type Drawing,
+  type FibLevel,
   type Pt,
 } from "@/lib/ta/drawings";
 
@@ -33,6 +33,7 @@ export type DrawingsState = {
   selectedId: string | null;
   hidden?: boolean;
   toScreen: (a: Anchor) => Pt | null;
+  timeZoneXs: (a: Anchor, b: Anchor, values: number[]) => (number | null)[];
   formatPrice: (p: number) => string;
   /** Bar interval in seconds (for "N bars" labels). */
   step: number;
@@ -255,26 +256,39 @@ function drawOne(
     }
     case "fibtime": {
       if (!b) break;
-      const unit =
-        Math.max(s.step, Math.abs(p2.time - p1.time)) * Math.sign(p2.time - p1.time || 1);
-      const xs = FIB_TIME.map((k) => ({
-        k,
-        x: s.toScreen({ time: p1.time + k * unit, price: p1.price })?.x,
-      })).filter((z): z is { k: number; x: number } => z.x != null);
-      xs.forEach((z, i) => {
-        const next = xs[i + 1];
-        if (next && i % 2 === 0 && d.fill !== "none") {
-          ctx.fillStyle = withAlpha(fillColor, 0.06);
+      const zones = fibLevels(d)
+        .filter((l) => l.visible)
+        .sort((l, m) => l.value - m.value);
+      const xs = s.timeZoneXs(
+        p1,
+        p2,
+        zones.map((z) => z.value),
+      );
+      const shown = zones
+        .map((z, i) => ({ ...z, x: xs[i] }))
+        .filter((z): z is FibLevel & { x: number } => z.x != null);
+      // Bands between neighbouring zones, in the left zone's colour.
+      if (d.fill !== "none")
+        shown.forEach((z, i) => {
+          const next = shown[i + 1];
+          if (!next) return;
+          ctx.fillStyle = withAlpha(z.color ?? fillColor, (d.fillOpacity ?? 0.12) * 0.4);
           ctx.fillRect(Math.min(z.x, next.x), 0, Math.abs(next.x - z.x), height);
-        }
-        stroke(d.dash, d.color, Math.max(1, lw - 1));
+        });
+      // Labels skip a zone that sits too close to the last one drawn (0, 1, 2, 3 bunch up).
+      let lastLabel = -Infinity;
+      for (const z of shown) {
+        const color = z.color ?? d.color;
+        stroke(d.dash, color, Math.max(1, lw - 1));
         line({ x: z.x, y: 0 }, { x: z.x, y: height });
-        ctx.setLineDash([]);
+        if (d.showLabel === false) continue;
+        const text = String(z.value);
         ctx.font = font(11);
-        ctx.fillStyle = d.color;
-        ctx.textBaseline = "top";
-        ctx.fillText(String(z.k), z.x + 4, 6);
-      });
+        if (Math.abs(z.x - lastLabel) < ctx.measureText(text).width + PAD * 2 + 4) continue;
+        lastLabel = z.x;
+        // Along the foot of the pane (the legend owns the top); dark text reads on every zone colour.
+        tag(ctx, text, z.x + 2, height - 14, color, "left", "#0a0a0b");
+      }
       break;
     }
     case "rect": {

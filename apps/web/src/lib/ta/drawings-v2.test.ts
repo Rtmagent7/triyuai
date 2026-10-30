@@ -5,6 +5,8 @@ import {
   channelOffset,
   fibExtPrice,
   fibLevels,
+  fibTimeLogicals,
+  nextFibTime,
   formatDuration,
   hitTest,
   moveDrawing,
@@ -168,5 +170,23 @@ describe("hit testing per tool", () => {
       time: 70,
       price: 120,
     });
+  });
+});
+
+describe("Fibonacci time zones", () => {
+  it("counts zones in whole bars from the snapped origin", () => {
+    expect(fibTimeLogicals(10.4, 13.2, [0, 1, 2, 3, 5, 8])).toEqual([10, 13, 16, 19, 25, 34]);
+  });
+
+  it("runs backwards when the unit is drawn to the left, and never collapses to zero", () => {
+    expect(fibTimeLogicals(20, 18, [0, 1, 5])).toEqual([20, 18, 10]);
+    expect(fibTimeLogicals(20, 20.3, [0, 1, 2])).toEqual([20, 21, 22]);
+  });
+
+  it("gives every default zone its own colour and hides the far ones", () => {
+    const zones = fibLevels({ id: "z", type: "fibtime", points: [], color: "#000" });
+    expect(new Set(zones.map((z) => z.color)).size).toBe(zones.length);
+    expect(zones.find((z) => z.value === 89)?.visible).toBe(false);
+    expect(nextFibTime(zones)).toBe(144);
   });
 });
