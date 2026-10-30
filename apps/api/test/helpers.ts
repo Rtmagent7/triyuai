@@ -14,6 +14,7 @@ import { createMarketService, prismaSnapshots } from "../src/services/market";
 import { createWatchlistService } from "../src/services/watchlist";
 import { createChatHistoryService } from "../src/services/chats";
 import { createPortfolioService } from "../src/services/portfolio";
+import { createNewsService } from "../src/services/news";
 
 export const silentLogger = pino({ level: "silent" });
 
@@ -266,7 +267,13 @@ export type TestContext = Awaited<ReturnType<typeof createTestContext>>;
 
 /** A full app on an in-memory Postgres (PGlite), memory cache and fake CoinGecko. */
 export async function createTestContext(
-  opts: { models?: { name: string; model: LanguageModel }[]; db?: Db; internalKey?: string } = {},
+  opts: {
+    models?: { name: string; model: LanguageModel }[];
+    db?: Db;
+    internalKey?: string;
+    /** Answers the news feeds (RSS); real fetch otherwise. */
+    fetch?: typeof fetch;
+  } = {},
 ) {
   const env = loadEnv({
     NODE_ENV: "test",
@@ -285,6 +292,7 @@ export async function createTestContext(
     monthlyBudget: 10_000,
     hasApiKey: false,
   });
+  const news = createNewsService({ cache, market, logger: silentLogger, fetch: opts.fetch });
   const deps: Deps = {
     env,
     logger: silentLogger,
@@ -294,7 +302,8 @@ export async function createTestContext(
     watchlist: createWatchlistService(db),
     history: createChatHistoryService(db),
     portfolio: createPortfolioService(db),
-    chat: createChatService({ market, models: opts.models ?? [], logger: silentLogger }),
+    news,
+    chat: createChatService({ market, news, models: opts.models ?? [], logger: silentLogger }),
   };
   return { app: createApp(deps), deps, db, cache, cg };
 }

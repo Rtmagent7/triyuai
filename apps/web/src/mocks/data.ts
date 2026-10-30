@@ -27,6 +27,8 @@ import globalJson from "./fixtures/global.json";
 import trendingJson from "./fixtures/trending.json";
 import ratesJson from "./fixtures/rates.json";
 import exchangesJson from "./fixtures/exchanges.json";
+import newsJson from "./fixtures/news.json";
+import type { NewsItem } from "@triyuai/shared/news";
 import metaJson from "./fixtures/meta.json";
 import { chartLoaders, detailLoaders } from "./fixtures/loaders";
 
@@ -57,6 +59,11 @@ export function getGlobal() {
 
 export function getRates() {
   return ok(rates);
+}
+
+export function getNews(coin?: string): ApiResponse<NewsItem[]> {
+  const all = newsJson as NewsItem[];
+  return ok(coin ? all.filter((n) => n.coins.includes(coin)) : all);
 }
 
 export function getExchanges(): ApiResponse<Exchange[]> {

@@ -12,6 +12,7 @@ import {
   getHighlights,
   getRates,
   getExchanges,
+  getNews,
   searchCoins,
 } from "./data";
 
@@ -32,6 +33,11 @@ export const handlers = [
   http.get(`${BASE}/global`, async () => {
     await latency();
     return HttpResponse.json(getGlobal());
+  }),
+
+  http.get(`${BASE}/news`, async ({ request }) => {
+    await latency();
+    return HttpResponse.json(getNews(new URL(request.url).searchParams.get("coin") ?? undefined));
   }),
 
   http.get(`${BASE}/exchanges`, async () => {

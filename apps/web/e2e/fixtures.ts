@@ -84,10 +84,12 @@ export const test = base.extend<{
   futures: [
     async ({ page }, use) => {
       const cors = { "access-control-allow-origin": "*" };
-      await page.route(/api\.alternative\.me\/fng/, (route) =>
-        route.fulfill({ json: fakeFearGreed(), headers: cors }),
-      );
-      await page.route(/fapi\.binance\.com\//, (route) => {
+      await page
+        .context()
+        .route(/api\.alternative\.me\/fng/, (route) =>
+          route.fulfill({ json: fakeFearGreed(), headers: cors }),
+        );
+      await page.context().route(/fapi\.binance\.com\//, (route) => {
         const url = new URL(route.request().url());
         const symbol = url.searchParams.get("symbol") ?? "BTCUSDT";
         const limit = Number(url.searchParams.get("limit") ?? 100);
@@ -140,10 +142,12 @@ export const test = base.extend<{
     },
     { auto: true },
   ],
+  // Routes are on the browser context, not the page: once the MSW service worker is running
+  // (prototype mode), requests it passes through skip page-level routes.
   // Candles for the TA chart, served offline; live kline sockets stay silent.
   klines: [
     async ({ page }, use) => {
-      await page.route(/binance\.(vision|com)\/api\/v3\/klines/, (route) => {
+      await page.context().route(/binance\.(vision|com)\/api\/v3\/klines/, (route) => {
         const url = new URL(route.request().url());
         const symbol = url.searchParams.get("symbol") ?? "";
         if (UNLISTED.includes(symbol)) {
@@ -168,9 +172,11 @@ export const test = base.extend<{
   // (one malformed logo URL in the snapshot makes the CDN hang, stalling networkidle).
   offlineImages: [
     async ({ page }, use) => {
-      await page.route(/^https:\/\/(coin-images|assets)\.coingecko\.com\//, (route) =>
-        route.fulfill({ contentType: "image/svg+xml", body: COIN_IMAGE }),
-      );
+      await page
+        .context()
+        .route(/^https:\/\/(coin-images|assets)\.coingecko\.com\//, (route) =>
+          route.fulfill({ contentType: "image/svg+xml", body: COIN_IMAGE }),
+        );
       await use();
     },
     { auto: true },

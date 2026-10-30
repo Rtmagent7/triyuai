@@ -11,7 +11,8 @@
     "./sectors": "./src/sectors.ts",
     "./sector-stats": "./src/sector-stats.ts",
     "./fear-greed": "./src/fear-greed.ts",
-    "./portfolio": "./src/portfolio.ts"
+    "./portfolio": "./src/portfolio.ts",
+    "./news": "./src/news.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

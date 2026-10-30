@@ -17,6 +17,7 @@ import type {
   ChatThread,
 } from "@triyuai/shared";
 import type { Transaction, TransactionInput } from "@triyuai/shared/portfolio";
+import type { NewsItem } from "@triyuai/shared/news";
 
 import { ensureMocks } from "./mocking";
 
@@ -130,6 +131,9 @@ export const api = {
       request<string[]>(`/watchlist/${encodeURIComponent(coinId)}`, { method: "DELETE" }),
     merge: (coinIds: string[]) => post<string[]>("/watchlist/merge", { coinIds }),
   },
+
+  news: (coin?: string) =>
+    request<NewsItem[]>(coin ? `/news?coin=${encodeURIComponent(coin)}` : "/news"),
 
   /** Portfolio tracker (P2): the signed-in user's transactions. */
   portfolio: {

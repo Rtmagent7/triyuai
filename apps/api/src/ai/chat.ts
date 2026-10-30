@@ -12,6 +12,7 @@ import { SECTORS, primarySector, type SectorId } from "@triyuai/shared/sectors";
 import { altcoinsVsBitcoin, dominance, sectorStats, statsFor } from "@triyuai/shared/sector-stats";
 import type { Logger } from "../lib/logger";
 import type { MarketService } from "../services/market";
+import type { NewsService } from "../services/news";
 
 const SYSTEM = `You are TRIYU, the AI assistant of TRIYUAI, a crypto market dashboard.
 
@@ -23,6 +24,7 @@ Rules:
 - Explain crypto concepts (market cap, FDV, halving, stablecoins, …) plainly for beginners.
 - For market mood, Fear & Greed, BTC/USDT/stablecoin dominance or "altcoin season", call getSentiment.
 - For sectors or categories (meme coins, AI, RWA, Layer 1, DeFi…), call getSectorPerformance.
+- For news, headlines or "what happened" questions, call getNews and name the source of each story.
 - If a coin is unknown, use searchCoin. If the question is not about crypto or markets, say you can only help with crypto markets.
 - End answers that discuss specific coins with: "_Not financial advice._"`;
 
@@ -51,6 +53,8 @@ export type ChatService = ReturnType<typeof createChatService>;
 
 export function createChatService(deps: {
   market: MarketService;
+  /** Optional so older callers and tests keep working without news. */
+  news?: NewsService;
   /** Tried in order: the next model is used when one fails before streaming anything. */
   models: { name: string; model: LanguageModel }[];
   logger: Logger;
@@ -166,6 +170,28 @@ export function createChatService(deps: {
             };
           },
         }),
+        getNews: tool({
+          description:
+            "Latest crypto headlines (CoinDesk, Cointelegraph, Decrypt, The Block), newest first. With a coin id, only stories that mention that coin.",
+          inputSchema: z.object({
+            coinId: coinIdSchema.optional().describe("Omit for all crypto news."),
+          }),
+          execute: async ({ coinId }) => {
+            if (!deps.news) return { error: "News is not available on this server." };
+            const r = await deps.news.list(coinId);
+            track(r.meta.fetchedAt);
+            return {
+              fetchedAt: r.meta.fetchedAt,
+              stories: r.data.slice(0, 8).map((n) => ({
+                title: n.title,
+                source: n.source,
+                publishedAt: n.publishedAt,
+                summary: n.summary,
+                url: n.url,
+              })),
+            };
+          },
+        }),
         getSectorPerformance: tool({
           description:
             "Sector performance among the top 250 coins (market-cap-weighted 24h/7d change, market cap). With a sector id, also its largest coins.",
@@ -222,6 +248,10 @@ export function createChatService(deps: {
           }
           case "getSentiment":
             return "Fetched: Fear & Greed and dominance";
+          case "getNews": {
+            const id = input.coinId as string | undefined;
+            return id ? `Fetched: ${await nameOf(id)} news` : "Fetched: latest crypto news";
+          }
           case "getSectorPerformance": {
             const id = input.sector as string | undefined;
             const label = SECTORS.find((x) => x.id === id)?.label;

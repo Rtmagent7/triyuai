@@ -7,6 +7,7 @@ import { MiniConverter } from "@/components/coin/mini-converter";
 import { PriceChartLazy } from "@/components/coin/price-chart-lazy";
 import { TradingChartLazy } from "@/components/trading/trading-chart-lazy";
 import { StatsGrid } from "@/components/coin/stats-grid";
+import { CoinNews } from "@/components/news/news-list";
 import { mockingEnabled } from "@/lib/api/mocking";
 import { NotFoundError, serverApi } from "@/lib/api/server";
 import { formatPercent, formatPrice } from "@/lib/format";
@@ -119,6 +120,7 @@ export default async function CoinPage({ params }: Props) {
               </ul>
             )}
           </section>
+          <CoinNews coinId={coin.id} name={coin.name} />
         </div>
         {/* Sticky so the stats stay beside the long description instead of ending in a blank column. */}
         <aside className="space-y-6 self-start lg:sticky lg:top-20">
