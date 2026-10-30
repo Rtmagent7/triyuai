@@ -6,6 +6,9 @@ import { useMoney } from "@/hooks/use-money";
 import { cn } from "@/lib/utils";
 import { formatNumber, formatPercent, timeAgo } from "@/lib/format";
 import { LiveIndicator } from "./live-indicator";
+import Link from "next/link";
+import { useFearGreed } from "@/components/insights/fear-greed-card";
+import { fgTone } from "@/lib/market/fear-greed";
 
 /** FR-02: refreshes every 60 s via React Query. */
 export function GlobalStatsBar() {
@@ -23,8 +26,10 @@ export function GlobalStatsBar() {
             </Stat>
             <Stat label="24h Vol">{money.compact(g.totalVolume24h)}</Stat>
             <Stat label="Dominance" className="hidden lg:inline-flex">
-              BTC {formatPercent(g.btcDominance, 1)} · ETH {formatPercent(g.ethDominance, 1)}
+              BTC {formatPercent(g.btcDominance, 1)} · ETH {formatPercent(g.ethDominance, 1)} · USDT{" "}
+              {formatPercent(g.usdtDominance, 1)}
             </Stat>
+            <FearGreedStat />
           </>
         ) : (
           <span>Loading market stats…</span>
@@ -63,5 +68,26 @@ function Stat({
         {children}
       </span>
     </span>
+  );
+}
+
+/** Today's Fear & Greed reading, linking to its history on /insights. */
+function FearGreedStat() {
+  const { points } = useFearGreed();
+  const now = points[0];
+  if (!now) return null;
+  const tone = fgTone(now.value);
+  return (
+    <Link href="/insights" className="hover:text-text inline-flex items-center gap-1.5">
+      Fear &amp; Greed:{" "}
+      <span
+        className={cn(
+          "tabular font-medium",
+          tone === "down" ? "text-down" : tone === "up" ? "text-up" : "text-text",
+        )}
+      >
+        {now.value} {now.label}
+      </span>
+    </Link>
   );
 }

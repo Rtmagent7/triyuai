@@ -1,1 +1,10 @@
-{"totalMarketCap":2716682512236.3027,"marketCapChange24h":-2.041,"totalVolume24h":63816979818.95441,"btcDominance":59.48,"ethDominance":10.46,"activeCoins":22557,"updatedAt":"2026-10-28T14:43:51.000Z"}
+{
+  "totalMarketCap": 2716682512236.3027,
+  "marketCapChange24h": -2.041,
+  "totalVolume24h": 63816979818.95441,
+  "btcDominance": 59.48,
+  "ethDominance": 10.46,
+  "usdtDominance": 6.68,
+  "activeCoins": 22557,
+  "updatedAt": "2026-10-28T14:43:51.000Z"
+}

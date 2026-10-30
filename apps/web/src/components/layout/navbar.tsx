@@ -30,9 +30,10 @@ import { Logo } from "./logo";
 
 const links = [
   { href: "/", label: "Markets" },
-  { href: "/highlights", label: "Highlights" },
+  { href: "/categories", label: "Sectors" },
+  { href: "/insights", label: "Insights" },
+  { href: "/derivatives", label: "Derivatives" },
   { href: "/chart/bitcoin", label: "Chart" },
-  { href: "/converter", label: "Converter" },
   { href: "/watchlist", label: "Watchlist" },
 ];
 
@@ -225,22 +226,26 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
         <SheetTitle className="sr-only">Menu</SheetTitle>
         <Logo />
         <nav aria-label="Mobile" className="mt-8 flex flex-col gap-1">
-          {[...links, { href: "/ask", label: "Ask TRIYU" }, { href: "/about", label: "About" }].map(
-            (l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                aria-current={isActive(l.href) ? "page" : undefined}
-                className={cn(
-                  "text-muted hover:bg-surface-2 hover:text-text rounded-lg px-3 py-2.5 font-medium",
-                  isActive(l.href) && "bg-surface-2 text-text",
-                )}
-              >
-                {l.label}
-              </Link>
-            ),
-          )}
+          {[
+            ...links,
+            { href: "/highlights", label: "Highlights" },
+            { href: "/converter", label: "Converter" },
+            { href: "/ask", label: "Ask TRIYU" },
+            { href: "/about", label: "About" },
+          ].map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={cn(
+                "text-muted hover:bg-surface-2 hover:text-text rounded-lg px-3 py-2.5 font-medium",
+                isActive(l.href) && "bg-surface-2 text-text",
+              )}
+            >
+              {l.label}
+            </Link>
+          ))}
         </nav>
         {user ? (
           <div className="border-border mt-6 border-t pt-4">

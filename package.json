@@ -9,6 +9,7 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
     "fixtures": "node scripts/fetch-fixtures.ts",
+    "sectors": "node scripts/fetch-sectors.ts",
     "test": "turbo run test",
     "test:e2e": "pnpm --filter @triyuai/web test:e2e"
   },

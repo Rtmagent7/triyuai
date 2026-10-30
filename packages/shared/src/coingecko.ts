@@ -104,6 +104,7 @@ export function mapGlobal(g: RawGlobal, round = exact): GlobalStats {
     totalVolume24h: g.data.total_volume.usd ?? 0,
     btcDominance: round(g.data.market_cap_percentage.btc, 4) ?? 0,
     ethDominance: round(g.data.market_cap_percentage.eth, 4) ?? 0,
+    usdtDominance: round(g.data.market_cap_percentage.usdt, 4) ?? 0,
     activeCoins: g.data.active_cryptocurrencies,
     updatedAt: new Date(g.data.updated_at * 1000).toISOString(),
   };

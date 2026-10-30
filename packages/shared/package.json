@@ -7,7 +7,8 @@
     ".": "./src/index.ts",
     "./constants": "./src/constants.ts",
     "./chart": "./src/chart.ts",
-    "./coingecko": "./src/coingecko.ts"
+    "./coingecko": "./src/coingecko.ts",
+    "./sectors": "./src/sectors.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

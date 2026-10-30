@@ -25,14 +25,14 @@ beforeEach(() => {
 
 describe("Navbar", () => {
   it("marks the active link and opens search", async () => {
-    navigation.pathname = "/highlights";
+    navigation.pathname = "/insights";
     renderWithClient(
       <ThemeProvider attribute="class">
         <Navbar />
       </ThemeProvider>,
     );
     const nav = screen.getByRole("navigation", { name: "Main" });
-    expect(within(nav).getByRole("link", { name: "Highlights" })).toHaveAttribute(
+    expect(within(nav).getByRole("link", { name: "Insights" })).toHaveAttribute(
       "aria-current",
       "page",
     );

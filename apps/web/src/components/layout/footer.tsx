@@ -31,6 +31,9 @@ export function Footer() {
           className="grid grid-cols-2 gap-2 text-sm md:col-span-2 md:grid-cols-3"
         >
           <FooterLink href="/">Markets</FooterLink>
+          <FooterLink href="/categories">Sectors</FooterLink>
+          <FooterLink href="/insights">Insights</FooterLink>
+          <FooterLink href="/derivatives">Derivatives</FooterLink>
           <FooterLink href="/highlights">Highlights</FooterLink>
           <FooterLink href="/converter">Converter</FooterLink>
           <FooterLink href="/watchlist">Watchlist</FooterLink>

@@ -11,6 +11,7 @@ import { useLivePriceFeed } from "@/hooks/use-live-prices";
 import { timeAgo } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { MarketTable } from "./market-table";
+import { SectorNav } from "./sector-tags";
 
 const PAGES = [1, 2, 3];
 
@@ -52,6 +53,8 @@ export function MarketsSection({
           />
         </label>
       </div>
+
+      <SectorNav />
 
       {query.isError && !coins ? (
         <ErrorState
