@@ -1,11 +1,17 @@
 import { Router } from "express";
 import { GUEST_DAILY_CHAT_QUOTA, USER_DAILY_CHAT_QUOTA, chatRequestSchema } from "@triyuai/shared";
 import type { ChatService } from "../ai/chat";
+import type { ChatHistoryService } from "../services/chats";
 import type { Cache } from "../cache";
 import { AppError } from "../lib/errors";
 import { clientKey, parse } from "../lib/http";
 
-export function aiRoutes(deps: { chat: ChatService; cache: Cache; salt: string }) {
+export function aiRoutes(deps: {
+  chat: ChatService;
+  history: ChatHistoryService;
+  cache: Cache;
+  salt: string;
+}) {
   const r = Router();
 
   r.post("/chat", async (req, res) => {
@@ -38,6 +44,22 @@ export function aiRoutes(deps: { chat: ChatService; cache: Cache; salt: string }
     });
     res.flushHeaders();
 
+    const send = (event: object) => res.write(`data: ${JSON.stringify(event)}\n\n`);
+
+    // Signed-in users: the exchange is saved (FR-24). The question is stored before the
+    // answer streams, so a failed or stopped answer still leaves the question in history.
+    let conversationId: string | null = null;
+    if (req.userId) {
+      const question = body.messages.at(-1)!;
+      conversationId = await deps.history.open(req.userId, body.conversationId, question.content);
+      if (body.regenerate) await deps.history.dropLastAnswer(conversationId);
+      else if (question.role === "user")
+        await deps.history.addMessage(conversationId, { role: "user", content: question.content });
+      send({ type: "conversation", id: conversationId });
+    }
+    let answer = "";
+    const tools: string[] = [];
+
     // Stop the model (and its token usage) as soon as the browser hits Stop or leaves.
     const abort = new AbortController();
     res.on("close", () => {
@@ -46,8 +68,13 @@ export function aiRoutes(deps: { chat: ChatService; cache: Cache; salt: string }
 
     for await (const event of deps.chat.stream(body, abort.signal)) {
       if (abort.signal.aborted) break;
-      res.write(`data: ${JSON.stringify(event)}\n\n`);
+      if (event.type === "text-delta") answer += event.delta;
+      else if (event.type === "tool-call") tools.push(event.label);
+      send(event);
     }
+    // A stopped answer is kept as far as it got, like in the browser.
+    if (conversationId && answer.trim())
+      await deps.history.addMessage(conversationId, { role: "assistant", content: answer, tools });
     res.end();
   });
 

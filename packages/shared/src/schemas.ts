@@ -152,8 +152,35 @@ export const chatRequestSchema = z.object({
     .min(1)
     .max(10),
   context: z.object({ coinId: z.string() }).optional(),
+  /** Signed-in users: the saved conversation this message continues (FR-24). */
+  conversationId: z.string().max(40).optional(),
+  /** The last assistant answer is being replaced, not added to. */
+  regenerate: z.boolean().optional(),
 });
 export type ChatRequest = z.infer<typeof chatRequestSchema>;
+
+/** A saved conversation in the history list. */
+export const chatConversationSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  updatedAt: z.string(),
+});
+export type ChatConversation = z.infer<typeof chatConversationSchema>;
+
+export const savedChatMessageSchema = z.object({
+  id: z.string(),
+  role: chatRoleSchema,
+  content: z.string(),
+  /** Tool chips shown on the answer, e.g. "Fetched: Solana price". */
+  tools: z.array(z.string()),
+  createdAt: z.string(),
+});
+export type SavedChatMessage = z.infer<typeof savedChatMessageSchema>;
+
+export const chatThreadSchema = chatConversationSchema.extend({
+  messages: z.array(savedChatMessageSchema),
+});
+export type ChatThread = z.infer<typeof chatThreadSchema>;
 
 export type ChatToolName = (typeof chatToolNames)[number];
 
@@ -166,6 +193,8 @@ export const chatStreamEventSchema = z.discriminatedUnion("type", [
     label: z.string(),
   }),
   z.object({ type: z.literal("tool-result"), id: z.string() }),
+  /** First event for signed-in users: the conversation the exchange is saved in. */
+  z.object({ type: z.literal("conversation"), id: z.string() }),
   z.object({ type: z.literal("text-delta"), delta: z.string() }),
   z.object({ type: z.literal("finish"), fetchedAt: z.string() }),
   z.object({ type: z.literal("error"), code: z.string(), message: z.string() }),

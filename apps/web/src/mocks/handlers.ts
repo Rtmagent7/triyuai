@@ -1,6 +1,6 @@
 import { http, HttpResponse, delay } from "msw";
 import { chartRangeSchema, chatRequestSchema, coinsQuerySchema } from "@triyuai/shared";
-import { authHandlers } from "./auth-handlers";
+import { authHandlers, saveMockExchange } from "./auth-handlers";
 import { answerEvents } from "./chat-engine";
 import {
   NotFoundError,
@@ -86,13 +86,37 @@ export const handlers = [
 
     const encoder = new TextEncoder();
     const events = answerEvents(body.data);
+    // Signed-in mock users get their chats saved, like the real API.
+    const question = body.data.messages.at(-1)!;
+    const saved =
+      question.role === "user"
+        ? saveMockExchange({
+            conversationId: body.data.conversationId,
+            question: question.content,
+            regenerate: body.data.regenerate,
+          })
+        : null;
+    let answer = "";
+    const tools: string[] = [];
+    let announced = !saved;
     const stream = new ReadableStream<Uint8Array>({
       async pull(controller) {
+        if (!announced && saved) {
+          announced = true;
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({ type: "conversation", id: saved.id })}\n\n`),
+          );
+          return;
+        }
         const next = events.next();
         if (next.done) {
+          saved?.answer(answer, tools);
           controller.close();
           return;
         }
+        const ev = next.value.event;
+        if (ev.type === "text-delta") answer += ev.delta;
+        else if (ev.type === "tool-call") tools.push(ev.label);
         if (next.value.delay) await delay(next.value.delay);
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(next.value.event)}\n\n`));
       },

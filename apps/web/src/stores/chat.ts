@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { ChatStreamEvent } from "@triyuai/shared";
+import type { ChatStreamEvent, ChatThread } from "@triyuai/shared";
 import {
   CHAT_CONTEXT_MESSAGES,
   GUEST_DAILY_CHAT_QUOTA,
@@ -22,6 +22,8 @@ export type ChatMessage = {
 type ChatState = {
   open: boolean;
   messages: ChatMessage[];
+  /** Saved conversation this chat continues (signed-in users, FR-24); null starts a new one. */
+  conversationId: string | null;
   /** Coin page the chat was opened from (FR-16). */
   coinContext: CoinContext | null;
   /** Local mirror of the server's daily quota; `owner` is "guest" or the user id. */
@@ -33,6 +35,8 @@ type ChatState = {
   stop: () => void;
   regenerate: () => Promise<void>;
   clear: () => void;
+  /** Opens a saved conversation from the history list. */
+  load: (thread: ChatThread) => void;
   remaining: () => number;
   /** Switches the quota to the signed-in user (30/day) or back to guest (10/day). */
   syncQuota: (owner: string, limit: number) => void;
@@ -85,7 +89,7 @@ export const useChat = create<ChatState>()(
           messages: s.messages.map((m, i) => (i === s.messages.length - 1 ? fn(m) : m)),
         }));
 
-      async function stream() {
+      async function stream(regenerate = false) {
         const history = get()
           .messages.filter((m) => m.status !== "error" && m.content)
           .slice(-CHAT_CONTEXT_MESSAGES)
@@ -101,7 +105,12 @@ export const useChat = create<ChatState>()(
         controller = new AbortController();
         try {
           const res = await api.chat(
-            { messages: history, ...(coinId ? { context: { coinId } } : {}) },
+            {
+              messages: history,
+              ...(coinId ? { context: { coinId } } : {}),
+              ...(get().conversationId ? { conversationId: get().conversationId! } : {}),
+              ...(regenerate ? { regenerate } : {}),
+            },
             controller.signal,
           );
           // The server is the source of truth for the quota (it counts per account or IP).
@@ -124,7 +133,9 @@ export const useChat = create<ChatState>()(
             );
           }
           for await (const ev of readEvents(res.body)) {
-            if (ev.type === "tool-call") {
+            if (ev.type === "conversation") {
+              set({ conversationId: ev.id });
+            } else if (ev.type === "tool-call") {
               patchLast((m) => ({
                 ...m,
                 tools: [...m.tools, { id: ev.id, label: ev.label, done: false }],
@@ -170,6 +181,7 @@ export const useChat = create<ChatState>()(
       return {
         open: false,
         messages: [],
+        conversationId: null,
         coinContext: null,
         quota: { day: today(), used: 0, owner: "guest", limit: GUEST_DAILY_CHAT_QUOTA },
         setOpen: (open) => set({ open }),
@@ -228,11 +240,25 @@ export const useChat = create<ChatState>()(
           if (!last || last.role !== "assistant") return;
           if (!consumeQuota()) return;
           set({ messages: msgs.slice(0, -1) });
-          await stream();
+          await stream(true);
         },
         clear: () => {
           controller?.abort();
-          set({ messages: [] });
+          set({ messages: [], conversationId: null });
+        },
+        load: (thread) => {
+          controller?.abort();
+          set({
+            conversationId: thread.id,
+            coinContext: null,
+            messages: thread.messages.map((m) => ({
+              id: m.id,
+              role: m.role,
+              content: m.content,
+              tools: m.tools.map((label, i) => ({ id: `${m.id}-${i}`, label, done: true })),
+              status: "done",
+            })),
+          });
         },
       };
     },

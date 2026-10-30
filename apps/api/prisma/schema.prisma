@@ -12,14 +12,15 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  email         String          @unique
+  id            String             @id @default(cuid())
+  email         String             @unique
   passwordHash  String
   name          String
-  isDemo        Boolean         @default(false)
-  createdAt     DateTime        @default(now())
+  isDemo        Boolean            @default(false)
+  createdAt     DateTime           @default(now())
   refreshTokens RefreshToken[]
   watchlist     WatchlistItem[]
+  conversations ChatConversation[]
 }
 
 model RefreshToken {
@@ -48,4 +49,30 @@ model MarketSnapshot {
   key       String   @id
   payload   Json
   fetchedAt DateTime
+}
+
+/// Ask TRIYU history for signed-in users (FR-24).
+model ChatConversation {
+  id        String        @id @default(cuid())
+  userId    String
+  title     String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@index([userId, updatedAt])
+}
+
+model ChatMessage {
+  id             String           @id @default(cuid())
+  conversationId String
+  role           String
+  content        String
+  /// Tool chip labels shown on an answer, e.g. ["Fetched: Solana price"].
+  toolCalls      Json?
+  createdAt      DateTime         @default(now())
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
 }
