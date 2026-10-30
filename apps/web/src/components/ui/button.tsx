@@ -8,8 +8,8 @@ const variants = {
   secondary: "bg-surface-2 text-text hover:bg-border",
   ghost: "text-text hover:bg-surface-2",
   outline: "border border-border bg-transparent text-text hover:bg-surface-2",
-  // Ask TRIYU entry points: the primary treatment, marked by the sparkle icon rather than a gradient.
-  ai: "bg-primary text-primary-fg hover:opacity-85",
+  // Ask TRIYU entry points: solid logo blue with the TRIYU emblem, never a gradient.
+  ai: "bg-ai text-ai-fg hover:bg-ai-hover",
 } as const;
 
 const sizes = {

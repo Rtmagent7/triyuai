@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { ChatMessage as Message } from "@/stores/chat";
 import { cn } from "@/lib/utils";
-import { Sparkle } from "./sparkle";
+import { AskMark } from "./ask-mark";
 
 type Props = { message: Message; isLast: boolean; onRegenerate: () => void };
 
@@ -14,7 +14,7 @@ export function ChatMessage({ message, isLast, onRegenerate }: Props) {
   if (message.role === "user") {
     return (
       <div className="animate-fade-up flex justify-end">
-        <p className="bg-brand text-brand-fg max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md px-3.5 py-2 text-sm">
+        <p className="bg-ai text-ai-fg max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md px-3.5 py-2 text-sm">
           {message.content}
         </p>
       </div>
@@ -25,7 +25,7 @@ export function ChatMessage({ message, isLast, onRegenerate }: Props) {
   return (
     <div className="animate-fade-up flex gap-2.5">
       <span className="bg-surface-2 text-brand mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full">
-        <Sparkle className="size-3.5" />
+        <AskMark className="size-3.5" />
       </span>
       <div className="min-w-0 flex-1 space-y-2">
         {message.tools.length > 0 && (

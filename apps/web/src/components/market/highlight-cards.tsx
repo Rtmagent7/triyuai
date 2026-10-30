@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { CoinSummary, Highlights } from "@triyuai/shared";
-import { Sparkle } from "@/components/chat/sparkle";
+import { AskMark } from "@/components/chat/ask-mark";
 import { CoinLogo } from "@/components/coin/coin-logo";
 import { PercentBadge } from "@/components/coin/percent-badge";
 import { useMoney } from "@/hooks/use-money";
@@ -29,7 +29,7 @@ export function HighlightCards({ highlights }: { highlights: Highlights }) {
         {/* Same header rhythm as the lists beside it, so the four cells end level. */}
         <div className="mb-1.5 flex items-baseline justify-between">
           <h2 className="flex items-center gap-1.5 text-sm font-semibold">
-            <Sparkle className="text-brand size-3.5 self-center" /> Ask TRIYU
+            <AskMark className="text-brand size-3.5 self-center" /> Ask TRIYU
           </h2>
           <span className="text-muted text-xs">from live prices</span>
         </div>

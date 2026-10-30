@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Loader2, Maximize2 } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { useChat } from "@/stores/chat";
-import { Sparkle } from "./sparkle";
+import { AskMark } from "./ask-mark";
 
 // The conversation UI pulls in react-markdown; load it when the panel first opens.
 const loadChatView = () => import("./chat-view").then((m) => m.ChatView);
@@ -33,7 +33,7 @@ export function ChatPanel() {
       <Sheet open={open && !onAskPage} onOpenChange={setOpen}>
         <SheetContent className="sm:max-w-[440px]" hideClose>
           <div className="border-border flex h-14 items-center gap-2 border-b px-4">
-            <Sparkle className="text-brand size-4" />
+            <AskMark className="text-brand size-4" />
             <div className="min-w-0">
               <SheetTitle className="text-sm font-semibold">Ask TRIYU</SheetTitle>
               <SheetDescription className="text-muted text-[11px]">
