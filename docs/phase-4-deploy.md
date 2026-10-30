@@ -5,7 +5,7 @@ stats and sectors come from a CoinGecko snapshot, and Ask TRIYU is a scripted de
 deploys `apps/api` as a second Vercel project and points the web app at it.
 
 Everything below except the accounts is already in the repo: the API bundles itself
-(`pnpm --filter @triyuai/api build` → `apps/api/api/index.mjs`) and `apps/api/vercel.json`
+(`pnpm --filter @triyuai/api build` → `apps/api/dist/server.mjs`, re-exported by `apps/api/api/index.mjs`) and `apps/api/vercel.json`
 serves it as one Vercel Function.
 
 ## 1. Accounts (free tiers)
