@@ -1,5 +1,6 @@
 "use client";
 
+import { mockingEnabled } from "@/lib/api/mocking";
 import { useEffect } from "react";
 import { useChat } from "@/stores/chat";
 import { ChatView } from "./chat-view";
@@ -16,7 +17,10 @@ export function AskPage() {
         <AskMark className="text-brand size-5" />
         <div>
           <h1 className="font-semibold">Ask TRIYU</h1>
-          <p className="text-muted text-xs">AI market assistant · demo mode with snapshot data</p>
+          <p className="text-muted text-xs">
+            AI market assistant ·{" "}
+            {mockingEnabled ? "demo mode with snapshot data" : "answers from live market data"}
+          </p>
         </div>
       </div>
       <ChatView autoFocus />

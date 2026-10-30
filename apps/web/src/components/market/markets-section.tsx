@@ -1,5 +1,6 @@
 "use client";
 
+import { mockingEnabled } from "@/lib/api/mocking";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { useState } from "react";
@@ -38,7 +39,8 @@ export function MarketsSection({
             Cryptocurrency prices by market cap
           </h2>
           <p className="text-muted mt-0.5 text-xs" suppressHydrationWarning>
-            Top 250 · snapshot updated {timeAgo(snapshotAt)} · top 20 stream live
+            Top 250 · {mockingEnabled ? "snapshot" : "data"} updated {timeAgo(snapshotAt)} · top 20
+            stream live
           </p>
         </div>
         <label className="relative block sm:w-64">
