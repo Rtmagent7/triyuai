@@ -748,9 +748,9 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
           {hint && tool !== "cursor" && (
             <p
               key={tool}
-              className="bg-surface/95 text-text animate-fade-up border-border pointer-events-none absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border py-1 pl-1.5 pr-3 text-xs shadow-lg backdrop-blur"
+              className="bg-bg text-text animate-fade-up border-border pointer-events-none absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border py-1 pl-1.5 pr-3 text-[13px] shadow-lg"
             >
-              <span className="bg-brand/15 text-brand flex size-6 items-center justify-center rounded-full [&_svg]:size-4">
+              <span className="text-brand flex size-6 items-center justify-center [&_svg]:size-4">
                 <ToolIcon tool={tool} />
               </span>
               <span className="font-medium">{TOOLS[tool].label}</span>

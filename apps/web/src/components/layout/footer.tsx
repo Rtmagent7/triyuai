@@ -4,9 +4,8 @@ import { Logo } from "./logo";
 const GITHUB_URL = "https://github.com/";
 
 export function Footer() {
-  // Bottom padding on phones keeps the last links clear of the floating Ask TRIYU button.
   return (
-    <footer className="border-border bg-surface mt-16 border-t pb-20 sm:pb-0">
+    <footer className="border-border bg-surface mt-16 border-t">
       <div className="mx-auto grid max-w-[1400px] gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.5fr_1fr_1fr]">
         <div className="space-y-3">
           <Logo />

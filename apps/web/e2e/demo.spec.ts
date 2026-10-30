@@ -111,7 +111,7 @@ test("pagination, highlights, converter URL state and 404", async ({ page }) => 
   await expect(page.getByRole("row").nth(1)).toContainText("201");
 
   await page.goto("/highlights");
-  await expect(page.getByRole("heading", { name: "Top gainers (24h)" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Top gainers · 24h" })).toBeVisible();
 
   await page.goto("/converter?from=ethereum&to=idr&amount=2");
   await expect(page.getByRole("textbox", { name: "Amount" })).toHaveValue("2");

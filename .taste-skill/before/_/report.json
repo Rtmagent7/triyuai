@@ -1,0 +1,1432 @@
+{
+ "url": "http://localhost:3100/",
+ "at": "2026-10-30T01:11:40.696Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 8,
+   "filled": [
+    0.42,
+    0.35,
+    0.34,
+    0.35,
+    0.36,
+    0.37,
+    0.4,
+    0.65
+   ],
+   "motion": {
+    "elements": 111,
+    "css": 111,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 6488,
+     "screens": 7.2,
+     "words": 1776,
+     "img": 115,
+     "video": 0,
+     "canvas": 0,
+     "svg": 223,
+     "sections": 3,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 30,
+     "vw": 2.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "lines": 1,
+     "size": 30,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "Today's crypto market",
+      "words": 3,
+      "chars": 21,
+      "lines": 1,
+      "size": 30,
+      "vw": 2.1,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.94,
+      "top": 126,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      30
+     ],
+     "sizeCount": 9,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 6.3
+     },
+     "measureChars": 55,
+     "max": {
+      "size": 30,
+      "vw": 2.1,
+      "font": "Inter",
+      "text": "Today's crypto market"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.07,
+     "centerShare": 0.02,
+     "smallText": 5
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0b0e14",
+     "bodyBgHsl": {
+      "h": 220,
+      "s": 0.29,
+      "l": 0.06
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#e6eaf2",
+       "share": 0.5
+      },
+      {
+       "color": "#ef4444",
+       "share": 0.2
+      },
+      {
+       "color": "#8a94a6",
+       "share": 0.19
+      },
+      {
+       "color": "#22c55e",
+       "share": 0.1
+      },
+      {
+       "color": "#9cdcba",
+       "share": 0.01
+      }
+     ],
+     "button": {
+      "bg": "#8b5cf6",
+      "hsl": {
+       "h": 258,
+       "s": 0.9,
+       "l": 0.66
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 5,
+     "inHero": 5,
+     "radius": 8,
+     "height": 36,
+     "withShadow": 0,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU",
+      "Log in",
+      "Ask now",
+      "Ask TRIYU"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.inline-flex.shrink-0 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 1,
+     "scrims": 0,
+     "gradientSamples": [
+      "div.ai-gradient.absolute → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))"
+     ],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 1440px",
+      "header.border-border.bg-bg/85 1440px",
+      "footer.border-border.bg-surface 1440px",
+      "div.border-border.border-t 1440px"
+     ],
+     "outlinedBoxes": 4,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 5,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 218
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 7,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 6488,
+    "margins": {
+     "left": 55,
+     "right": 55
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 6074,
+      "words": 1050,
+      "media": 0,
+      "middle": 30,
+      "heading": {
+       "text": "Today's crypto market",
+       "size": 30,
+       "tag": "h1"
+      },
+      "left": 44,
+      "right": 44,
+      "textLeft": 44,
+      "textRight": 69,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 6240,
+      "height": 248,
+      "words": 54,
+      "media": 0,
+      "middle": 210,
+      "heading": null,
+      "left": 44,
+      "right": 44,
+      "textLeft": 44,
+      "textRight": 44,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Today's crypto market",
+      "size": 30,
+      "top": 126,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 44,
+      "n": 3
+     },
+     {
+      "x": 89,
+      "n": 1
+     },
+     {
+      "x": 431,
+      "n": 1
+     },
+     {
+      "x": 773,
+      "n": 1
+     },
+     {
+      "x": 1091,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.12,
+    "voidBox": {
+     "x": 300,
+     "y": 480,
+     "w": 360,
+     "h": 420
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#0b0e14",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 55,
+     "right": 55
+    },
+    "hero": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 30,
+     "vw": 2.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 5,
+     "firstScreen": 5,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 5,
+     "radii": [
+      [
+       16,
+       5
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 399,
+     "leftAligned": 100,
+     "figures": 310,
+     "tabularShare": 1,
+     "kpiMax": 14
+    },
+    "rows": {
+     "count": 100,
+     "median": 56
+    },
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.1,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      30
+     ]
+    },
+    "title": {
+     "text": "Today's crypto market",
+     "size": 30,
+     "top": 126
+    },
+    "colourShare": 0.024
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 7,
+   "filled": [
+    0.56,
+    0.23,
+    0.24,
+    0.25,
+    0.24,
+    0.23,
+    0.43
+   ],
+   "motion": {
+    "elements": 88,
+    "css": 88,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 6702,
+     "screens": 6.5,
+     "words": 1766,
+     "img": 115,
+     "video": 0,
+     "canvas": 0,
+     "svg": 223,
+     "sections": 3,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 30,
+     "vw": 3.9,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "lines": 1,
+     "size": 30,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "Today's crypto market",
+      "words": 3,
+      "chars": 21,
+      "lines": 1,
+      "size": 30,
+      "vw": 3.9,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.94,
+      "top": 126,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      30
+     ],
+     "sizeCount": 9,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 6.3
+     },
+     "measureChars": 40,
+     "max": {
+      "size": 30,
+      "vw": 3.9,
+      "font": "Inter",
+      "text": "Today's crypto market"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.07,
+     "centerShare": 0.01,
+     "smallText": 5
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0b0e14",
+     "bodyBgHsl": {
+      "h": 220,
+      "s": 0.29,
+      "l": 0.06
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#e6eaf2",
+       "share": 0.51
+      },
+      {
+       "color": "#ef4444",
+       "share": 0.2
+      },
+      {
+       "color": "#8a94a6",
+       "share": 0.18
+      },
+      {
+       "color": "#22c55e",
+       "share": 0.1
+      },
+      {
+       "color": "#78d59f",
+       "share": 0
+      }
+     ],
+     "button": {
+      "bg": "#8b5cf6",
+      "hsl": {
+       "h": 258,
+       "s": 0.9,
+       "l": 0.66
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 4,
+     "radius": 8,
+     "height": 36,
+     "withShadow": 0,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU",
+      "Ask now",
+      "Ask TRIYU"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.inline-flex.shrink-0 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 1,
+     "scrims": 0,
+     "gradientSamples": [
+      "div.ai-gradient.absolute → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))"
+     ],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 768px",
+      "header.border-border.bg-bg/85 768px",
+      "footer.border-border.bg-surface 768px",
+      "div.border-border.border-t 768px"
+     ],
+     "outlinedBoxes": 4,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 5,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 218
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 6702,
+    "margins": {
+     "left": 35,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 6248,
+      "words": 1047,
+      "media": 0,
+      "middle": 337,
+      "heading": {
+       "text": "Today's crypto market",
+       "size": 30,
+       "tag": "h1"
+      },
+      "left": 24,
+      "right": 0,
+      "textLeft": 24,
+      "textRight": -364,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 6414,
+      "height": 288,
+      "words": 54,
+      "media": 0,
+      "middle": 69,
+      "heading": null,
+      "left": 24,
+      "right": 24,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Today's crypto market",
+      "size": 30,
+      "top": 126,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 24,
+      "n": 3
+     },
+     {
+      "x": 69,
+      "n": 2
+     },
+     {
+      "x": 413,
+      "n": 1
+     },
+     {
+      "x": 437,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#0b0e14",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 35,
+     "right": -364
+    },
+    "hero": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 30,
+     "vw": 3.9,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 5,
+     "firstScreen": 5,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 5,
+     "radii": [
+      [
+       16,
+       5
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 399,
+     "leftAligned": 100,
+     "figures": 310,
+     "tabularShare": 1,
+     "kpiMax": 14
+    },
+    "rows": {
+     "count": 100,
+     "median": 56
+    },
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.1,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      30
+     ]
+    },
+    "title": {
+     "text": "Today's crypto market",
+     "size": 30,
+     "top": 126
+    },
+    "colourShare": 0.031
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 9,
+   "filled": [
+    0.88,
+    0.47,
+    0.19,
+    0.18,
+    0.13,
+    0.09,
+    0.09,
+    0.09,
+    0.84
+   ],
+   "motion": {
+    "elements": 96,
+    "css": 96,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 7342,
+     "screens": 8.7,
+     "words": 1360,
+     "img": 115,
+     "video": 0,
+     "canvas": 0,
+     "svg": 223,
+     "sections": 3,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 6.2,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "Today's crypto market",
+      "words": 3,
+      "chars": 21,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.33,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 126,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      12,
+      13,
+      14,
+      16,
+      20,
+      24
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 6.3
+     },
+     "measureChars": 51,
+     "max": {
+      "size": 24,
+      "vw": 6.2,
+      "font": "Inter",
+      "text": "Today's crypto market"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.08,
+     "centerShare": 0.01,
+     "smallText": 5
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0b0e14",
+     "bodyBgHsl": {
+      "h": 220,
+      "s": 0.29,
+      "l": 0.06
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#121722",
+       "top": 6842,
+       "hsl": {
+        "h": 221,
+        "s": 0.31,
+        "l": 0.1
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#e6eaf2",
+       "share": 0.59
+      },
+      {
+       "color": "#8a94a6",
+       "share": 0.17
+      },
+      {
+       "color": "#ef4444",
+       "share": 0.16
+      },
+      {
+       "color": "#22c55e",
+       "share": 0.08
+      },
+      {
+       "color": "#ffffff",
+       "share": 0
+      }
+     ],
+     "button": {
+      "bg": "#8b5cf6",
+      "hsl": {
+       "h": 258,
+       "s": 0.9,
+       "l": 0.66
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 2,
+     "inHero": 1,
+     "radius": 8,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 2,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Ask TRIYU"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 1,
+     "shadowSamples": [
+      "button.inline-flex.shrink-0 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 2,
+     "scrims": 0,
+     "gradientSamples": [
+      "div.ai-gradient.absolute → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))",
+      "button.ai-gradient.h-13 → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))"
+     ],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 390px",
+      "header.border-border.bg-bg/85 390px",
+      "footer.border-border.bg-surface 390px",
+      "div.border-border.border-t 390px"
+     ],
+     "outlinedBoxes": 4,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 5,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 7342,
+    "margins": {
+     "left": 16,
+     "right": 37
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 6676,
+      "words": 854,
+      "media": 0,
+      "middle": 310,
+      "heading": {
+       "text": "Today's crypto market",
+       "size": 24,
+       "tag": "h1"
+      },
+      "left": 16,
+      "right": 0,
+      "textLeft": 16,
+      "textRight": -337,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 6842,
+      "height": 500,
+      "words": 54,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 16,
+      "right": 20,
+      "textLeft": 16,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Today's crypto market",
+      "size": 24,
+      "top": 126,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 16,
+      "n": 3
+     },
+     {
+      "x": 61,
+      "n": 3
+     },
+     {
+      "x": 37,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 7,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "dark": true,
+    "ground": "#0b0e14",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 27,
+     "right": -337
+    },
+    "hero": {
+     "text": "Today's crypto market",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 6.2,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 5,
+     "firstScreen": 4,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 5,
+     "radii": [
+      [
+       16,
+       5
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 399,
+     "leftAligned": 100,
+     "figures": 310,
+     "tabularShare": 1,
+     "kpiMax": 14
+    },
+    "rows": {
+     "count": 100,
+     "median": 56
+    },
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.1,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      13,
+      14,
+      16,
+      20,
+      24
+     ]
+    },
+    "title": {
+     "text": "Today's crypto market",
+     "size": 24,
+     "top": 126
+    },
+    "colourShare": 0.038
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "gradient",
+   "width": 1440,
+   "message": "1 gradient fill(s): div.ai-gradient.absolute → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))",
+   "fix": "Use a flat colour or a real image. The only gradient allowed by default is a neutral scrim over a photo for legibility.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "button-fx",
+   "width": 1440,
+   "message": "Buttons with gradient fill.",
+   "fix": "Flat fill, one colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "palette-purple",
+   "width": 1440,
+   "message": "Indigo / violet (button #8b5cf6).",
+   "fix": "Use the accent from the drawn palette.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\desktop-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\desktop-page-01.jpg",
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\desktop-page-02.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\tablet-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\tablet-page-01.jpg",
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\tablet-page-02.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\mobile-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\mobile-page-01.jpg",
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\_\\mobile-page-02.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

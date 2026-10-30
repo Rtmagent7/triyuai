@@ -31,7 +31,7 @@ export function SettingsDialog({ open, title, tabs, onCancel, onDefaults, onClos
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="animate-fade-in fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]" />
+        <Dialog.Overlay className="animate-fade-in fixed inset-0 z-50 bg-black/40" />
         <Dialog.Content
           aria-describedby={undefined}
           className="border-border bg-bg animate-pop-in fixed left-1/2 top-1/2 z-50 flex max-h-[85dvh] w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border shadow-2xl"

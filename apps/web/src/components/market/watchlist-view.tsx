@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { Star } from "lucide-react";
-import { EmptyState, ErrorState } from "@/components/common/states";
-import { Button } from "@/components/ui/button";
+import { ErrorState } from "@/components/common/states";
 import { useCoinsByIds } from "@/hooks/queries";
 import { useLivePriceFeed } from "@/hooks/use-live-prices";
 import { useWatchlistIds } from "@/hooks/use-watchlist";
@@ -20,31 +18,33 @@ export function WatchlistSubtitle() {
   );
 }
 
+/** Shown, with their stars, while the watchlist is empty: something real to start from. */
+const STARTERS = ["bitcoin", "ethereum", "solana", "binancecoin", "ripple"];
+
 /** FR-30/32: reuses the market table for the device or account watchlist. */
 export function WatchlistView() {
   const { ids, ready, isError, refetch } = useWatchlistIds();
+  const empty = ready && ids.length === 0;
+  const shown = empty ? STARTERS : ids;
 
-  const query = useCoinsByIds(ids);
+  const query = useCoinsByIds(shown);
   // Drop coins removed since the last fetch (placeholder data) and order by rank.
   const coins = (query.data?.data ?? [])
-    .filter((c) => ids.includes(c.id))
+    .filter((c) => shown.includes(c.id))
     .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
   useLivePriceFeed(coins);
 
   if (!ready && !isError) return <MarketTable coins={[]} isLoading />;
-  if (ids.length === 0)
+  if (empty)
     return (
-      <div className="border-border rounded-2xl border border-dashed">
-        <EmptyState
-          icon={<Star className="size-8 text-amber-500" />}
-          title="Your watchlist is empty"
-          message="Tap the star next to any coin to keep track of it here."
-          action={
-            <Button asChild variant="primary" size="sm">
-              <Link href="/">Browse the market</Link>
-            </Button>
-          }
-        />
+      <div className="space-y-3">
+        <p className="text-sm">
+          Nothing starred yet. Tap{" "}
+          <Star aria-hidden className="text-muted inline size-3.5 -translate-y-px" />
+          <span className="sr-only">the star</span> on any coin to keep it here, or start with the
+          five largest:
+        </p>
+        <MarketTable coins={coins} isLoading={!query.data} />
       </div>
     );
   if (query.isError || isError)

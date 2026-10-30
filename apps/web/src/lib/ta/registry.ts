@@ -84,7 +84,7 @@ export type IndicatorDef = {
 
 export type TaColors = { up: string; down: string };
 
-export const OVERLAY_PALETTE = ["#f59e0b", "#3b82f6", "#ec4899", "#14b8a6", "#a855f7", "#84cc16"];
+export const OVERLAY_PALETTE = ["#f59e0b", "#1a9bff", "#ec4899", "#14b8a6", "#e2725b", "#84cc16"];
 
 export function sourceValues(bars: Bar[], source: Source = "close"): number[] {
   return bars.map((b) => {
@@ -217,7 +217,7 @@ export const INDICATORS: Record<IndicatorType, IndicatorDef> = {
         key: "rsi",
         label: "RSI",
         kind: "line",
-        color: "#a855f7",
+        color: "#1a9bff",
         values: rsi(closes(bars, cfg), n!),
       },
     ],

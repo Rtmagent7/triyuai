@@ -142,15 +142,15 @@ describe("ChatView", () => {
 });
 
 describe("ChatPanel and /ask", () => {
-  it("opens the drawer from the floating button", async () => {
+  it("opens as a drawer and closes", async () => {
     renderWithClient(<ChatPanel />);
-    await userEvent.click(screen.getByRole("button", { name: "Open Ask TRIYU" }));
+    act(() => useChat.getState().setOpen(true));
     expect(await screen.findByRole("dialog")).toHaveTextContent("AI market assistant");
     await userEvent.click(screen.getByRole("button", { name: "Close Ask TRIYU" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
   });
 
-  it("hides the floating button on /ask and the page closes the drawer", () => {
+  it("stays closed on /ask, where the page hosts the conversation", () => {
     navigation.pathname = "/ask";
     useChat.setState({ open: true });
     renderWithClient(
@@ -159,7 +159,7 @@ describe("ChatPanel and /ask", () => {
         <AskPage />
       </>,
     );
-    expect(screen.queryByRole("button", { name: "Open Ask TRIYU" })).toBeNull();
+    expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Ask TRIYU");
     expect(useChat.getState().open).toBe(false);
   });

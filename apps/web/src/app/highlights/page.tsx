@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BarChart3, Flame, TrendingDown, TrendingUp } from "lucide-react";
 import type { CoinSummary } from "@triyuai/shared";
 import { CoinLogo } from "@/components/coin/coin-logo";
 import { PercentBadge } from "@/components/coin/percent-badge";
@@ -26,28 +25,11 @@ export default async function HighlightsPage() {
         </p>
       </div>
       {/* Two columns only from lg: at tablet width coin names would be truncated. */}
-      <div className="stagger grid gap-4 lg:grid-cols-2">
-        <List
-          title="Trending"
-          icon={<Flame className="size-4 text-orange-500" />}
-          coins={h.trending}
-        />
-        <List
-          title="Highest volume (24h)"
-          icon={<BarChart3 className="text-brand size-4" />}
-          coins={h.highestVolume}
-          volume
-        />
-        <List
-          title="Top gainers (24h)"
-          icon={<TrendingUp className="text-up size-4" />}
-          coins={h.gainers}
-        />
-        <List
-          title="Top losers (24h)"
-          icon={<TrendingDown className="text-down size-4" />}
-          coins={h.losers}
-        />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <List title="Trending" coins={h.trending} />
+        <List title="Highest volume · 24h" coins={h.highestVolume} volume />
+        <List title="Top gainers · 24h" coins={h.gainers} />
+        <List title="Top losers · 24h" coins={h.losers} />
       </div>
     </div>
   );
@@ -55,21 +37,16 @@ export default async function HighlightsPage() {
 
 function List({
   title,
-  icon,
   coins,
   volume,
 }: {
   title: string;
-  icon: React.ReactNode;
   coins: (CoinSummary & { volume24h?: number })[];
   volume?: boolean;
 }) {
   return (
     <Card className="lift min-w-0 p-4">
-      <h2 className="mb-2 flex items-center gap-2 px-2 font-semibold">
-        {icon}
-        {title}
-      </h2>
+      <h2 className="mb-2 px-2 font-semibold">{title}</h2>
       <ol>
         {coins.map((c, i) => (
           <li key={c.id}>

@@ -3,11 +3,13 @@ import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const variants = {
-  primary: "bg-brand text-brand-fg hover:opacity-90",
+  // Ink on paper (inverted on dark); the brand blue is kept for data and selection.
+  primary: "bg-primary text-primary-fg hover:opacity-85",
   secondary: "bg-surface-2 text-text hover:bg-border",
   ghost: "text-text hover:bg-surface-2",
   outline: "border border-border bg-transparent text-text hover:bg-surface-2",
-  ai: "ai-gradient text-white shadow-sm shadow-ai-from/30 hover:opacity-95",
+  // Ask TRIYU entry points: the primary treatment, marked by the sparkle icon rather than a gradient.
+  ai: "bg-primary text-primary-fg hover:opacity-85",
 } as const;
 
 const sizes = {

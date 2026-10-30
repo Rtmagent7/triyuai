@@ -1,0 +1,1245 @@
+{
+ "url": "http://localhost:3100/watchlist",
+ "at": "2026-10-30T01:37:46.340Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 1,
+   "filled": [
+    0.5
+   ],
+   "motion": {
+    "elements": 184,
+    "css": 184,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 900,
+     "screens": 1,
+     "words": 211,
+     "img": 11,
+     "video": 0,
+     "canvas": 0,
+     "svg": 25,
+     "sections": 1,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Watchlist",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 24,
+     "vw": 1.7,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Watchlist",
+     "words": 1,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      24
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 55,
+     "max": {
+      "size": 24,
+      "vw": 1.7,
+      "font": "Inter",
+      "text": "Watchlist"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.05,
+     "centerShare": 0.09,
+     "smallText": 4
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0a0a0b",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.05,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#9b9ca3",
+       "share": 0.55
+      },
+      {
+       "color": "#f1f1f3",
+       "share": 0.29
+      },
+      {
+       "color": "#f0586e",
+       "share": 0.09
+      },
+      {
+       "color": "#f06f82",
+       "share": 0.03
+      },
+      {
+       "color": "#3fc07a",
+       "share": 0.01
+      }
+     ],
+     "button": {
+      "bg": "#121214",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.07
+      },
+      "fg": "#9b9ca3"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 8,
+     "height": 36,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU",
+      "Log in"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 1440px",
+      "header.border-border.bg-bg 1440px",
+      "footer.border-border.bg-surface 1440px",
+      "div.border-border.border-t 1440px"
+     ],
+     "outlinedBoxes": 1,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 1,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 7,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 900,
+    "margins": {
+     "left": 44,
+     "right": 55
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 462,
+      "words": 89,
+      "media": 0,
+      "middle": 88,
+      "heading": {
+       "text": "Watchlist",
+       "size": 24,
+       "tag": "h1"
+      },
+      "left": 44,
+      "right": 55,
+      "textLeft": 44,
+      "textRight": 78,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 628,
+      "height": 248,
+      "words": 54,
+      "media": 0,
+      "middle": 210,
+      "heading": null,
+      "left": 44,
+      "right": 44,
+      "textLeft": 44,
+      "textRight": 44,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Watchlist",
+      "size": 24,
+      "top": 126,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 44,
+      "n": 2
+     },
+     {
+      "x": 222,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 3,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.08,
+    "voidBox": {
+     "x": 600,
+     "y": 120,
+     "w": 840,
+     "h": 120
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#0a0a0b",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 44,
+     "right": 55
+    },
+    "hero": {
+     "text": "Watchlist",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 24,
+     "vw": 1.7,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 1,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 1,
+     "radii": [
+      [
+       16,
+       1
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 19,
+     "leftAligned": 5,
+     "figures": 16,
+     "tabularShare": 1,
+     "kpiMax": 14
+    },
+    "rows": {
+     "count": 5,
+     "median": 56
+    },
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.25,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      14,
+      16,
+      24
+     ]
+    },
+    "title": {
+     "text": "Watchlist",
+     "size": 24,
+     "top": 126
+    },
+    "colourShare": 0.007
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 1,
+   "filled": [
+    0.56
+   ],
+   "motion": {
+    "elements": 164,
+    "css": 164,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1024,
+     "screens": 1,
+     "words": 195,
+     "img": 11,
+     "video": 0,
+     "canvas": 0,
+     "svg": 25,
+     "sections": 1,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Watchlist",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 24,
+     "vw": 3.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Watchlist",
+     "words": 1,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      24
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 40,
+     "max": {
+      "size": 24,
+      "vw": 3.1,
+      "font": "Inter",
+      "text": "Watchlist"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.03,
+     "centerShare": 0.08,
+     "smallText": 3
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0a0a0b",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.05,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#9b9ca3",
+       "share": 0.55
+      },
+      {
+       "color": "#f1f1f3",
+       "share": 0.29
+      },
+      {
+       "color": "#f0586e",
+       "share": 0.1
+      },
+      {
+       "color": "#85d3a9",
+       "share": 0.02
+      },
+      {
+       "color": "#f094a2",
+       "share": 0.02
+      }
+     ],
+     "button": {
+      "bg": "#121214",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.07
+      },
+      "fg": "#9b9ca3"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 2,
+     "inHero": 2,
+     "radius": 8,
+     "height": 36,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 768px",
+      "header.border-border.bg-bg 768px",
+      "footer.border-border.bg-surface 768px",
+      "div.border-border.border-t 768px"
+     ],
+     "outlinedBoxes": 1,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 1,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1024,
+    "margins": {
+     "left": 24,
+     "right": 24
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 462,
+      "words": 86,
+      "media": 0,
+      "middle": 20,
+      "heading": {
+       "text": "Watchlist",
+       "size": 24,
+       "tag": "h1"
+      },
+      "left": 24,
+      "right": 0,
+      "textLeft": 24,
+      "textRight": -7,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 628,
+      "height": 288,
+      "words": 54,
+      "media": 0,
+      "middle": 69,
+      "heading": null,
+      "left": 24,
+      "right": 24,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Watchlist",
+      "size": 24,
+      "top": 126,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 24,
+      "n": 2
+     },
+     {
+      "x": 202,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 3,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#0a0a0b",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 24,
+     "right": -7
+    },
+    "hero": {
+     "text": "Watchlist",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 24,
+     "vw": 3.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 1,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 1,
+     "radii": [
+      [
+       16,
+       1
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 19,
+     "leftAligned": 5,
+     "figures": 16,
+     "tabularShare": 1,
+     "kpiMax": 14
+    },
+    "rows": {
+     "count": 5,
+     "median": 56
+    },
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.23,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      14,
+      16,
+      24
+     ]
+    },
+    "title": {
+     "text": "Watchlist",
+     "size": 24,
+     "top": 126
+    },
+    "colourShare": 0.01
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.49,
+    0.51
+   ],
+   "motion": {
+    "elements": 128,
+    "css": 128,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 1088,
+     "screens": 1.3,
+     "words": 169,
+     "img": 11,
+     "video": 0,
+     "canvas": 0,
+     "svg": 25,
+     "sections": 1,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Watchlist",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 24,
+     "vw": 6.2,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Watchlist",
+     "words": 1,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "Watchlist",
+      "words": 1,
+      "chars": 9,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.33,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 126,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      12,
+      14,
+      24
+     ],
+     "sizeCount": 5,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 51,
+     "max": {
+      "size": 24,
+      "vw": 6.2,
+      "font": "Inter",
+      "text": "Watchlist"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.03,
+     "centerShare": 0.05,
+     "smallText": 3
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0a0a0b",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.05,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#121214",
+       "top": 668,
+       "hsl": {
+        "h": 240,
+        "s": 0.05,
+        "l": 0.07
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#9b9ca3",
+       "share": 0.56
+      },
+      {
+       "color": "#f1f1f3",
+       "share": 0.31
+      },
+      {
+       "color": "#f0586e",
+       "share": 0.08
+      },
+      {
+       "color": "#54c689",
+       "share": 0.02
+      },
+      {
+       "color": "#3fc07a",
+       "share": 0.01
+      }
+     ],
+     "button": null,
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 0,
+     "inHero": 0,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": []
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 4,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 390px",
+      "header.border-border.bg-bg 390px",
+      "footer.border-border.bg-surface 390px",
+      "div.border-border.border-t 390px"
+     ],
+     "outlinedBoxes": 1,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 1,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 1088,
+    "margins": {
+     "left": 16,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 502,
+      "words": 79,
+      "media": 0,
+      "middle": 288,
+      "heading": {
+       "text": "Watchlist",
+       "size": 24,
+       "tag": "h1"
+      },
+      "left": 16,
+      "right": 0,
+      "textLeft": 16,
+      "textRight": -337,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 668,
+      "height": 420,
+      "words": 54,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 16,
+      "right": 20,
+      "textLeft": 16,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Watchlist",
+      "size": 24,
+      "top": 126,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 16,
+      "n": 3
+     }
+    ],
+    "leftBlocks": 3,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "dark": true,
+    "ground": "#0a0a0b",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 16,
+     "right": -337
+    },
+    "hero": {
+     "text": "Watchlist",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 24,
+     "vw": 6.2,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 126,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 1,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 1,
+     "radii": [
+      [
+       16,
+       1
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 19,
+     "leftAligned": 5,
+     "figures": 16,
+     "tabularShare": 1,
+     "kpiMax": 14
+    },
+    "rows": {
+     "count": 5,
+     "median": 56
+    },
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.23,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      14,
+      16,
+      24
+     ]
+    },
+    "title": {
+     "text": "Watchlist",
+     "size": 24,
+     "top": 126
+    },
+    "colourShare": 0.009
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\final\\_watchlist\\desktop-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\final\\_watchlist\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\final\\_watchlist\\tablet-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\final\\_watchlist\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\final\\_watchlist\\mobile-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\final\\_watchlist\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

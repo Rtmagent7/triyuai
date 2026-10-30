@@ -29,10 +29,11 @@ describe("PercentBadge", () => {
     expect(screen.getByText("3.46%")).toBeInTheDocument();
   });
 
-  it("shows ▼ for losses, as a pill", () => {
+  it("shows ▼ for losses; the pill size keeps colour on the figure only", () => {
     const { container } = render(<PercentBadge value={-1} variant="pill" />);
     expect(screen.getByText("▼")).toBeInTheDocument();
-    expect(container.firstChild).toHaveClass("text-down", "rounded-md");
+    expect(container.firstChild).toHaveClass("text-down", "font-semibold");
+    expect(container.firstChild).not.toHaveClass("bg-down-soft");
   });
 
   it("renders a dash when missing", () => {

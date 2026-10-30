@@ -42,10 +42,16 @@ const styleIcon: Record<ChartStyle, typeof ChartLine> = {
   area: ChartArea,
 };
 
+/** Phones: an alpha mask (not a visible fill) fades the right edge to show the row scrolls. */
+const SCROLL_FADE = "max-md:[mask-image:linear-gradient(to_right,black_88%,transparent)]"; // taste-skill-ignore
+
 const COMPACT_INTERVALS: Interval[] = ["15m", "1h", "4h", "1d", "1w"];
 
 const btn =
-  "text-muted hover:bg-surface-2 hover:text-text inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium transition-colors [&_svg]:size-4";
+  "text-muted hover:bg-surface-2 hover:text-text inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2 text-[13px] font-medium transition-colors [&_svg]:size-4";
+/** The one selection mark: a 1px brand line as wide as the label, lying on the toolbar's bottom edge. */
+const selected =
+  "text-text relative after:absolute after:inset-x-1.5 after:-bottom-[7px] after:h-px after:bg-brand";
 
 type Props = {
   variant: "full" | "compact";
@@ -80,7 +86,12 @@ export function ChartToolbar({
       : [...COMPACT_INTERVALS, interval];
 
   return (
-    <div className="border-border relative flex h-[45px] shrink-0 items-center gap-1 overflow-x-auto border-b px-2 [scrollbar-width:none] max-md:[mask-image:linear-gradient(to_right,black_88%,transparent)]">
+    <div
+      className={cn(
+        "border-border relative flex h-[45px] shrink-0 items-center gap-1 overflow-x-auto border-b px-2 [scrollbar-width:none]",
+        SCROLL_FADE,
+      )}
+    >
       {/* The page title already names the pair on phones. */}
       {full && (
         <span className="hidden whitespace-nowrap pr-2 text-sm font-semibold sm:inline">
@@ -96,7 +107,7 @@ export function ChartToolbar({
             role="radio"
             aria-checked={interval === iv}
             onClick={() => setInterval(iv)}
-            className={cn(btn, "px-1.5", interval === iv && "bg-surface-2 text-text")}
+            className={cn(btn, "px-1.5", interval === iv && selected)}
           >
             {intervalLabel[iv]}
           </button>
@@ -160,7 +171,7 @@ export function ChartToolbar({
             aria-checked={scale === mode}
             title={title}
             onClick={() => setScale(scale === mode ? "normal" : mode)}
-            className={cn(btn, scale === mode && "bg-surface-2 text-brand")}
+            className={cn(btn, scale === mode && selected)}
           >
             {label}
           </button>

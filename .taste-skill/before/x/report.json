@@ -1,0 +1,1523 @@
+{
+ "url": "http://localhost:3100/coins/bitcoin",
+ "at": "2026-10-30T01:14:23.003Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.52,
+    0.63,
+    0.51
+   ],
+   "motion": {
+    "elements": 11,
+    "css": 11,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1836,
+     "screens": 2,
+     "words": 516,
+     "img": 8,
+     "video": 0,
+     "canvas": 7,
+     "svg": 23,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "chars": 11,
+     "lines": 1,
+     "size": 24,
+     "vw": 1.7,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 166,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "$77,368.58",
+      "words": 1,
+      "chars": 10,
+      "lines": 1,
+      "size": 36,
+      "vw": 2.5,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.11,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.14,
+      "top": 230,
+      "tag": "p",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      16,
+      24,
+      36
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.63,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 16
+     },
+     "measureChars": 110,
+     "max": {
+      "size": 36,
+      "vw": 2.5,
+      "font": "Inter",
+      "text": "$77,368.58"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.03,
+     "smallText": 17
+    },
+    "eyebrows": [
+     {
+      "text": "Rank #1",
+      "above": "$77,368.58",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 12,
+      "top": 198
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0b0e14",
+     "bodyBgHsl": {
+      "h": 220,
+      "s": 0.29,
+      "l": 0.06
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#0b0e14",
+       "top": 336,
+       "hsl": {
+        "h": 220,
+        "s": 0.29,
+        "l": 0.06
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#e6eaf2",
+       "share": 0.71
+      },
+      {
+       "color": "#8a94a6",
+       "share": 0.25
+      },
+      {
+       "color": "#22c55e",
+       "share": 0.02
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.01
+      },
+      {
+       "color": "#ef4444",
+       "share": 0.01
+      }
+     ],
+     "button": {
+      "bg": "#8b5cf6",
+      "hsl": {
+       "h": 258,
+       "s": 0.9,
+       "l": 0.66
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 14,
+     "inHero": 7,
+     "radius": 8,
+     "height": 30,
+     "withShadow": 0,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU",
+      "Log in",
+      "Watchlist",
+      "Share"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.inline-flex.shrink-0 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 14,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 1440px",
+      "header.border-border.bg-bg/85 1440px",
+      "div.border-border.relative 966px",
+      "div.border-border.grid 318px",
+      "div.border-border.grid 318px"
+     ],
+     "outlinedBoxes": 4,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 4,
+     "boxRadius": 16,
+     "squareMedia": 2,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.27
+     },
+     {
+      "type": "canvas",
+      "ratio": 0.27
+     }
+    ],
+    "nav": {
+     "links": 7,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1836,
+    "margins": {
+     "left": 44,
+     "right": 58
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 1422,
+      "words": 462,
+      "media": 6,
+      "middle": 0,
+      "heading": {
+       "text": "$77,368.58",
+       "size": 36,
+       "tag": "span"
+      },
+      "left": 44,
+      "right": 44,
+      "textLeft": 44,
+      "textRight": 58,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 1588,
+      "height": 248,
+      "words": 54,
+      "media": 0,
+      "middle": 210,
+      "heading": null,
+      "left": 44,
+      "right": 44,
+      "textLeft": 44,
+      "textRight": 44,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Bitcoin BTC",
+      "size": 24,
+      "top": 166,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 65,
+      "n": 6
+     },
+     {
+      "x": 1057,
+      "n": 2
+     },
+     {
+      "x": 96,
+      "n": 1
+     },
+     {
+      "x": 116,
+      "n": 1
+     },
+     {
+      "x": 180,
+      "n": 1
+     },
+     {
+      "x": 1089,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 12,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.11,
+    "voidBox": {
+     "x": 240,
+     "y": 120,
+     "w": 1200,
+     "h": 120
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#0b0e14",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 44,
+     "right": 44
+    },
+    "hero": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "chars": 11,
+     "lines": 1,
+     "size": 24,
+     "vw": 1.7,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 166,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 3,
+     "ragged": [
+      {
+       "diff": 114,
+       "top": 336
+      }
+     ],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 4,
+     "radii": [
+      [
+       16,
+       4
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 1,
+     "hues": 1,
+     "samples": [
+      {
+       "hue": 221,
+       "size": 32,
+       "radius": "3.35544e+07px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 20,
+     "tabularShare": 0.85,
+     "kpiMax": 36
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.19,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      14,
+      16,
+      24,
+      36
+     ]
+    },
+    "title": {
+     "text": "Bitcoin\nBTC",
+     "size": 24,
+     "top": 166
+    },
+    "colourShare": 0.035
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.62,
+    0.42,
+    0.45
+   ],
+   "motion": {
+    "elements": 13,
+    "css": 13,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 2889,
+     "screens": 2.8,
+     "words": 509,
+     "img": 8,
+     "video": 0,
+     "canvas": 7,
+     "svg": 23,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "chars": 11,
+     "lines": 1,
+     "size": 24,
+     "vw": 3.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 166,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "$77,350.61",
+      "words": 1,
+      "chars": 10,
+      "lines": 1,
+      "size": 36,
+      "vw": 4.7,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.11,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.26,
+      "top": 230,
+      "tag": "p",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      11,
+      12,
+      14,
+      16,
+      24,
+      36
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.63,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 16
+     },
+     "measureChars": 97,
+     "max": {
+      "size": 36,
+      "vw": 4.7,
+      "font": "Inter",
+      "text": "$77,350.61"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.03,
+     "smallText": 17
+    },
+    "eyebrows": [
+     {
+      "text": "Rank #1",
+      "above": "$77,350.61",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 12,
+      "top": 198
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0b0e14",
+     "bodyBgHsl": {
+      "h": 220,
+      "s": 0.29,
+      "l": 0.06
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#0b0e14",
+       "top": 392,
+       "hsl": {
+        "h": 220,
+        "s": 0.29,
+        "l": 0.06
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#e6eaf2",
+       "share": 0.72
+      },
+      {
+       "color": "#8a94a6",
+       "share": 0.24
+      },
+      {
+       "color": "#22c55e",
+       "share": 0.02
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.01
+      },
+      {
+       "color": "#ef4444",
+       "share": 0.01
+      }
+     ],
+     "button": {
+      "bg": "#8b5cf6",
+      "hsl": {
+       "h": 258,
+       "s": 0.9,
+       "l": 0.66
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 13,
+     "inHero": 6,
+     "radius": 8,
+     "height": 30,
+     "withShadow": 0,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU",
+      "Watchlist",
+      "Share",
+      "Ask TRIYU about Bitcoin"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.inline-flex.shrink-0 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 14,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 768px",
+      "header.border-border.bg-bg/85 768px",
+      "div.border-border.relative 718px",
+      "div.border-border.grid 678px",
+      "div.border-border.grid 678px"
+     ],
+     "outlinedBoxes": 4,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 4,
+     "boxRadius": 16,
+     "squareMedia": 2,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.33
+     },
+     {
+      "type": "canvas",
+      "ratio": 0.33
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 2889,
+    "margins": {
+     "left": 24,
+     "right": 25
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 2435,
+      "words": 462,
+      "media": 4,
+      "middle": 0,
+      "heading": {
+       "text": "$77,350.61",
+       "size": 36,
+       "tag": "span"
+      },
+      "left": 24,
+      "right": 25,
+      "textLeft": 24,
+      "textRight": 41,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 2601,
+      "height": 288,
+      "words": 54,
+      "media": 0,
+      "middle": 69,
+      "heading": null,
+      "left": 24,
+      "right": 24,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Bitcoin BTC",
+      "size": 24,
+      "top": 166,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 45,
+      "n": 8
+     },
+     {
+      "x": 76,
+      "n": 2
+     },
+     {
+      "x": 96,
+      "n": 1
+     },
+     {
+      "x": 160,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 12,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#0b0e14",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 24,
+     "right": 24
+    },
+    "hero": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "chars": 11,
+     "lines": 1,
+     "size": 24,
+     "vw": 3.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 166,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 2,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 4,
+     "radii": [
+      [
+       16,
+       4
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 1,
+     "hues": 1,
+     "samples": [
+      {
+       "hue": 221,
+       "size": 32,
+       "radius": "3.35544e+07px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 20,
+     "tabularShare": 0.85,
+     "kpiMax": 36
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.19,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      14,
+      16,
+      24,
+      36
+     ]
+    },
+    "title": {
+     "text": "Bitcoin\nBTC",
+     "size": 24,
+     "top": 166
+    },
+    "colourShare": 0.052
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.69,
+    0.73,
+    0.41,
+    0.38,
+    0.75
+   ],
+   "motion": {
+    "elements": 12,
+    "css": 12,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 3739,
+     "screens": 4.4,
+     "words": 505,
+     "img": 8,
+     "video": 0,
+     "canvas": 7,
+     "svg": 23,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "chars": 11,
+     "lines": 1,
+     "size": 24,
+     "vw": 6.2,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 166,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "lines": 1,
+     "size": 24,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "Bitcoin BTC",
+      "words": 2,
+      "chars": 11,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.33,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.29,
+      "top": 166,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "$77,349.01",
+      "words": 1,
+      "chars": 10,
+      "lines": 1,
+      "size": 30,
+      "vw": 7.7,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.42,
+      "top": 230,
+      "tag": "p",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 2,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      10,
+      12,
+      14,
+      16,
+      24,
+      30
+     ],
+     "sizeCount": 7,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.63,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 16
+     },
+     "measureChars": 46,
+     "max": {
+      "size": 30,
+      "vw": 7.7,
+      "font": "Inter",
+      "text": "$77,349.01"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.02,
+     "smallText": 17
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0b0e14",
+     "bodyBgHsl": {
+      "h": 220,
+      "s": 0.29,
+      "l": 0.06
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#0b0e14",
+       "top": 432,
+       "hsl": {
+        "h": 220,
+        "s": 0.29,
+        "l": 0.06
+       }
+      },
+      {
+       "color": "#121722",
+       "top": 3239,
+       "hsl": {
+        "h": 221,
+        "s": 0.31,
+        "l": 0.1
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#e6eaf2",
+       "share": 0.73
+      },
+      {
+       "color": "#8a94a6",
+       "share": 0.24
+      },
+      {
+       "color": "#22c55e",
+       "share": 0.02
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.01
+      },
+      {
+       "color": "#ef4444",
+       "share": 0.01
+      }
+     ],
+     "button": {
+      "bg": "#8b5cf6",
+      "hsl": {
+       "h": 258,
+       "s": 0.9,
+       "l": 0.66
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 11,
+     "inHero": 4,
+     "radius": 8,
+     "height": 30,
+     "withShadow": 0,
+     "withGradient": 2,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Watchlist",
+      "Share",
+      "Ask TRIYU about Bitcoin",
+      "Ask TRIYU"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 1,
+     "shadowSamples": [
+      "button.inline-flex.shrink-0 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 2,
+     "scrims": 0,
+     "gradientSamples": [
+      "button.inline-flex.shrink-0 → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))",
+      "button.ai-gradient.h-13 → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))"
+     ],
+     "gradientText": 0,
+     "hairlines": 14,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 390px",
+      "header.border-border.bg-bg/85 390px",
+      "div.border-border.relative 356px",
+      "div.border-border.grid 324px",
+      "div.border-border.grid 324px"
+     ],
+     "outlinedBoxes": 4,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 4,
+     "boxRadius": 16,
+     "squareMedia": 2,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.29
+     },
+     {
+      "type": "canvas",
+      "ratio": 0.29
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 3739,
+    "margins": {
+     "left": 16,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 3073,
+      "words": 461,
+      "media": 4,
+      "middle": 76,
+      "heading": {
+       "text": "$77,349.00",
+       "size": 30,
+       "tag": "span"
+      },
+      "left": 16,
+      "right": 0,
+      "textLeft": 16,
+      "textRight": -129,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 3239,
+      "height": 500,
+      "words": 54,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 16,
+      "right": 20,
+      "textLeft": 16,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Bitcoin BTC",
+      "size": 24,
+      "top": 166,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 33,
+      "n": 8
+     },
+     {
+      "x": 65,
+      "n": 2
+     },
+     {
+      "x": 84,
+      "n": 1
+     },
+     {
+      "x": 152,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 12,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "dark": true,
+    "ground": "#0b0e14",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 16,
+     "right": -184
+    },
+    "hero": {
+     "text": "Bitcoin BTC",
+     "words": 2,
+     "chars": 11,
+     "lines": 1,
+     "size": 24,
+     "vw": 6.2,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.33,
+     "top": 166,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 4,
+     "radii": [
+      [
+       16,
+       4
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 1,
+     "hues": 1,
+     "samples": [
+      {
+       "hue": 221,
+       "size": 32,
+       "radius": "3.35544e+07px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 20,
+     "tabularShare": 0.85,
+     "kpiMax": 30
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.19,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      14,
+      16,
+      24,
+      30
+     ]
+    },
+    "title": {
+     "text": "Bitcoin\nBTC",
+     "size": 24,
+     "top": 166
+    },
+    "colourShare": 0.092
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "button-fx",
+   "width": 1440,
+   "message": "Buttons with gradient fill.",
+   "fix": "Flat fill, one colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "palette-purple",
+   "width": 1440,
+   "message": "Indigo / violet (button #8b5cf6).",
+   "fix": "Use the accent from the drawn palette.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "ragged-row",
+   "width": 1440,
+   "message": "1 pair(s) of cards in one row end at different heights (by 114px).",
+   "fix": "Cards that share a row share a bottom edge: balance them by their content (the same number of rows, a block of similar height beside it), or stack them. In testing, ragged rows were marked down every time."
+  },
+  {
+   "level": "FAIL",
+   "id": "gradient",
+   "width": 390,
+   "message": "2 gradient fill(s): button.inline-flex.shrink-0 → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212)) | button.ai-gradient.h-13 → linear-gradient(135deg, rgb(139, 92, 246), rgb(6, 182, 212))",
+   "fix": "Use a flat colour or a real image. The only gradient allowed by default is a neutral scrim over a photo for legibility."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\x\\desktop-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\x\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\x\\tablet-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\x\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\x\\mobile-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\before\\x\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

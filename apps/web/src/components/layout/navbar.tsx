@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { LogOut, Menu, Monitor, Moon, Search, Star, Sun, UserRound } from "lucide-react";
 import type { Currency } from "@triyuai/shared";
 import { currencies } from "@triyuai/shared/constants";
+import { preloadChatView } from "@/components/chat/chat-panel";
 import { Sparkle } from "@/components/chat/sparkle";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,7 +46,7 @@ export function Navbar() {
       : pathname.startsWith(href.startsWith("/chart") ? "/chart" : href);
 
   return (
-    <header className="border-border bg-bg/85 sticky top-0 z-40 border-b backdrop-blur-md">
+    <header className="border-border bg-bg sticky top-0 z-40 border-b">
       <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-2 px-4 sm:gap-3 sm:px-6">
         <MobileMenu isActive={isActive} />
         <Logo />
@@ -56,9 +57,9 @@ export function Navbar() {
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}
               className={cn(
-                // Underline grows in under the active (and hovered) link.
-                "text-muted hover:text-text after:bg-brand relative rounded-lg px-2.5 py-2 text-sm font-medium transition-colors after:absolute after:inset-x-2.5 after:-bottom-[13px] after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:transition-transform after:duration-300 hover:after:scale-x-50 xl:px-3 xl:after:inset-x-3",
-                isActive(l.href) && "text-text after:scale-x-100 hover:after:scale-x-100",
+                // The active page is marked by a 1px brand line lying on the header's bottom edge.
+                "text-muted hover:text-text after:bg-brand relative rounded-md px-2.5 py-2 text-sm font-medium transition-colors after:absolute after:inset-x-2.5 after:-bottom-[13px] after:h-px after:scale-x-0 after:transition-transform after:duration-200 xl:px-3 xl:after:inset-x-3",
+                isActive(l.href) && "text-text after:scale-x-100",
               )}
             >
               {l.label}
@@ -85,16 +86,21 @@ export function Navbar() {
           </button>
           <CurrencySwitch />
           <ThemeToggle />
-          {/* Icon-only between lg and xl, where the nav links take the room. */}
-          <Button
-            variant="ai"
-            onClick={() => openChat()}
-            aria-label="Ask TRIYU"
-            className="hidden sm:inline-flex lg:px-2.5 xl:px-3.5"
-          >
-            <Sparkle className="text-white" />
-            <span className="lg:hidden xl:inline">Ask TRIYU</span>
-          </Button>
+          {/* The one way into Ask TRIYU on every page. Icon-only on phones and between
+              lg and xl, where the nav links take the room. Hidden on /ask itself. */}
+          {pathname !== "/ask" && (
+            <Button
+              variant="ai"
+              onClick={() => openChat()}
+              onPointerEnter={preloadChatView}
+              onFocus={preloadChatView}
+              aria-label="Open Ask TRIYU"
+              className="px-2.5 sm:px-3.5 lg:px-2.5 xl:px-3.5"
+            >
+              <Sparkle />
+              <span className="hidden sm:inline lg:hidden xl:inline">Ask TRIYU</span>
+            </Button>
+          )}
           <AccountMenu />
         </div>
       </div>
@@ -231,7 +237,7 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
                   isActive(l.href) && "bg-surface-2 text-text",
                 )}
               >
-                {l.href === "/ask" ? <span className="ai-text">{l.label}</span> : l.label}
+                {l.label}
               </Link>
             ),
           )}

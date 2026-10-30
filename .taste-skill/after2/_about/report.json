@@ -1,0 +1,1333 @@
+{
+ "url": "http://localhost:3100/about",
+ "at": "2026-10-30T01:31:25.433Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.31,
+    0.51
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1669,
+     "screens": 1.9,
+     "words": 367,
+     "img": 6,
+     "video": 0,
+     "canvas": 0,
+     "svg": 6,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "chars": 19,
+     "lines": 1,
+     "size": 30,
+     "vw": 2.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 158,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "lines": 1,
+     "size": 30,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "How I built TRIYUAI",
+      "words": 4,
+      "chars": 19,
+      "lines": 1,
+      "size": 30,
+      "vw": 2.1,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.53,
+      "top": 158,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      11,
+      12,
+      14,
+      16,
+      20,
+      30
+     ],
+     "sizeCount": 7,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 96,
+     "max": {
+      "size": 30,
+      "vw": 2.1,
+      "font": "Inter",
+      "text": "How I built TRIYUAI"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.01,
+     "centerShare": 0.01,
+     "smallText": 4
+    },
+    "eyebrows": [
+     {
+      "text": "Case study",
+      "above": "How I built TRIYUAI",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 126
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0a0a0b",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.05,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#9b9ca3",
+       "share": 0.74
+      },
+      {
+       "color": "#f1f1f3",
+       "share": 0.24
+      },
+      {
+       "color": "#1a9bff",
+       "share": 0.01
+      },
+      {
+       "color": "#0a0a0b",
+       "share": 0
+      },
+      {
+       "color": "#f0586e",
+       "share": 0
+      }
+     ],
+     "button": {
+      "bg": "#121214",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.07
+      },
+      "fg": "#9b9ca3"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 8,
+     "height": 36,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU",
+      "Log in"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 9,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 1440px",
+      "header.border-border.bg-bg 1440px",
+      "div.grid.gap-1 766px",
+      "div.grid.gap-1 766px",
+      "div.grid.gap-1 766px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 2,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 7,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1669,
+    "margins": {
+     "left": 44,
+     "right": 59
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 1255,
+      "words": 298,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How I built TRIYUAI",
+       "size": 30,
+       "tag": "h1"
+      },
+      "left": 336,
+      "right": 347,
+      "textLeft": 336,
+      "textRight": 347,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 1421,
+      "height": 248,
+      "words": 54,
+      "media": 0,
+      "middle": 210,
+      "heading": null,
+      "left": 44,
+      "right": 44,
+      "textLeft": 44,
+      "textRight": 44,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "How I built TRIYUAI",
+      "size": 30,
+      "top": 158,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 336,
+      "n": 11
+     },
+     {
+      "x": 357,
+      "n": 2
+     }
+    ],
+    "leftBlocks": 13,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.18,
+    "voidBox": {
+     "x": 0,
+     "y": 120,
+     "w": 300,
+     "h": 780
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#0a0a0b",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 44,
+     "right": 44
+    },
+    "hero": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "chars": 19,
+     "lines": 1,
+     "size": 30,
+     "vw": 2.1,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 158,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 2,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 2,
+     "radii": [
+      [
+       16,
+       2
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 2,
+     "tabularShare": 1,
+     "kpiMax": 12
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.08,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      14,
+      16,
+      20,
+      30
+     ]
+    },
+    "title": {
+     "text": "How I built TRIYUAI",
+     "size": 30,
+     "top": 158
+    },
+    "colourShare": 0.001
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.45,
+    0.64
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1709,
+     "screens": 1.7,
+     "words": 354,
+     "img": 6,
+     "video": 0,
+     "canvas": 0,
+     "svg": 6,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "chars": 19,
+     "lines": 1,
+     "size": 30,
+     "vw": 3.9,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 158,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "lines": 1,
+     "size": 30,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "How I built TRIYUAI",
+      "words": 4,
+      "chars": 19,
+      "lines": 1,
+      "size": 30,
+      "vw": 3.9,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.94,
+      "top": 158,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      11,
+      12,
+      14,
+      16,
+      20,
+      30
+     ],
+     "sizeCount": 7,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 90,
+     "max": {
+      "size": 30,
+      "vw": 3.9,
+      "font": "Inter",
+      "text": "How I built TRIYUAI"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.01,
+     "smallText": 3
+    },
+    "eyebrows": [
+     {
+      "text": "Case study",
+      "above": "How I built TRIYUAI",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 126
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0a0a0b",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.05,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#9b9ca3",
+       "share": 0.75
+      },
+      {
+       "color": "#f1f1f3",
+       "share": 0.24
+      },
+      {
+       "color": "#1a9bff",
+       "share": 0.01
+      },
+      {
+       "color": "#0a0a0b",
+       "share": 0
+      },
+      {
+       "color": "#f0586e",
+       "share": 0
+      }
+     ],
+     "button": {
+      "bg": "#121214",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.07
+      },
+      "fg": "#9b9ca3"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 2,
+     "inHero": 2,
+     "radius": 8,
+     "height": 36,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Search coins… ⌘K",
+      "Ask TRIYU"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 9,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 768px",
+      "header.border-border.bg-bg 768px",
+      "div.grid.gap-1 718px",
+      "div.grid.gap-1 718px",
+      "div.grid.gap-1 718px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 2,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1709,
+    "margins": {
+     "left": 24,
+     "right": 24
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 1255,
+      "words": 298,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How I built TRIYUAI",
+       "size": 30,
+       "tag": "h1"
+      },
+      "left": 24,
+      "right": 25,
+      "textLeft": 24,
+      "textRight": 25,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 1421,
+      "height": 288,
+      "words": 54,
+      "media": 0,
+      "middle": 69,
+      "heading": null,
+      "left": 24,
+      "right": 24,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "How I built TRIYUAI",
+      "size": 30,
+      "top": 158,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 24,
+      "n": 11
+     },
+     {
+      "x": 45,
+      "n": 2
+     }
+    ],
+    "leftBlocks": 13,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#0a0a0b",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 16,
+     "right": 24
+    },
+    "hero": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "chars": 19,
+     "lines": 1,
+     "size": 30,
+     "vw": 3.9,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 158,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 2,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 2,
+     "radii": [
+      [
+       16,
+       2
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 2,
+     "tabularShare": 1,
+     "kpiMax": 12
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.08,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      14,
+      16,
+      20,
+      30
+     ]
+    },
+    "title": {
+     "text": "How I built TRIYUAI",
+     "size": 30,
+     "top": 158
+    },
+    "colourShare": 0.004
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.66,
+    0.44,
+    0.75
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 2467,
+     "screens": 2.9,
+     "words": 351,
+     "img": 6,
+     "video": 0,
+     "canvas": 0,
+     "svg": 6,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "chars": 19,
+     "lines": 1,
+     "size": 30,
+     "vw": 7.7,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 158,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "lines": 1,
+     "size": 30,
+     "font": "Inter"
+    },
+    "headings": [
+     {
+      "text": "How I built TRIYUAI",
+      "words": 4,
+      "chars": 19,
+      "lines": 1,
+      "size": 30,
+      "vw": 7.7,
+      "font": "Inter",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 158,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Inter",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      8,
+      12,
+      14,
+      16,
+      20,
+      30
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Inter",
+      "size": 14,
+      "leading": 1.43,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 45,
+     "max": {
+      "size": 30,
+      "vw": 7.7,
+      "font": "Inter",
+      "text": "How I built TRIYUAI"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0,
+     "smallText": 3
+    },
+    "eyebrows": [
+     {
+      "text": "Case study",
+      "above": "How I built TRIYUAI",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 14,
+      "top": 126
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#0a0a0b",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.05,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#121214",
+       "top": 2047,
+       "hsl": {
+        "h": 240,
+        "s": 0.05,
+        "l": 0.07
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#9b9ca3",
+       "share": 0.75
+      },
+      {
+       "color": "#f1f1f3",
+       "share": 0.24
+      },
+      {
+       "color": "#1a9bff",
+       "share": 0.01
+      },
+      {
+       "color": "#f0586e",
+       "share": 0
+      }
+     ],
+     "button": null,
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 0,
+     "inHero": 0,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": []
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 9,
+     "hairlineSamples": [
+      "div.border-border.bg-surface 390px",
+      "header.border-border.bg-bg 390px",
+      "div.grid.gap-1 356px",
+      "div.grid.gap-1 356px",
+      "div.grid.gap-1 356px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 2,
+     "boxRadius": 16,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "inter",
+     "inter fallback"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 2467,
+    "margins": {
+     "left": 16,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "main#main.mx-auto.w-full",
+      "tag": "main",
+      "top": 102,
+      "height": 1881,
+      "words": 298,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How I built TRIYUAI",
+       "size": 30,
+       "tag": "h1"
+      },
+      "left": 16,
+      "right": 16,
+      "textLeft": 16,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.border-border.bg-surface",
+      "tag": "footer",
+      "top": 2047,
+      "height": 420,
+      "words": 54,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 16,
+      "right": 20,
+      "textLeft": 16,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "How I built TRIYUAI",
+      "size": 30,
+      "top": 158,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 16,
+      "n": 11
+     },
+     {
+      "x": 37,
+      "n": 2
+     }
+    ],
+    "leftBlocks": 13,
+    "bodySize": 14,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "dark": true,
+    "ground": "#0a0a0b",
+    "sidebar": null,
+    "topbar": {
+     "h": 37
+    },
+    "canvas": {
+     "left": 8,
+     "right": -25
+    },
+    "hero": {
+     "text": "How I built TRIYUAI",
+     "words": 4,
+     "chars": 19,
+     "lines": 1,
+     "size": 30,
+     "vw": 7.7,
+     "font": "Inter",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 158,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 2,
+     "firstScreen": 0,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 2,
+     "radii": [
+      [
+       16,
+       2
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 2,
+     "tabularShare": 1,
+     "kpiMax": 12
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.08,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      14,
+      16,
+      20,
+      30
+     ]
+    },
+    "title": {
+     "text": "How I built TRIYUAI",
+     "size": 30,
+     "top": 158
+    },
+    "colourShare": 0.005
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "app-title-size",
+   "width": 390,
+   "message": "The h1 is 30px (\"How I built TRIYUAI\").",
+   "fix": "An app screen is not a landing page: the title is 18-32px (20-24px on a phone)."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\after2\\_about\\desktop-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\after2\\_about\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\after2\\_about\\tablet-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\after2\\_about\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "D:\\REKHA\\Web Project 1\\.taste-skill\\after2\\_about\\mobile-fold.jpg",
+   "pages": [
+    "D:\\REKHA\\Web Project 1\\.taste-skill\\after2\\_about\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

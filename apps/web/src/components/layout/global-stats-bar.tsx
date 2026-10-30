@@ -3,6 +3,7 @@
 import { PercentBadge } from "@/components/coin/percent-badge";
 import { useGlobalStats } from "@/hooks/queries";
 import { useMoney } from "@/hooks/use-money";
+import { cn } from "@/lib/utils";
 import { formatNumber, formatPercent, timeAgo } from "@/lib/format";
 import { LiveIndicator } from "./live-indicator";
 
@@ -21,7 +22,7 @@ export function GlobalStatsBar() {
               {money.compact(g.totalMarketCap)} <PercentBadge value={g.marketCapChange24h} />
             </Stat>
             <Stat label="24h Vol">{money.compact(g.totalVolume24h)}</Stat>
-            <Stat label="Dominance">
+            <Stat label="Dominance" className="hidden lg:inline-flex">
               BTC {formatPercent(g.btcDominance, 1)} · ETH {formatPercent(g.ethDominance, 1)}
             </Stat>
           </>
@@ -46,9 +47,17 @@ export function GlobalStatsBar() {
   );
 }
 
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
+function Stat({
+  label,
+  children,
+  className,
+}: {
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className={cn("inline-flex items-center gap-1.5", className)}>
       {label}:{" "}
       <span className="text-text tabular inline-flex items-center gap-1.5 font-medium">
         {children}

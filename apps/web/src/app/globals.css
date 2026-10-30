@@ -2,42 +2,46 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Design tokens from PRD §14. Light is the default, `.dark` on <html> switches.
-   Light muted/brand/up/down are darker than the PRD draft so text meets WCAG AA (≥ 4.5:1)
-   on both --bg and --surface; verified by the axe e2e suite. */
+/* Design tokens. Style: "data terminal" — neutral greys, colour only on data, and the
+   brand blue (sampled from the logo, #0050f0–#00c0f0) as the one accent: links, focus,
+   chart series and the 1px line that marks every selection. The primary button is
+   ink-on-paper (near-black on light, inverted white on dark), never the accent.
+   Every text tier reaches 4.5:1 on --bg and --surface; verified by the axe e2e suite. */
 :root {
   --bg: #ffffff;
-  --surface: #f6f7f9;
-  --surface-2: #eceef2;
-  --border: #e3e6ec;
-  --text: #0f172a;
-  --muted: #5b6577;
-  --brand: #4f46e5;
+  --surface: #f7f7f8;
+  --surface-2: #eeeef0;
+  --border: #e4e4e7;
+  --text: #111113;
+  --muted: #5f6166;
+  --brand: #0a6ad6;
   --brand-fg: #ffffff;
-  --ai-from: #8b5cf6;
-  --ai-to: #06b6d4;
-  --up: #15803d;
-  --down: #c81e1e;
-  --up-soft: rgb(21 128 61 / 0.07);
-  --down-soft: rgb(200 30 30 / 0.07);
-  --ring: #4f46e5;
+  --primary: #151517;
+  --primary-fg: #ffffff;
+  --up: #1b7a46;
+  --down: #c4242a;
+  --up-soft: rgb(27 122 70 / 0.08);
+  --down-soft: rgb(196 36 42 / 0.08);
+  --ring: #0a6ad6;
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0b0e14;
-  --surface: #121722;
-  --surface-2: #1a2130;
-  --border: #232b3b;
-  --text: #e6eaf2;
-  --muted: #8a94a6;
-  --brand: #7c7cff;
-  --brand-fg: #0b0e14;
-  --up: #22c55e;
-  --down: #ef4444;
-  --up-soft: rgb(34 197 94 / 0.14);
-  --down-soft: rgb(239 68 68 / 0.14);
-  --ring: #7c7cff;
+  --bg: #0a0a0b;
+  --surface: #121214;
+  --surface-2: #1b1b1e;
+  --border: #242428;
+  --text: #f1f1f3;
+  --muted: #9b9ca3;
+  --brand: #1a9bff;
+  --brand-fg: #0a0a0b;
+  --primary: #f1f1f3;
+  --primary-fg: #0a0a0b;
+  --up: #3fc07a;
+  --down: #f0586e;
+  --up-soft: rgb(63 192 122 / 0.14);
+  --down-soft: rgb(240 88 110 / 0.14);
+  --ring: #1a9bff;
   color-scheme: dark;
 }
 
@@ -50,8 +54,8 @@
   --color-muted: var(--muted);
   --color-brand: var(--brand);
   --color-brand-fg: var(--brand-fg);
-  --color-ai-from: var(--ai-from);
-  --color-ai-to: var(--ai-to);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
   --color-up: var(--up);
   --color-down: var(--down);
   --color-up-soft: var(--up-soft);
@@ -91,7 +95,6 @@
   --animate-fade-up: fade-up 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-fade-in: fade-in 240ms ease-out both;
   --animate-pop-in: pop-in 160ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
   --animate-star-pop: star-pop 360ms cubic-bezier(0.3, 1.6, 0.5, 1);
   --animate-float: float 3.2s ease-in-out infinite;
 
@@ -121,14 +124,6 @@
     to {
       opacity: 1;
       transform: none;
-    }
-  }
-  @keyframes shimmer {
-    from {
-      background-position: 150% 0;
-    }
-    to {
-      background-position: -50% 0;
     }
   }
   @keyframes star-pop {
@@ -171,17 +166,6 @@
 
 @utility tabular {
   font-variant-numeric: tabular-nums;
-}
-
-@utility ai-gradient {
-  background-image: linear-gradient(135deg, var(--ai-from), var(--ai-to));
-}
-
-@utility ai-text {
-  background-image: linear-gradient(135deg, var(--ai-from), var(--ai-to));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -259,37 +243,10 @@
   color: var(--muted);
 }
 
-/* Children fade up one after another (cards, lists). */
-@utility stagger {
-  & > * {
-    animation: var(--animate-fade-up);
-  }
-  & > :nth-child(2) {
-    animation-delay: 50ms;
-  }
-  & > :nth-child(3) {
-    animation-delay: 100ms;
-  }
-  & > :nth-child(4) {
-    animation-delay: 150ms;
-  }
-  & > :nth-child(5) {
-    animation-delay: 200ms;
-  }
-  & > :nth-child(n + 6) {
-    animation-delay: 250ms;
-  }
-}
-
-/* Gentle lift for interactive cards. */
+/* Interactive cards answer the pointer with a firmer edge, nothing else. */
 @utility lift {
-  transition:
-    transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
-    box-shadow 200ms ease,
-    border-color 200ms ease;
+  transition: border-color 150ms ease;
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--brand) 35%, transparent);
-    border-color: color-mix(in srgb, var(--brand) 35%, var(--border));
+    border-color: color-mix(in srgb, var(--text) 22%, var(--border));
   }
 }

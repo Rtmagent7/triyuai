@@ -47,7 +47,7 @@ export function CommandPalette() {
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px]" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
         <Dialog.Content
           aria-describedby={undefined}
           className="border-border bg-bg fixed left-1/2 top-[12vh] z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-2xl border shadow-2xl"

@@ -6,7 +6,7 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
       <body
         style={{
           fontFamily: "system-ui, sans-serif",
-          background: "#0b0e14",
+          background: "#0a0a0b",
           color: "#e6eaf2",
           display: "grid",
           placeItems: "center",
@@ -25,8 +25,8 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
               padding: "8px 16px",
               borderRadius: 8,
               border: 0,
-              background: "#7c7cff",
-              color: "#0b0e14",
+              background: "#f1f1f3",
+              color: "#0a0a0b",
               cursor: "pointer",
             }}
           >
