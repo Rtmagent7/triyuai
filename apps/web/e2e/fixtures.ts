@@ -52,7 +52,94 @@ export function fakeKlines(symbol: string, interval: string, endTime?: number, l
   return out;
 }
 
-export const test = base.extend<{ binance: BinanceMock; offlineImages: void; klines: void }>({
+/** Fear & Greed readings, newest first: 30 days drifting from greed to fear. */
+const fakeFearGreed = () => ({
+  data: Array.from({ length: 365 }, (_, i) => {
+    const value = Math.round(50 + 30 * Math.sin(i / 20) - 20 * (i < 5 ? 1 : 0));
+    const label =
+      value <= 24
+        ? "Extreme Fear"
+        : value <= 44
+          ? "Fear"
+          : value <= 55
+            ? "Neutral"
+            : value <= 74
+              ? "Greed"
+              : "Extreme Greed";
+    return {
+      value: String(value),
+      value_classification: label,
+      timestamp: String(NOW - i * 86_400),
+    };
+  }),
+});
+
+export const test = base.extend<{
+  binance: BinanceMock;
+  offlineImages: void;
+  klines: void;
+  futures: void;
+}>({
+  // Fear & Greed index and Binance futures data for /insights and /derivatives.
+  futures: [
+    async ({ page }, use) => {
+      const cors = { "access-control-allow-origin": "*" };
+      await page.route(/api\.alternative\.me\/fng/, (route) =>
+        route.fulfill({ json: fakeFearGreed(), headers: cors }),
+      );
+      await page.route(/fapi\.binance\.com\//, (route) => {
+        const url = new URL(route.request().url());
+        const symbol = url.searchParams.get("symbol") ?? "BTCUSDT";
+        const limit = Number(url.searchParams.get("limit") ?? 100);
+        const p = url.pathname;
+        if (p.endsWith("/klines"))
+          return route.fulfill({
+            json: fakeKlines(symbol, url.searchParams.get("interval") ?? "1h", undefined, limit),
+            headers: cors,
+          });
+        if (p.endsWith("/openInterestHist")) {
+          const step = INTERVAL_S[url.searchParams.get("period") ?? "1h"] ?? 3600;
+          const last = Math.floor(NOW / step) * step;
+          return route.fulfill({
+            json: Array.from({ length: limit }, (_, i) => ({
+              symbol,
+              sumOpenInterestValue: String(7e9 + 2e8 * Math.sin(i / 9) + i * 1e6),
+              timestamp: (last - (limit - 1 - i) * step) * 1000,
+            })),
+            headers: cors,
+          });
+        }
+        if (p.endsWith("/premiumIndex"))
+          return route.fulfill({
+            json: ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "DOGEUSDT"].map((s, i) => ({
+              symbol: s,
+              markPrice: s.startsWith("BTC") ? "80000" : s.startsWith("ETH") ? "2400" : "100",
+              lastFundingRate: String(0.0001 * (i % 2 ? -1 : 1) * (i + 1)),
+              nextFundingTime: (NOW + 3 * 3600) * 1000,
+            })),
+            headers: cors,
+          });
+        if (p.endsWith("/openInterest"))
+          return route.fulfill({ json: { symbol, openInterest: "90000" }, headers: cors });
+        if (p.endsWith("/globalLongShortAccountRatio"))
+          return route.fulfill({ json: [{ symbol, longShortRatio: "2.3" }], headers: cors });
+        return route.fulfill({ status: 404, json: {}, headers: cors });
+      });
+      await page.routeWebSocket(/fstream\.binance\.com/, (ws) => {
+        const send = (s: string, side: "BUY" | "SELL", price: number, qty: number) =>
+          ws.send(
+            JSON.stringify({
+              e: "forceOrder",
+              o: { s, S: side, ap: String(price), z: String(qty), T: NOW * 1000 },
+            }),
+          );
+        send("BTCUSDT", "SELL", 79500, 1.5);
+        send("ETHUSDT", "BUY", 2410, 20);
+      });
+      await use();
+    },
+    { auto: true },
+  ],
   // Candles for the TA chart, served offline; live kline sockets stay silent.
   klines: [
     async ({ page }, use) => {

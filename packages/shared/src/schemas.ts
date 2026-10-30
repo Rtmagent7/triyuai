@@ -81,6 +81,7 @@ export const globalStatsSchema = z.object({
   totalVolume24h: z.number(),
   btcDominance: z.number(),
   ethDominance: z.number(),
+  usdtDominance: z.number(),
   activeCoins: z.number(),
   updatedAt: z.string(),
 });

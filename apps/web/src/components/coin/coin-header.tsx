@@ -9,6 +9,7 @@ import { useLivePriceFeed, useLiveTick } from "@/hooks/use-live-prices";
 import { useMoney } from "@/hooks/use-money";
 import { clamp } from "@/lib/utils";
 import { useChat } from "@/stores/chat";
+import { SectorTags } from "@/components/market/sector-tags";
 import { CoinLogo } from "./coin-logo";
 import { PercentBadge } from "./percent-badge";
 import { PriceCell } from "./price-cell";
@@ -57,6 +58,7 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
               </span>
               {tick && <LiveIndicator />}
             </div>
+            <SectorTags coinId={coin.id} className="mt-2" />
           </div>
         </div>
         <div className="flex flex-wrap items-baseline gap-3">
