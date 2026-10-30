@@ -9,6 +9,7 @@ import {
   hasChangeLabel,
   hasFill,
   hasLevels,
+  nextFibTime,
   hasLine,
   hasText,
   toolLabel,
@@ -45,11 +46,13 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
   const label =
     t === "hline" || t === "hray"
       ? { text: "Price label", on: d.showLabel !== false }
-      : hasLevels(t)
-        ? { text: "Level prices", on: d.showLabel !== false }
-        : hasChangeLabel(t)
-          ? { text: "Price change, % and bars", on: !!d.showLabel }
-          : null;
+      : t === "fibtime"
+        ? { text: "Zone numbers", on: d.showLabel !== false }
+        : hasLevels(t)
+          ? { text: "Level prices", on: d.showLabel !== false }
+          : hasChangeLabel(t)
+            ? { text: "Price change, % and bars", on: !!d.showLabel }
+            : null;
 
   const styleTab = (
     <>
@@ -64,7 +67,7 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
         </p>
       )}
       {hasLine(t) && (
-        <Row label={hasLevels(t) ? "Trend line" : "Line"}>
+        <Row label={t === "fibtime" ? "Zone lines" : hasLevels(t) ? "Trend line" : "Line"}>
           <ColorPicker label="Line colour" value={d.color} onChange={(color) => set({ color })} />
           <LineStylePicker
             label="Line style"
@@ -190,10 +193,15 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
       ))}
       <button
         type="button"
-        onClick={() => setLevels([...levels, { value: 1.618, visible: true }])}
+        onClick={() =>
+          setLevels([
+            ...levels,
+            { value: t === "fibtime" ? nextFibTime(levels) : 1.618, visible: true },
+          ])
+        }
         className="text-brand inline-flex items-center gap-1 text-sm font-medium"
       >
-        <Plus className="size-4" /> Add level
+        <Plus className="size-4" /> {t === "fibtime" ? "Add zone" : "Add level"}
       </button>
     </>
   );
@@ -242,7 +250,9 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
   const tabs: SettingsTab[] = [
     ...(hasText(t) ? [{ id: "text", label: "Text", content: textTab }] : []),
     ...(t !== "text" ? [{ id: "style", label: "Style", content: styleTab }] : []),
-    ...(hasLevels(t) ? [{ id: "levels", label: "Levels", content: levelsTab }] : []),
+    ...(hasLevels(t)
+      ? [{ id: "levels", label: t === "fibtime" ? "Zones" : "Levels", content: levelsTab }]
+      : []),
     // A brush has hundreds of points; editing them one by one is not useful.
     ...(t !== "brush" ? [{ id: "coords", label: "Coordinates", content: coordsTab }] : []),
   ];

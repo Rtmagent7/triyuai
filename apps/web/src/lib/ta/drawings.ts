@@ -212,8 +212,54 @@ export const FIB_EXT_LEVELS: FibLevel[] = [0, 0.382, 0.618, 1, 1.272, 1.618, 2, 
 /** Fibonacci numbers used by time zones (bars from the start, in units). */
 export const FIB_TIME = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
+/** Each zone gets its own colour (cool to warm as they widen) so neighbours never read as one. */
+const FIB_TIME_COLORS = [
+  "#8b8d94",
+  "#1a9bff",
+  "#0ea5e9",
+  "#14b8a6",
+  "#3fc07a",
+  "#84cc16",
+  "#eab308",
+  "#f59e0b",
+  "#e2725b",
+  "#f0586e",
+  "#ec4899",
+];
+
+/** 89 and beyond start off hidden: on most screens they land far past the last candle. */
+export const FIB_TIME_LEVELS: FibLevel[] = FIB_TIME.map((value, i) => ({
+  value,
+  visible: value <= 55,
+  color: FIB_TIME_COLORS[i],
+}));
+
 export const fibLevels = (d: Drawing) =>
-  d.levels ?? (d.type === "fibext" ? FIB_EXT_LEVELS : FIB_DEFAULT_LEVELS);
+  d.levels ??
+  (d.type === "fibext"
+    ? FIB_EXT_LEVELS
+    : d.type === "fibtime"
+      ? FIB_TIME_LEVELS
+      : FIB_DEFAULT_LEVELS);
+
+/**
+ * Bar positions of Fibonacci time zones. Counted in candles, not seconds, so every zone
+ * starts on a candle and keeps its meaning on any timeframe (and across weekend gaps).
+ * The first two clicks set the origin and one unit; both snap to whole bars.
+ */
+export function fibTimeLogicals(from: number, to: number, values: number[]) {
+  const origin = Math.round(from);
+  const raw = Math.round(to) - origin;
+  const unit = raw === 0 ? 1 : raw;
+  return values.map((k) => origin + k * unit);
+}
+
+/** Next Fibonacci number after the largest zone, for "Add zone". */
+export function nextFibTime(levels: FibLevel[]) {
+  const vals = [...levels.map((l) => l.value)].sort((a, b) => a - b);
+  const [a = 0, b = 1] = vals.slice(-2);
+  return vals.length < 2 ? 1 : a + b;
+}
 
 /** Types that support each settings section. */
 export const hasLine = (t: DrawingType) =>
@@ -231,7 +277,7 @@ export const hasFill = (t: DrawingType) =>
     "measure",
   ].includes(t);
 export const hasText = (t: DrawingType) => t === "text" || t === "callout";
-export const hasLevels = (t: DrawingType) => t === "fib" || t === "fibext";
+export const hasLevels = (t: DrawingType) => t === "fib" || t === "fibext" || t === "fibtime";
 export const canExtend = (t: DrawingType) =>
   ["trendline", "arrow", "channel", "fib", "fibext"].includes(t);
 export const hasChangeLabel = (t: DrawingType) =>

@@ -8,7 +8,6 @@ import { ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { binanceSymbol, intervalLabel, intervalSeconds } from "@/lib/ta/binance";
 import {
-  FIB_TIME,
   TOOLS,
   channelOffset,
   drawingDefaults,
@@ -278,11 +277,10 @@ export function TradingChart({ coinId, ticker, variant, fallback, className }: P
         )
         .flatMap((q) => (q ? [q.y] : []));
     } else if (d.type === "fibtime" && p2) {
-      const unit =
-        Math.max(e.step, Math.abs(p2.time - p1.time)) * Math.sign(p2.time - p1.time || 1);
-      ctx.levelXs = FIB_TIME.map((k) =>
-        e.toScreen({ time: p1.time + k * unit, price: p1.price }),
-      ).flatMap((q) => (q ? [q.x] : []));
+      const values = fibLevels(d)
+        .filter((l) => l.visible)
+        .map((l) => l.value);
+      ctx.levelXs = e.timeZoneXs(p1, p2, values).flatMap((x) => (x == null ? [] : [x]));
     }
     return ctx;
   }, []);

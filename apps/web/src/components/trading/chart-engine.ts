@@ -16,7 +16,7 @@ import {
   type Time,
   type UTCTimestamp,
 } from "lightweight-charts";
-import type { Anchor, Pt } from "@/lib/ta/drawings";
+import { fibTimeLogicals, type Anchor, type Pt } from "@/lib/ta/drawings";
 import { heikinAshi, type Bar } from "@/lib/ta/indicators";
 import type { LineDash } from "@/lib/ta/colors";
 import {
@@ -77,7 +77,10 @@ export class ChartEngine {
   constructor(
     el: HTMLElement,
     private colors: ChartColors,
-    getDrawings: () => Omit<DrawingsState, "toScreen" | "background" | "step" | "up" | "down">,
+    getDrawings: () => Omit<
+      DrawingsState,
+      "toScreen" | "timeZoneXs" | "background" | "step" | "up" | "down"
+    >,
   ) {
     this.chart = createChart(el, {
       autoSize: true,
@@ -89,6 +92,7 @@ export class ChartEngine {
     this.primitive = new DrawingsPrimitive(() => ({
       ...getDrawings(),
       toScreen: (a) => this.toScreen(a),
+      timeZoneXs: (a, b, v) => this.timeZoneXs(a, b, v),
       background: this.colors.background,
       step: this.step,
       up: this.colors.up,
@@ -339,6 +343,17 @@ export class ChartEngine {
       .logicalToCoordinate(timeToLogical(this.times(), a.time, this.step) as Logical);
     const y = this.main.priceToCoordinate(a.price);
     return x == null || y == null ? null : { x, y };
+  }
+
+  /** Screen x of each Fibonacci time zone between two anchors (null when off-screen). */
+  timeZoneXs(a: Anchor, b: Anchor, values: number[]): (number | null)[] {
+    const times = this.times();
+    const ts = this.chart.timeScale();
+    return fibTimeLogicals(
+      timeToLogical(times, a.time, this.step),
+      timeToLogical(times, b.time, this.step),
+      values,
+    ).map((l) => ts.logicalToCoordinate(l as Logical));
   }
 
   /** Pixel → anchor. With `magnet`, snaps to the nearest O/H/L/C of the bar under the pointer. */
