@@ -15,7 +15,10 @@ import { useChat } from "@/stores/chat";
 export function HighlightCards({ highlights }: { highlights: Highlights }) {
   const openChat = useChat((s) => s.openWith);
   return (
-    <section aria-label="Market highlights" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <section
+      aria-label="Market highlights"
+      className="stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+    >
       <HighlightList
         title="Trending"
         icon={<Flame className="size-4 text-orange-500" />}
@@ -31,7 +34,7 @@ export function HighlightCards({ highlights }: { highlights: Highlights }) {
         icon={<TrendingDown className="text-down size-4" />}
         coins={highlights.losers.slice(0, 3)}
       />
-      <Card className="relative overflow-hidden border-transparent p-5">
+      <Card className="lift relative overflow-hidden border-transparent p-5">
         <div className="ai-gradient absolute inset-0 opacity-[0.14]" aria-hidden />
         <div className="relative flex h-full flex-col">
           <p className="flex items-center gap-2 text-sm font-semibold">
@@ -68,7 +71,7 @@ function HighlightList({
 }) {
   const money = useMoney();
   return (
-    <Card className="p-4">
+    <Card className="lift p-4">
       <div className="mb-2 flex items-center justify-between px-1">
         <h2 className="flex items-center gap-2 text-sm font-semibold">
           {icon}

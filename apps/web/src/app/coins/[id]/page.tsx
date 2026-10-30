@@ -120,7 +120,7 @@ export default async function CoinPage({ params }: Props) {
             )}
           </section>
         </div>
-        <aside className="space-y-6">
+        <aside className="stagger space-y-6">
           <StatsGrid coin={coin} />
           <MiniConverter coin={toSummary(coin)} />
         </aside>

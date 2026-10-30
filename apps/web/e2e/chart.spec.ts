@@ -9,6 +9,12 @@ const drawings = (page: Page, coin: string) =>
     coin,
   );
 
+/** Opens a tool group on the drawing rail and picks a tool from its panel. */
+async function pickTool(page: Page, group: string, tool: string) {
+  await page.getByRole("button", { name: `${group} tools` }).click();
+  await page.getByRole("menuitemradio", { name: new RegExp(`^${tool}`) }).click();
+}
+
 async function chartBox(page: Page) {
   const box = await page.getByTestId("trading-chart").boundingBox();
   if (!box) throw new Error("chart not visible");
@@ -31,17 +37,17 @@ test("full chart: timeframes, indicators and drawings that persist", async ({ pa
 
   // Trend line: two clicks in the price pane.
   const box = await chartBox(page);
-  await page.getByRole("button", { name: "Trend line" }).click();
-  await expect(page.getByText("Click to set the first point")).toBeVisible();
+  await pickTool(page, "Lines", "Trend line");
+  await expect(page.getByText("Point 1 of 2")).toBeVisible();
   await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.45);
-  await expect(page.getByText("Click to set the second point · Esc to cancel")).toBeVisible();
+  await expect(page.getByText("Point 2 of 2")).toBeVisible();
   await page.mouse.click(box.x + box.width * 0.6, box.y + box.height * 0.25);
   await expect.poll(() => drawings(page, "bitcoin")).toBe(1);
 
   // Horizontal line with the keyboard shortcut, then a text note.
   await page.keyboard.press("Alt+h");
   await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.6);
-  await page.getByRole("button", { name: "Text note" }).click();
+  await pickTool(page, "Notes", "Text");
   await page.mouse.click(box.x + box.width * 0.2, box.y + box.height * 0.2);
   await page.getByRole("textbox", { name: "Note text" }).fill("Breakout?");
   await page.keyboard.press("Enter");
@@ -87,10 +93,10 @@ test("coin page: compact chart opens the full chart; unlisted coins fall back", 
 }) => {
   await page.goto("/coins/solana");
   await expect(page.getByTestId("ohlc-legend")).toContainText("SOL/USDT");
-  await expect(page.getByRole("button", { name: "Trend line" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Lines tools" })).toHaveCount(0);
   await page.getByRole("link", { name: "Full chart" }).click();
   await expect(page).toHaveURL(/\/chart\/solana$/);
-  await expect(page.getByRole("button", { name: "Trend line" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Lines tools" })).toBeVisible();
 
   // Monero has no Binance pair: the CoinGecko chart is shown instead.
   await page.goto("/coins/monero");
@@ -110,7 +116,7 @@ test("detailed styling: drawing toolbar, drawing settings and indicator settings
   await page.getByRole("radio", { name: "#f23645" }).click();
   await page.keyboard.press("Escape");
 
-  await page.getByRole("button", { name: "Rectangle" }).click();
+  await pickTool(page, "Shapes", "Rectangle");
   await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.3);
   await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.5);
 
@@ -128,7 +134,7 @@ test("detailed styling: drawing toolbar, drawing settings and indicator settings
     );
   await expect
     .poll(stored)
-    .toMatchObject({ type: "rect", color: "#f23645", locked: true, fillOpacity: 0.15 });
+    .toMatchObject({ type: "rect", color: "#f23645", locked: true, fillOpacity: 0.12 });
 
   await options.getByRole("button", { name: "Clone drawing" }).click();
   await expect.poll(() => drawings(page, "bitcoin")).toBe(2);
@@ -145,4 +151,57 @@ test("detailed styling: drawing toolbar, drawing settings and indicator settings
   await rsi.getByRole("spinbutton", { name: "Level 2" }).fill("80");
   await rsi.getByRole("button", { name: "OK" }).click();
   await expect(page.getByText("RSI 21")).toBeVisible();
+});
+
+test("more drawing tools: channel, long position, path and keep-drawing mode", async ({ page }) => {
+  await page.goto("/chart/bitcoin");
+  await expect(page.getByTestId("ohlc-legend")).toBeVisible();
+  const box = await chartBox(page);
+  const at = (fx: number, fy: number) =>
+    page.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
+  const types = () =>
+    page.evaluate(() =>
+      (JSON.parse(localStorage.getItem("triyu:chart-layout")!).state.drawings.bitcoin ?? []).map(
+        (d: { type: string; points: unknown[] }) => `${d.type}:${d.points.length}`,
+      ),
+    );
+
+  // Three-click channel.
+  await pickTool(page, "Lines", "Parallel channel");
+  await expect(page.getByText("Point 1 of 3")).toBeVisible();
+  await at(0.2, 0.6);
+  await at(0.4, 0.4);
+  await expect(page.getByText("Point 3 of 3")).toBeVisible();
+  await at(0.3, 0.6);
+
+  // Long position: two clicks, the stop is added automatically.
+  await pickTool(page, "Measure", "Long position");
+  await at(0.6, 0.5);
+  await at(0.7, 0.35);
+
+  // Path: clicks, then Enter finishes.
+  await pickTool(page, "Shapes", "Path");
+  await at(0.1, 0.3);
+  await at(0.15, 0.2);
+  await at(0.2, 0.3);
+  await page.keyboard.press("Enter");
+  await expect.poll(types).toEqual(["channel:3", "long:3", "path:3"]);
+
+  // Keep drawing: the tool stays active for several markers in a row.
+  await page.getByRole("button", { name: "Keep drawing" }).click();
+  await pickTool(page, "Notes", "Up marker");
+  await at(0.5, 0.8);
+  await at(0.55, 0.8);
+  await expect(page.getByText("Up marker", { exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect
+    .poll(async () => (await types()).filter((t: string) => t.startsWith("markup")))
+    .toHaveLength(2);
+
+  // Hide all hides drawings and their selection toolbar.
+  await page.getByRole("button", { name: "Hide all drawings" }).click();
+  await expect(page.getByRole("button", { name: "Hide all drawings" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
 });

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { Interval } from "@/lib/ta/binance";
-import type { Drawing, DrawingStyle } from "@/lib/ta/drawings";
+import type { Drawing, DrawingStyle, DrawingType, ToolGroup } from "@/lib/ta/drawings";
 import {
   defaultParams,
   OVERLAY_PALETTE,
@@ -26,6 +26,14 @@ type ChartLayoutState = {
   drawingStyle: DrawingStyle;
   /** Last custom colours picked, newest first. */
   recentColors: string[];
+  /** Last tool used in each toolbar group (the group button shows it). */
+  lastTools: Record<ToolGroup, DrawingType>;
+  /** Stay in the drawing tool after finishing a drawing. */
+  keepDrawing: boolean;
+  hideDrawings: boolean;
+  lockDrawings: boolean;
+  setLastTool: (group: ToolGroup, tool: DrawingType) => void;
+  toggle: (key: "keepDrawing" | "hideDrawings" | "lockDrawings") => void;
   setDrawingStyle: (patch: Partial<DrawingStyle>) => void;
   addRecentColor: (color: string) => void;
   setInterval: (interval: Interval) => void;
@@ -54,6 +62,18 @@ export const useChartLayout = create<ChartLayoutState>()(
       drawings: {},
       drawingStyle: { color: "#2962ff", width: 2, dash: "solid" },
       recentColors: [],
+      lastTools: {
+        lines: "trendline",
+        fib: "fib",
+        shapes: "rect",
+        notes: "text",
+        measure: "measure",
+      },
+      keepDrawing: false,
+      hideDrawings: false,
+      lockDrawings: false,
+      setLastTool: (group, tool) => set({ lastTools: { ...get().lastTools, [group]: tool } }),
+      toggle: (key) => set({ [key]: !get()[key] }),
       setDrawingStyle: (patch) => set({ drawingStyle: { ...get().drawingStyle, ...patch } }),
       addRecentColor: (color) =>
         set({
@@ -118,7 +138,24 @@ export const useChartLayout = create<ChartLayoutState>()(
         drawings,
         drawingStyle,
         recentColors,
-      }) => ({ interval, style, scale, magnet, indicators, drawings, drawingStyle, recentColors }),
+        lastTools,
+        keepDrawing,
+        hideDrawings,
+        lockDrawings,
+      }) => ({
+        interval,
+        style,
+        scale,
+        magnet,
+        indicators,
+        drawings,
+        drawingStyle,
+        recentColors,
+        lastTools,
+        keepDrawing,
+        hideDrawings,
+        lockDrawings,
+      }),
     },
   ),
 );

@@ -157,27 +157,39 @@ describe("drawings geometry", () => {
       { x: 0, y: 0 },
       { x: 100, y: 0 },
     ];
-    expect(hitTest(d("trendline"), line, { x: 2, y: 1 }, 500)).toEqual({
+    expect(hitTest(d("trendline"), line, { x: 2, y: 1 }, { width: 500 })).toEqual({
       part: "handle",
       index: 0,
     });
-    expect(hitTest(d("trendline"), line, { x: 50, y: 4 }, 500)).toEqual({ part: "body" });
-    expect(hitTest(d("trendline"), line, { x: 150, y: 0 }, 500)).toBeNull();
-    expect(hitTest(d("ray"), line, { x: 300, y: 2 }, 500)).toEqual({ part: "body" });
-    expect(hitTest(d("hline", 1), [{ x: 0, y: 40 }], { x: 400, y: 43 }, 500)).toEqual({
+    expect(hitTest(d("trendline"), line, { x: 50, y: 4 }, { width: 500 })).toEqual({
+      part: "body",
+    });
+    expect(hitTest(d("trendline"), line, { x: 150, y: 0 }, { width: 500 })).toBeNull();
+    expect(hitTest(d("ray"), line, { x: 300, y: 2 }, { width: 500 })).toEqual({ part: "body" });
+    expect(hitTest(d("hline", 1), [{ x: 0, y: 40 }], { x: 400, y: 43 }, { width: 500 })).toEqual({
       part: "body",
     });
     const box = [
       { x: 0, y: 0 },
       { x: 100, y: 50 },
     ];
-    expect(hitTest(d("rect"), box, { x: 50, y: 25 }, 500)).toEqual({ part: "body" });
-    expect(hitTest(d("fib"), box, { x: 200, y: 25 }, 500)).toBeNull();
+    expect(hitTest(d("rect"), box, { x: 50, y: 25 }, { width: 500 })).toEqual({ part: "body" });
+    expect(hitTest(d("fib"), box, { x: 200, y: 25 }, { width: 500 })).toBeNull();
     expect(
-      hitTest(d("text", 1), [{ x: 10, y: 30 }], { x: 40, y: 20 }, 500, { w: 60, h: 20 }),
+      hitTest(
+        d("text", 1),
+        [{ x: 10, y: 30 }],
+        { x: 40, y: 20 },
+        { width: 500, textBox: { w: 60, h: 20 } },
+      ),
     ).toEqual({ part: "body" });
     expect(
-      hitTest(d("text", 1), [{ x: 10, y: 30 }], { x: 40, y: 40 }, 500, { w: 60, h: 20 }),
+      hitTest(
+        d("text", 1),
+        [{ x: 10, y: 30 }],
+        { x: 40, y: 40 },
+        { width: 500, textBox: { w: 60, h: 20 } },
+      ),
     ).toBeNull();
   });
 

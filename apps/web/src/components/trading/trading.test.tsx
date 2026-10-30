@@ -196,8 +196,19 @@ describe("DrawingToolbar", () => {
       count: 0,
     };
     const { rerender } = render(<DrawingToolbar {...props} />);
-    await userEvent.click(screen.getByRole("button", { name: "Fibonacci retracement" }));
-    expect(props.onTool).toHaveBeenCalledWith("fib");
+    // Groups open a panel of tool cards; the group then remembers the last pick.
+    await userEvent.click(screen.getByRole("button", { name: "Fibonacci tools" }));
+    await userEvent.click(await screen.findByRole("menuitemradio", { name: /Fib extension/ }));
+    expect(props.onTool).toHaveBeenCalledWith("fibext");
+    expect(useChartLayout.getState().lastTools.fib).toBe("fibext");
+    await userEvent.click(screen.getByRole("button", { name: "Keep drawing" }));
+    await userEvent.click(screen.getByRole("button", { name: "Lock all drawings" }));
+    await userEvent.click(screen.getByRole("button", { name: "Hide all drawings" }));
+    expect(useChartLayout.getState()).toMatchObject({
+      keepDrawing: true,
+      lockDrawings: true,
+      hideDrawings: true,
+    });
     // Style for new drawings: palette colour, then width and dash.
     await userEvent.click(screen.getByRole("button", { name: /New drawing colour/ }));
     await userEvent.click(await screen.findByRole("radio", { name: "#f23645" }));

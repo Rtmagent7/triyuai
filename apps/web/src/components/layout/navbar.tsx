@@ -56,8 +56,9 @@ export function Navbar() {
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}
               className={cn(
-                "text-muted hover:text-text rounded-lg px-2.5 py-2 text-sm font-medium transition-colors xl:px-3",
-                isActive(l.href) && "text-text",
+                // Underline grows in under the active (and hovered) link.
+                "text-muted hover:text-text after:bg-brand relative rounded-lg px-2.5 py-2 text-sm font-medium transition-colors after:absolute after:inset-x-2.5 after:-bottom-[13px] after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:transition-transform after:duration-300 hover:after:scale-x-50 xl:px-3 xl:after:inset-x-3",
+                isActive(l.href) && "text-text after:scale-x-100 hover:after:scale-x-100",
               )}
             >
               {l.label}

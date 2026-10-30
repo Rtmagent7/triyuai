@@ -26,7 +26,7 @@ export default async function HighlightsPage() {
         </p>
       </div>
       {/* Two columns only from lg: at tablet width coin names would be truncated. */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="stagger grid gap-4 lg:grid-cols-2">
         <List
           title="Trending"
           icon={<Flame className="size-4 text-orange-500" />}
@@ -65,7 +65,7 @@ function List({
   volume?: boolean;
 }) {
   return (
-    <Card className="min-w-0 p-4">
+    <Card className="lift min-w-0 p-4">
       <h2 className="mb-2 flex items-center gap-2 px-2 font-semibold">
         {icon}
         {title}

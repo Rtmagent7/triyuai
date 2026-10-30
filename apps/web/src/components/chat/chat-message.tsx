@@ -13,7 +13,7 @@ type Props = { message: Message; isLast: boolean; onRegenerate: () => void };
 export function ChatMessage({ message, isLast, onRegenerate }: Props) {
   if (message.role === "user") {
     return (
-      <div className="flex justify-end">
+      <div className="animate-fade-up flex justify-end">
         <p className="bg-brand text-brand-fg max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md px-3.5 py-2 text-sm">
           {message.content}
         </p>
@@ -23,7 +23,7 @@ export function ChatMessage({ message, isLast, onRegenerate }: Props) {
 
   const streaming = message.status === "streaming";
   return (
-    <div className="flex gap-2.5">
+    <div className="animate-fade-up flex gap-2.5">
       <span className="ai-gradient mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full text-white">
         <Sparkle className="size-3.5" />
       </span>

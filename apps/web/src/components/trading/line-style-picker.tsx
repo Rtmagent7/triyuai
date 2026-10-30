@@ -42,7 +42,7 @@ export function LineStylePicker({ label, width, dash, onChange, className }: Pro
         <Popover.Content
           sideOffset={6}
           collisionPadding={8}
-          className="border-border bg-bg z-[60] w-44 space-y-2 rounded-xl border p-2 text-sm shadow-xl"
+          className="border-border bg-bg animate-pop-in z-[60] w-44 space-y-2 rounded-xl border p-2 text-sm shadow-xl"
         >
           <div role="radiogroup" aria-label="Line width">
             {WIDTHS.map((w) => (
