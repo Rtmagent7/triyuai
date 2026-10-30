@@ -12,6 +12,7 @@ import type {
   CoinLinks,
   CoinSummary,
   CoinsPage,
+  Exchange,
   GlobalStats,
   Highlights,
   LinePoint,
@@ -25,6 +26,7 @@ import marketsJson from "./fixtures/markets.json";
 import globalJson from "./fixtures/global.json";
 import trendingJson from "./fixtures/trending.json";
 import ratesJson from "./fixtures/rates.json";
+import exchangesJson from "./fixtures/exchanges.json";
 import metaJson from "./fixtures/meta.json";
 import { chartLoaders, detailLoaders } from "./fixtures/loaders";
 
@@ -55,6 +57,10 @@ export function getGlobal() {
 
 export function getRates() {
   return ok(rates);
+}
+
+export function getExchanges(): ApiResponse<Exchange[]> {
+  return ok(exchangesJson as Exchange[]);
 }
 
 export function getCoins(page = 1, perPage = 100): ApiResponse<CoinsPage> {

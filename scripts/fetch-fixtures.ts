@@ -12,11 +12,13 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   mapDetailExtras,
+  mapExchange,
   mapGlobal,
   mapMarket,
   mapRates,
   mapTrending,
   type RawDetail,
+  type RawExchange,
   type RawGlobal,
   type RawMarket,
   type RawRates,
@@ -81,6 +83,11 @@ async function main() {
   console.log("Fetching trending…");
   const trending = await get<RawTrending>("/search/trending");
   await json("trending.json", mapTrending(trending, markets, sig));
+
+  console.log("Fetching exchanges…");
+  const btcUsd = markets.find((c) => c.id === "bitcoin")?.price ?? 0;
+  const exchanges = await get<RawExchange[]>("/exchanges?per_page=100&page=1");
+  await json("exchanges.json", exchanges.map((e) => mapExchange(e, btcUsd, sig)));
 
   console.log("Fetching exchange rates…");
   await json("rates.json", mapRates(await get<RawRates>("/exchange_rates"), sig));

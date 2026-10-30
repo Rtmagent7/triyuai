@@ -1,5 +1,6 @@
 import {
   mapDetail,
+  mapExchange,
   mapGlobal,
   mapMarket,
   mapRates,
@@ -15,10 +16,12 @@ import {
   type CoinDetail,
   type CoinSummary,
   type CoinsPage,
+  type Exchange,
   type GlobalStats,
   type Highlights,
   type Meta,
   type RawDetail,
+  type RawExchange,
   type RawGlobal,
   type RawMarket,
   type RawRates,
@@ -38,6 +41,7 @@ export const TTL = {
   global: 600,
   trending: 900,
   rates: 3_600,
+  exchanges: 600,
   coin: 600,
   search: 3_600,
   /** After a failure, a snapshot is re-served for a minute before CoinGecko is retried. */
@@ -246,6 +250,21 @@ export function createMarketService(deps: {
       ),
 
     trending,
+
+    /** Top 100 exchanges by Trust Score; BTC volume valued at the cached Bitcoin price. */
+    async exchanges(): Promise<ApiResponse<Exchange[]>> {
+      const [raw, top] = await Promise.all([
+        cached(
+          "cg:exchanges",
+          TTL.exchanges,
+          async () => coingecko.get<RawExchange[]>("/exchanges", { per_page: 100, page: 1 }),
+          { snapshot: true },
+        ),
+        markets(),
+      ]);
+      const btc = top.data.find((c) => c.id === "bitcoin")?.price ?? 0;
+      return { data: raw.data.map((e) => mapExchange(e, btc)), meta: raw.meta };
+    },
 
     async highlights(): Promise<ApiResponse<Highlights>> {
       const [top, trend] = await Promise.all([markets(), trending().catch(() => null)]);

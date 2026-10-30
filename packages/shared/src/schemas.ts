@@ -123,6 +123,23 @@ export const chartDataSchema = z.object({
 });
 export type ChartData = z.infer<typeof chartDataSchema>;
 
+/** A crypto exchange ranked by CoinGecko's Trust Score (P2). */
+export const exchangeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  image: z.string(),
+  url: z.string(),
+  country: z.string().nullable(),
+  yearEstablished: z.number().nullable(),
+  /** 1–10, CoinGecko's liquidity, scale, API coverage and cybersecurity score. */
+  trustScore: z.number().nullable(),
+  trustScoreRank: z.number(),
+  volume24hBtc: z.number(),
+  /** The BTC volume at the current Bitcoin price. */
+  volume24hUsd: z.number(),
+});
+export type Exchange = z.infer<typeof exchangeSchema>;
+
 export const currencySchema = z.enum(currencies);
 export type Currency = z.infer<typeof currencySchema>;
 

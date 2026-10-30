@@ -7,6 +7,7 @@ import {
   coinSchema,
   coinSummarySchema,
   coinsPageSchema,
+  exchangeSchema,
   globalStatsSchema,
   highlightsSchema,
   ratesSchema,
@@ -58,6 +59,26 @@ describe("market endpoints follow the API contract", () => {
 });
 
 describe("market data", () => {
+  it("ranks exchanges and values their BTC volume in USD", async () => {
+    const res = await request(ctx.app).get("/api/v1/exchanges").expect(200);
+    expect(() => z.array(exchangeSchema).parse(res.body.data)).not.toThrow();
+    const btc = (await request(ctx.app).get("/api/v1/coins?ids=bitcoin").expect(200)).body.data[0]
+      .price;
+    expect(res.body.data[0]).toMatchObject({
+      id: "kraken",
+      trustScore: 10,
+      volume24hBtc: 2,
+      volume24hUsd: 2 * btc,
+      yearEstablished: 2011,
+    });
+    // Missing fields stay explicit nulls / zero rather than empty strings.
+    expect(res.body.data[1]).toMatchObject({ country: null, trustScore: null, volume24hUsd: 0 });
+    // Cached: a second request does not call CoinGecko again.
+    const before = ctx.cg.calls.filter((c) => c === "/exchanges").length;
+    await request(ctx.app).get("/api/v1/exchanges").expect(200);
+    expect(ctx.cg.calls.filter((c) => c === "/exchanges").length).toBe(before);
+  });
+
   it("paginates the top list and maps CoinGecko fields", async () => {
     const res = await request(ctx.app).get("/api/v1/coins?page=2&perPage=5").expect(200);
     expect(res.body.data).toMatchObject({ page: 2, perPage: 5, total: 12 });

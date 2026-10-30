@@ -11,6 +11,7 @@ import {
   getGlobal,
   getHighlights,
   getRates,
+  getExchanges,
   searchCoins,
 } from "./data";
 
@@ -31,6 +32,11 @@ export const handlers = [
   http.get(`${BASE}/global`, async () => {
     await latency();
     return HttpResponse.json(getGlobal());
+  }),
+
+  http.get(`${BASE}/exchanges`, async () => {
+    await latency();
+    return HttpResponse.json(getExchanges());
   }),
 
   http.get(`${BASE}/rates`, async () => {

@@ -5,6 +5,7 @@ import type {
   ChartRange,
   CoinDetail,
   CoinsPage,
+  Exchange,
   GlobalStats,
   Highlights,
   Rates,
@@ -38,6 +39,8 @@ const mock = () => import("@/mocks/data");
 export const serverApi = {
   global: async (): Promise<ApiResponse<GlobalStats>> =>
     mockingEnabled ? (await mock()).getGlobal() : get("/global"),
+  exchanges: async (): Promise<ApiResponse<Exchange[]>> =>
+    mockingEnabled ? (await mock()).getExchanges() : get("/exchanges", 600),
   rates: async (): Promise<ApiResponse<Rates>> =>
     mockingEnabled ? (await mock()).getRates() : get("/rates", 3600),
   coins: async (page = 1, perPage = 100): Promise<ApiResponse<CoinsPage>> =>

@@ -230,6 +230,7 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
             ...links,
             { href: "/highlights", label: "Highlights" },
             { href: "/compare", label: "Compare" },
+            { href: "/exchanges", label: "Exchanges" },
             { href: "/converter", label: "Converter" },
             { href: "/ask", label: "Ask TRIYU" },
             { href: "/about", label: "About" },
