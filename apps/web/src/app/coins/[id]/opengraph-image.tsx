@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { serverApi } from "@/lib/api/server";
 import { formatPrice, formatSignedPercent } from "@/lib/format";
@@ -14,6 +16,11 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
     .then((r) => r.data)
     .catch(() => null);
   const up = (coin?.change24h ?? 0) >= 0;
+  const brand = (file: string) =>
+    readFile(join(process.cwd(), "src/assets/brand", file)).then(
+      (b) => `data:image/png;base64,${b.toString("base64")}`,
+    );
+  const [mark, word] = await Promise.all([brand("logo-mark.png"), brand("logo-wordmark-dark.png")]);
 
   return new ImageResponse(
     <div
@@ -29,8 +36,11 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
         fontFamily: "sans-serif",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", fontSize: 34, fontWeight: 700 }}>
-        TRIYU<span style={{ color: "#7c7cff" }}>AI</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={mark} width={64} height={64} alt="" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={word} height={34} width={203} alt="" />
       </div>
       {coin ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>

@@ -30,7 +30,7 @@ function LiveChange({ coin }: { coin: Coin }) {
 
 /** Per-column cell classes; the coin column is sticky on mobile so the table can scroll sideways. */
 const cellClass: Record<string, string> = {
-  rank: "hidden w-20 sm:table-cell",
+  rank: "hidden w-16 sm:table-cell",
   name: "sticky left-0 z-10 bg-bg group-hover:bg-surface sm:static min-w-40 max-w-[11rem] sm:max-w-none",
   price: "text-right",
   change1h: "hidden text-right md:table-cell",
@@ -38,7 +38,7 @@ const cellClass: Record<string, string> = {
   change7d: "text-right",
   volume24h: "text-right",
   marketCap: "text-right",
-  sparkline: "hidden w-32 xl:table-cell",
+  sparkline: "hidden w-28 xl:table-cell",
 };
 
 type Props = {
@@ -149,12 +149,12 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
   return (
     <div
       className={cn(
-        "border-border overflow-x-auto rounded-2xl border lg:overflow-visible",
+        "border-border relative overflow-x-auto rounded-2xl border xl:overflow-visible",
         className,
       )}
     >
       <table className="w-full min-w-[720px] border-collapse text-sm">
-        <thead className="lg:sticky lg:top-16 lg:z-20">
+        <thead className="xl:sticky xl:top-16 xl:z-20">
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id} className="bg-surface">
               {hg.headers.map((h) => {
@@ -168,7 +168,7 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
                       sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined
                     }
                     className={cn(
-                      "border-border text-muted h-11 whitespace-nowrap border-b px-3 text-xs font-medium first:rounded-tl-2xl last:rounded-tr-2xl",
+                      "border-border text-muted h-11 whitespace-nowrap border-b px-2.5 text-xs font-medium first:rounded-tl-2xl last:rounded-tr-2xl",
                       cellClass[h.column.id],
                       h.column.id === "name" && "bg-surface text-left",
                       h.column.id === "rank" && "text-left",

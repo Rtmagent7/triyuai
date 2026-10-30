@@ -87,13 +87,15 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <WatchlistButton id={coin.id} name={coin.name} withLabel className="h-9" />
+      {/* Phones: Watchlist and Share side by side, Ask TRIYU full width below. */}
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+        <WatchlistButton id={coin.id} name={coin.name} withLabel className="h-9 justify-center" />
         <Button variant="outline" onClick={share} title="Copy link to this page">
           {copied ? <Check /> : <Link2 />} {copied ? "Copied" : "Share"}
         </Button>
         <Button
           variant="ai"
+          className="col-span-2"
           onClick={() =>
             openWith({
               coin: { id: coin.id, name: coin.name },

@@ -4,6 +4,7 @@ const pages = [
   "/",
   "/coins/bitcoin",
   "/coins/monero",
+  "/chart/bitcoin",
   "/highlights",
   "/converter",
   "/watchlist",
@@ -16,9 +17,9 @@ for (const path of pages) {
   test(`mobile: ${path} has no horizontal page scroll`, async ({ page }) => {
     await page.goto(path);
     await hydrated(page);
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth - window.innerWidth,
-    );
+    // Compare with the device width: mobile emulation widens innerWidth to fit overflowing content.
+    const width = page.viewportSize()!.width;
+    const overflow = await page.evaluate((w) => document.documentElement.scrollWidth - w, width);
     expect(overflow).toBeLessThanOrEqual(0);
   });
 }
@@ -49,4 +50,16 @@ test("mobile: menu closes after navigating, chat opens full-screen", async ({ pa
   const sheet = page.getByRole("dialog");
   const box = (await sheet.boundingBox())!;
   expect(Math.round(box.width)).toBe(page.viewportSize()!.width);
+});
+
+test("mobile: compact and full TA charts keep a usable height", async ({ page }) => {
+  for (const [path, min] of [
+    ["/coins/bitcoin", 340],
+    ["/chart/bitcoin", 300],
+  ] as const) {
+    await page.goto(path);
+    await expect(page.getByTestId("ohlc-legend")).toBeVisible();
+    const box = await page.getByTestId("trading-chart").boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(min);
+  }
 });

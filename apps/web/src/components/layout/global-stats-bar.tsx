@@ -13,7 +13,7 @@ export function GlobalStatsBar() {
   const g = data?.data;
   return (
     <div className="border-border bg-surface border-b text-xs">
-      <div className="text-muted mx-auto flex h-9 max-w-[1400px] items-center gap-5 overflow-x-auto whitespace-nowrap px-4 [scrollbar-width:none] sm:px-6">
+      <div className="text-muted relative mx-auto flex h-9 max-w-[1400px] items-center gap-5 overflow-x-auto whitespace-nowrap px-4 [scrollbar-width:none] sm:px-6">
         {g ? (
           <>
             <Stat label="Coins">{formatNumber(g.activeCoins)}</Stat>

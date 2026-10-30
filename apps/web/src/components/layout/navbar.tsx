@@ -30,6 +30,7 @@ import { Logo } from "./logo";
 const links = [
   { href: "/", label: "Markets" },
   { href: "/highlights", label: "Highlights" },
+  { href: "/chart/bitcoin", label: "Chart" },
   { href: "/converter", label: "Converter" },
   { href: "/watchlist", label: "Watchlist" },
 ];
@@ -38,7 +39,10 @@ export function Navbar() {
   const pathname = usePathname();
   const setPaletteOpen = useUi((s) => s.setPaletteOpen);
   const openChat = useChat((s) => s.openWith);
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isActive = (href: string) =>
+    href === "/"
+      ? pathname === "/"
+      : pathname.startsWith(href.startsWith("/chart") ? "/chart" : href);
 
   return (
     <header className="border-border bg-bg/85 sticky top-0 z-40 border-b backdrop-blur-md">
@@ -52,7 +56,7 @@ export function Navbar() {
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}
               className={cn(
-                "text-muted hover:text-text rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "text-muted hover:text-text rounded-lg px-2.5 py-2 text-sm font-medium transition-colors xl:px-3",
                 isActive(l.href) && "text-text",
               )}
             >
@@ -65,23 +69,30 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
-            className="border-border bg-surface text-muted hover:text-text flex h-9 items-center gap-2 rounded-lg border px-2.5 text-sm transition-colors md:w-56"
+            className="border-border bg-surface text-muted hover:text-text flex h-9 items-center gap-2 rounded-lg border px-2.5 text-sm transition-colors md:w-56 lg:w-40 xl:w-56"
             aria-keyshortcuts="Control+K Meta+K"
           >
             <Search className="size-4" aria-hidden />
             {/* Visible text doubles as the accessible name (WCAG 2.5.3 label-in-name). */}
-            <span className="sr-only md:not-sr-only">Search coins…</span>
+            <span className="sr-only whitespace-nowrap md:not-sr-only">Search coins…</span>
             <kbd
               aria-hidden
-              className="border-border bg-bg ml-auto hidden rounded border px-1.5 font-sans text-[11px] md:inline"
+              className="border-border bg-bg ml-auto hidden rounded border px-1.5 font-sans text-[11px] md:inline lg:hidden xl:inline"
             >
               ⌘K
             </kbd>
           </button>
           <CurrencySwitch />
           <ThemeToggle />
-          <Button variant="ai" onClick={() => openChat()} className="hidden sm:inline-flex">
-            <Sparkle className="text-white" /> Ask TRIYU
+          {/* Icon-only between lg and xl, where the nav links take the room. */}
+          <Button
+            variant="ai"
+            onClick={() => openChat()}
+            aria-label="Ask TRIYU"
+            className="hidden sm:inline-flex lg:px-2.5 xl:px-3.5"
+          >
+            <Sparkle className="text-white" />
+            <span className="lg:hidden xl:inline">Ask TRIYU</span>
           </Button>
           <AccountMenu />
         </div>
