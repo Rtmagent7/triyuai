@@ -10,6 +10,7 @@ import type {
   Highlights,
   Rates,
 } from "@triyuai/shared";
+import type { NewsItem } from "@triyuai/shared/news";
 import { NotFoundError } from "./errors";
 import { mockingEnabled } from "./mocking";
 
@@ -39,6 +40,8 @@ const mock = () => import("@/mocks/data");
 export const serverApi = {
   global: async (): Promise<ApiResponse<GlobalStats>> =>
     mockingEnabled ? (await mock()).getGlobal() : get("/global"),
+  news: async (): Promise<ApiResponse<NewsItem[]>> =>
+    mockingEnabled ? (await mock()).getNews() : get("/news", 600),
   exchanges: async (): Promise<ApiResponse<Exchange[]>> =>
     mockingEnabled ? (await mock()).getExchanges() : get("/exchanges", 600),
   rates: async (): Promise<ApiResponse<Rates>> =>

@@ -8,7 +8,7 @@ import { WATCHLIST_MAX, chartRanges, chatToolNames, currencies } from "./constan
 
 export const metaSchema = z.object({
   fetchedAt: z.string(),
-  source: z.enum(["coingecko", "snapshot", "mock", "database"]),
+  source: z.enum(["coingecko", "snapshot", "mock", "database", "rss"]),
   stale: z.boolean(),
 });
 export type Meta = z.infer<typeof metaSchema>;

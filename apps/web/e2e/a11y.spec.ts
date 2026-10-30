@@ -14,6 +14,7 @@ const pages = [
   "/compare",
   "/exchanges",
   "/portfolio",
+  "/news",
   "/converter",
   "/watchlist",
   "/ask",

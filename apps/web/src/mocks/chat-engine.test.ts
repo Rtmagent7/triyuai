@@ -165,3 +165,14 @@ describe("planAnswer: sentiment and sectors", () => {
     expect(plan.tools[0]?.name).toBe("getCoinDetails");
   });
 });
+
+describe("planAnswer: news", () => {
+  it("answers with the latest headlines, or a coin's", () => {
+    const all = planAnswer(ask("What's the latest crypto news?"));
+    expect(all.tools[0]).toEqual({ name: "getNews", label: "Fetched: latest crypto news" });
+    expect(all.text).toMatch(/^The latest crypto headlines:/);
+    const btc = planAnswer(ask("Any news about Bitcoin?"));
+    expect(btc.tools[0]?.label).toBe("Fetched: Bitcoin news");
+    expect(btc.text).toMatch(/Bitcoin/);
+  });
+});

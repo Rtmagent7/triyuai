@@ -234,6 +234,7 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
           {[
             ...links,
             { href: "/highlights", label: "Highlights" },
+            { href: "/news", label: "News" },
             { href: "/portfolio", label: "Portfolio" },
             { href: "/compare", label: "Compare" },
             { href: "/exchanges", label: "Exchanges" },

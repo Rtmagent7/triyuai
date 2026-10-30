@@ -11,6 +11,7 @@ import { createChatHistoryService } from "./services/chats";
 import { createCoinGecko } from "./services/coingecko";
 import { createMarketService, prismaSnapshots } from "./services/market";
 import { createPortfolioService } from "./services/portfolio";
+import { createNewsService } from "./services/news";
 import { createWatchlistService } from "./services/watchlist";
 
 /** Wires real services from the environment. Tests build their own Deps. */
@@ -55,6 +56,8 @@ export async function buildDeps(env: Env): Promise<Deps> {
     "services configured",
   );
 
+  const news = createNewsService({ cache, market, logger });
+
   return {
     env,
     logger,
@@ -62,8 +65,9 @@ export async function buildDeps(env: Env): Promise<Deps> {
     market,
     auth: createAuthService({ db, cache, jwtSecret: env.JWT_SECRET }),
     watchlist: createWatchlistService(db),
-    chat: createChatService({ market, models, logger }),
+    chat: createChatService({ market, news, models, logger }),
     history: createChatHistoryService(db),
     portfolio: createPortfolioService(db),
+    news,
   };
 }

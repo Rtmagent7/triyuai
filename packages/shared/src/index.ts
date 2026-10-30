@@ -6,3 +6,4 @@ export * from "./sectors";
 export * from "./sector-stats";
 export * from "./fear-greed";
 export * from "./portfolio";
+export * from "./news";

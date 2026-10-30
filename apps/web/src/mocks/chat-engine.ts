@@ -15,10 +15,12 @@ import { useLivePrices } from "@/stores/live-prices";
 import { fearGreedSnapshot, fgAgo } from "@/lib/market/fear-greed";
 import { altcoinsVsBitcoin, dominance, sectorStats, statsFor } from "@/lib/market/sectors";
 import { sectorById, type SectorId } from "@triyuai/shared/sectors";
+import { NEWS_SOURCES } from "@triyuai/shared/news";
 import {
   findCoin as findSnapshotCoin,
   getGlobal,
   getHighlights,
+  getNews,
   markets,
   snapshotAt,
 } from "./data";
@@ -272,6 +274,20 @@ function sentimentAnswer(): string {
     .join("\n");
 }
 
+function newsAnswer(coin: Coin | undefined): string {
+  const stories = getNews(coin?.id).data.slice(0, 5);
+  if (!stories.length)
+    return `I couldn't find recent headlines that mention **${coin?.name ?? "that"}**. The **News** page lists everything from the last few hours.`;
+  const source = (id: string) => NEWS_SOURCES.find((s) => s.id === id)?.name ?? id;
+  return [
+    coin ? `Latest headlines that mention **${coin.name}**:` : "The latest crypto headlines:",
+    "",
+    ...stories.map((n) => `- **${n.title}** — ${source(n.source)}, ${formatDate(n.publishedAt)}`),
+    "",
+    "Open the **News** page for the full stories on each publisher's site.",
+  ].join("\n");
+}
+
 /** Words people use for each sector, matched against the question. */
 const SECTOR_WORDS: [RegExp, SectorId][] = [
   [/\bmeme(coin)?s?\b|memecoin/, "meme"],
@@ -363,6 +379,16 @@ export function planAnswer(req: ChatRequest): Plan {
 
   const edu = EDUCATION.find((e) => e.match.test(q) && /explain|what|difference|mean|vs/.test(q));
   if (edu) return { tools: [], text: edu.text };
+
+  if (/\bnews\b|headline|what happened|latest on|happening with/.test(q)) {
+    const coin = detectCoins(last)[0] ?? (req.context ? findCoin(req.context.coinId) : undefined);
+    return {
+      tools: [
+        { name: "getNews", label: coin ? `Fetched: ${coin.name} news` : "Fetched: latest crypto news" },
+      ],
+      text: newsAnswer(coin),
+    };
+  }
 
   if (
     /fear|greed|sentiment|mood|altcoin season|alt season/.test(q) ||

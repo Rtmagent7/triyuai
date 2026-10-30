@@ -18,6 +18,7 @@ import { watchlistRoutes } from "./routes/watchlist";
 import type { AuthService } from "./services/auth";
 import type { ChatHistoryService } from "./services/chats";
 import type { MarketService } from "./services/market";
+import type { NewsService } from "./services/news";
 import type { PortfolioService } from "./services/portfolio";
 import type { WatchlistService } from "./services/watchlist";
 
@@ -33,6 +34,7 @@ export type Deps = {
   chat: ChatService;
   history: ChatHistoryService;
   portfolio: PortfolioService;
+  news: NewsService;
 };
 
 export function createApp(deps: Deps) {
@@ -80,7 +82,7 @@ export function createApp(deps: Deps) {
     }),
   );
   v1.use(optionalUser(deps.auth));
-  v1.use(marketRoutes(deps.market));
+  v1.use(marketRoutes(deps.market, deps.news));
   v1.use("/auth", authRoutes(deps.auth, deps.watchlist, env.NODE_ENV === "production"));
   v1.use("/watchlist", watchlistRoutes(deps.watchlist));
   v1.use("/chats", chatRoutes(deps.history));

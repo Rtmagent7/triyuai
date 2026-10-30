@@ -3,6 +3,7 @@ import { z } from "zod";
 import { chartRangeSchema, coinIdSchema, coinsQuerySchema } from "@triyuai/shared";
 import { parse } from "../lib/http";
 import type { MarketService } from "../services/market";
+import type { NewsService } from "../services/news";
 
 /** Data is cached in Redis anyway; a short CDN cache absorbs bursts before they reach the function. */
 const cacheable = (res: Response) =>
@@ -13,7 +14,7 @@ const idsSchema = z
   .transform((s) => s.split(",").filter(Boolean))
   .pipe(z.array(coinIdSchema).max(100, "At most 100 ids"));
 
-export function marketRoutes(market: MarketService) {
+export function marketRoutes(market: MarketService, news: NewsService) {
   const r = Router();
 
   r.get("/global", async (_req, res) => {
@@ -29,6 +30,12 @@ export function marketRoutes(market: MarketService) {
   r.get("/highlights", async (_req, res) => {
     cacheable(res);
     res.json(await market.highlights());
+  });
+
+  r.get("/news", async (req, res) => {
+    cacheable(res);
+    const coin = req.query.coin === undefined ? undefined : parse(coinIdSchema, req.query.coin);
+    res.json(await news.list(coin));
   });
 
   r.get("/exchanges", async (_req, res) => {

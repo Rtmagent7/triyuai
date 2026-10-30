@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { transactionInputSchema, transactionSchema } from "@triyuai/shared/portfolio";
+import { newsItemSchema } from "@triyuai/shared/news";
 import {
   apiErrorSchema,
   apiResponse,
@@ -302,6 +303,28 @@ export function buildOpenApi(version: string) {
             204: { description: "Deleted" },
             401: err("Not signed in"),
             404: err("Not found"),
+          },
+        },
+      },
+      "/api/v1/news": {
+        get: {
+          tags: ["Market"],
+          summary:
+            "Latest crypto headlines from CoinDesk, Cointelegraph, Decrypt and The Block (RSS)",
+          description:
+            "Merged and de-duplicated, newest first, each tagged with the top-100 coins it mentions. Cached 10 min.",
+          parameters: [
+            {
+              ...coinId,
+              name: "coin",
+              in: "query",
+              required: false,
+              description: "Only stories that mention this coin",
+            },
+          ],
+          responses: {
+            200: ok(z.array(newsItemSchema)),
+            502: err("No feed responded and nothing cached"),
           },
         },
       },
