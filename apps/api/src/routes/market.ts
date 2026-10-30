@@ -31,6 +31,11 @@ export function marketRoutes(market: MarketService) {
     res.json(await market.highlights());
   });
 
+  r.get("/exchanges", async (_req, res) => {
+    cacheable(res);
+    res.json(await market.exchanges());
+  });
+
   r.get("/coins", async (req, res) => {
     cacheable(res);
     if (typeof req.query.ids === "string") {

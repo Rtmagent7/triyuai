@@ -11,6 +11,7 @@ import {
   coinSchema,
   coinSummarySchema,
   coinsPageSchema,
+  exchangeSchema,
   globalStatsSchema,
   highlightsSchema,
   loginSchema,
@@ -301,6 +302,13 @@ export function buildOpenApi(version: string) {
             401: err("Not signed in"),
             404: err("Not found"),
           },
+        },
+      },
+      "/api/v1/exchanges": {
+        get: {
+          tags: ["Market"],
+          summary: "Top 100 exchanges by CoinGecko Trust Score, with 24h volume in BTC and USD",
+          responses: { 200: ok(z.array(exchangeSchema)) },
         },
       },
       "/api/v1/health": {

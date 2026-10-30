@@ -8,6 +8,7 @@ import type {
   CoinDetail,
   CoinLinks,
   CoinSummary,
+  Exchange,
   GlobalStats,
   Rates,
 } from "./schemas";
@@ -107,6 +108,35 @@ export function mapGlobal(g: RawGlobal, round = exact): GlobalStats {
     usdtDominance: round(g.data.market_cap_percentage.usdt, 4) ?? 0,
     activeCoins: g.data.active_cryptocurrencies,
     updatedAt: new Date(g.data.updated_at * 1000).toISOString(),
+  };
+}
+
+export type RawExchange = {
+  id: string;
+  name: string;
+  image: string;
+  url: string;
+  country: string | null;
+  year_established: number | null;
+  trust_score: number | null;
+  trust_score_rank: number;
+  trade_volume_24h_btc: number | null;
+};
+
+/** `/exchanges` row → Exchange; volume is converted to USD at the given BTC price. */
+export function mapExchange(e: RawExchange, btcUsd: number, round = exact): Exchange {
+  const btc = e.trade_volume_24h_btc ?? 0;
+  return {
+    id: e.id,
+    name: e.name,
+    image: e.image,
+    url: e.url,
+    country: e.country || null,
+    yearEstablished: e.year_established ?? null,
+    trustScore: e.trust_score ?? null,
+    trustScoreRank: e.trust_score_rank,
+    volume24hBtc: round(btc, 6) ?? 0,
+    volume24hUsd: round(btc * btcUsd, 6) ?? 0,
   };
 }
 

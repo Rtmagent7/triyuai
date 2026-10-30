@@ -161,6 +161,31 @@ export function fakeCoinGecko() {
         if (path === "/global") return raw.global;
         if (path === "/search/trending") return raw.trending;
         if (path === "/exchange_rates") return raw.rates;
+        if (path === "/exchanges")
+          return [
+            {
+              id: "kraken",
+              name: "Kraken",
+              image: "https://img/kraken.png",
+              url: "https://www.kraken.com/",
+              country: "United States",
+              year_established: 2011,
+              trust_score: 10,
+              trust_score_rank: 1,
+              trade_volume_24h_btc: 2,
+            },
+            {
+              id: "tiny",
+              name: "Tiny",
+              image: "https://img/tiny.png",
+              url: "https://tiny.example/",
+              country: "",
+              year_established: null,
+              trust_score: null,
+              trust_score_rank: 2,
+              trade_volume_24h_btc: null,
+            },
+          ];
         if (path === "/search") {
           return {
             coins: [
