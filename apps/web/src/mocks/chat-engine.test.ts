@@ -135,3 +135,33 @@ describe("tokenize", () => {
     expect(tokenize(text).join("")).toBe(text);
   });
 });
+
+describe("planAnswer: sentiment and sectors", () => {
+  it("answers Fear & Greed with the index and dominance", () => {
+    const plan = planAnswer(ask("What's the fear and greed index today?"));
+    expect(plan.tools.map((t) => t.name)).toEqual(["getSentiment"]);
+    expect(plan.text).toMatch(/Fear & Greed Index reads \*\*\d+/);
+    expect(plan.text).toMatch(/USDT \*\*/);
+  });
+
+  it("answers a sector question with its largest coins", () => {
+    const plan = planAnswer(ask("How are meme coins doing?"));
+    expect(plan.tools[0]).toEqual({ name: "getSectorPerformance", label: "Fetched: Meme sector" });
+    expect(plan.text).toContain("**Dogecoin**");
+  });
+
+  it("ranks sectors when asked about sectors in general", () => {
+    const plan = planAnswer(ask("Which sectors are moving today?"));
+    expect(plan.text).toContain("### Strongest");
+  });
+
+  it("still explains dominance when asked what it means", () => {
+    const plan = planAnswer(ask("What is bitcoin dominance?"));
+    expect(plan.tools).toEqual([]);
+  });
+
+  it("keeps single-coin questions on the coin", () => {
+    const plan = planAnswer(ask("How is Solana doing?"));
+    expect(plan.tools[0]?.name).toBe("getCoinDetails");
+  });
+});

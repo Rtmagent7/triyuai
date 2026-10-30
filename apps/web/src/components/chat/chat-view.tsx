@@ -12,6 +12,8 @@ import { ChatMessage } from "./chat-message";
 const GENERAL_PROMPTS = [
   "What's moving the market today?",
   "Compare BTC and ETH",
+  "What's the Fear & Greed today?",
+  "How are meme coins doing?",
   "Explain market cap vs FDV",
 ];
 

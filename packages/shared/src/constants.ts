@@ -10,6 +10,8 @@ export const chatToolNames = [
   "getTopMovers",
   "searchCoin",
   "compareCoins",
+  "getSentiment",
+  "getSectorPerformance",
 ] as const;
 
 export const GUEST_DAILY_CHAT_QUOTA = 10;

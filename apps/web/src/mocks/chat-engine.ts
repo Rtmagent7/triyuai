@@ -12,6 +12,9 @@ import {
   formatDate,
 } from "@/lib/format";
 import { useLivePrices } from "@/stores/live-prices";
+import { fearGreedSnapshot, fgAgo } from "@/lib/market/fear-greed";
+import { altcoinsVsBitcoin, dominance, sectorStats, statsFor } from "@/lib/market/sectors";
+import { sectorById, type SectorId } from "@triyuai/shared/sectors";
 import {
   findCoin as findSnapshotCoin,
   getGlobal,
@@ -230,6 +233,109 @@ const EDUCATION: { match: RegExp; text: string }[] = [
   },
 ];
 
+function sentimentAnswer(): string {
+  const g = getGlobal().data;
+  const fg = fearGreedSnapshot;
+  const now = fg[0]!;
+  const ago = (d: number) => {
+    const p = fgAgo(fg, d);
+    return p ? `**${p.value}** (${p.label})` : "—";
+  };
+  const alts = altcoinsVsBitcoin(markets);
+  const slices = dominance(g, markets);
+  const stables = slices
+    .filter((x) => x.id === "usdt" || x.id === "stables")
+    .reduce((t, x) => t + x.share, 0);
+  const fgDate = new Date(now.time * 1000).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+  return [
+    `The Crypto Fear & Greed Index reads **${now.value} — ${now.label}** (${fgDate}).`,
+    "",
+    `- Yesterday ${ago(1)}, last week ${ago(7)}, last month ${ago(30)}`,
+    `- Bitcoin dominance **${formatPercent(g.btcDominance, 1)}**, USDT **${formatPercent(g.usdtDominance, 1)}**, all stablecoins **${formatPercent(stables, 1)}**`,
+    alts
+      ? `- **${alts.beat} of ${alts.total}** large altcoins beat Bitcoin over 7 days (BTC ${pct(alts.btcChange7d)})`
+      : "",
+    "",
+    now.value <= 44
+      ? "Fear readings often come with falling prices and rising stablecoin share: traders are cautious."
+      : now.value >= 56
+        ? "Greed readings often come with rising prices and leverage: traders are confident."
+        : "A neutral reading: neither side is in control.",
+    "",
+    "Full history on the **Insights** page.",
+  ]
+    .filter((l, i, a) => l !== "" || a[i - 1] !== "")
+    .join("\n");
+}
+
+/** Words people use for each sector, matched against the question. */
+const SECTOR_WORDS: [RegExp, SectorId][] = [
+  [/\bmeme(coin)?s?\b|memecoin/, "meme"],
+  [/\bai\b|artificial intelligence|\bagents?\b/, "ai"],
+  [/\brwa\b|real[- ]world/, "rwa"],
+  [/layer ?1|\bl1s?\b/, "layer-1"],
+  [/layer ?2|\bl2s?\b|rollup/, "layer-2"],
+  [/\bdefi\b/, "defi"],
+  [/\bdex(es)?\b/, "dex"],
+  [/\bdepin\b/, "depin"],
+  [/gaming|gamefi/, "gaming"],
+  [/stablecoins?/, "stablecoin"],
+  [/oracles?/, "oracle"],
+  [/privacy/, "privacy"],
+  [/exchange tokens?/, "exchange"],
+  [/liquid staking|\blst\b/, "liquid-staking"],
+  [/lending/, "lending"],
+];
+
+const detectSector = (q: string) => SECTOR_WORDS.find(([re]) => re.test(q))?.[1];
+
+function sectorAnswer(id: SectorId): string {
+  const st = statsFor(sectorById(id)!, markets);
+  const ranked = [...st.coins].filter((c) => c.change24h != null);
+  const best = ranked.sort((a, b) => b.change24h! - a.change24h!)[0];
+  const worst = ranked.at(-1);
+  return [
+    `**${st.sector.label}** (${st.coins.length} coins in the top 250) is ${pct(st.change24h)} over 24h and ${pct(st.change7d)} over 7 days, weighted by market cap. Combined market cap: **${formatCompact(st.marketCap)}**.`,
+    "",
+    `_${st.sector.blurb}_`,
+    "",
+    "| Coin | Price | 24h | 7d | Market cap |",
+    "| --- | --- | --- | --- | --- |",
+    ...st.coins
+      .slice(0, 6)
+      .map(
+        (c) =>
+          `| **${c.name}** (${c.symbol.toUpperCase()}) | ${formatPrice(c.price)} | ${pct(c.change24h)} | ${pct(c.change7d)} | ${formatCompact(c.marketCap)} |`,
+      ),
+    "",
+    best && worst && best !== worst
+      ? `Best today: **${best.name}** ${pct(best.change24h)}. Weakest: **${worst.name}** ${pct(worst.change24h)}.`
+      : "",
+  ].join("\n");
+}
+
+function sectorsOverview(): string {
+  const stats = sectorStats(markets).filter((x) => x.coins.length >= 4 && x.change24h != null);
+  const by24h = [...stats].sort((a, b) => b.change24h! - a.change24h!);
+  const line = (x: (typeof stats)[number]) =>
+    `- **${x.sector.label}** ${pct(x.change24h)} (24h), ${pct(x.change7d)} (7d)`;
+  return [
+    "How the sectors moved in the last 24 hours, weighted by market cap:",
+    "",
+    "### Strongest",
+    ...by24h.slice(0, 3).map(line),
+    "",
+    "### Weakest",
+    ...by24h.slice(-3).reverse().map(line),
+    "",
+    "Every sector is on the **Sectors** page.",
+  ].join("\n");
+}
+
 const ADVICE =
   /\b(should i (buy|sell|invest)|buy or sell|is it a good (time|investment)|price prediction|predict|will .* (go|reach|hit)|financial advice|all in)\b/;
 
@@ -258,7 +364,30 @@ export function planAnswer(req: ChatRequest): Plan {
   const edu = EDUCATION.find((e) => e.match.test(q) && /explain|what|difference|mean|vs/.test(q));
   if (edu) return { tools: [], text: edu.text };
 
+  if (
+    /fear|greed|sentiment|mood|altcoin season|alt season/.test(q) ||
+    (/dominance/.test(q) && !/explain|what is|mean/.test(q))
+  )
+    return {
+      tools: [{ name: "getSentiment", label: "Fetched: Fear & Greed and dominance" }],
+      text: sentimentAnswer(),
+    };
+
+  const sector = detectSector(q);
+  if (/\bsectors?\b|categor/.test(q) && !sector)
+    return {
+      tools: [{ name: "getSectorPerformance", label: "Fetched: sector performance" }],
+      text: sectorsOverview(),
+    };
+
   let coins = detectCoins(last);
+  if (sector && (!coins.length || /\bcoins\b|\bsector|tokens/.test(q)))
+    return {
+      tools: [
+        { name: "getSectorPerformance", label: `Fetched: ${sectorById(sector)!.label} sector` },
+      ],
+      text: sectorAnswer(sector),
+    };
   // Follow-ups like "and its ATH?" refer to the coin from earlier turns or the page context.
   if (!coins.length && !/market|today|overview|gainer|loser|trend/.test(q)) {
     const earlier = [...req.messages]
@@ -314,6 +443,8 @@ export function planAnswer(req: ChatRequest): Plan {
       '- **Prices & stats** — "How is Solana doing?"',
       '- **Market overview** — "What\'s moving the market today?"',
       '- **Comparisons** — "Compare BTC and ETH"',
+      '- **Sentiment** — "What\'s the Fear & Greed today?"',
+      '- **Sectors** — "How are meme coins doing?"',
       '- **Concepts** — "Explain market cap vs FDV"',
     ].join("\n"),
   };

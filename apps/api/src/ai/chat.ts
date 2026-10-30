@@ -7,6 +7,9 @@ import {
   type ChatToolName,
   type Coin,
 } from "@triyuai/shared";
+import { fetchFearGreed, fgAgo, type FearGreedPoint } from "@triyuai/shared/fear-greed";
+import { SECTORS, primarySector, type SectorId } from "@triyuai/shared/sectors";
+import { altcoinsVsBitcoin, dominance, sectorStats, statsFor } from "@triyuai/shared/sector-stats";
 import type { Logger } from "../lib/logger";
 import type { MarketService } from "../services/market";
 
@@ -18,6 +21,8 @@ Rules:
 - Mention when the data was fetched (UTC) and that prices move quickly.
 - You never give financial advice: no buy/sell/hold calls, price targets or predictions. If asked, say so politely and offer neutral facts (recent performance, volatility, what drives the price) instead.
 - Explain crypto concepts (market cap, FDV, halving, stablecoins, …) plainly for beginners.
+- For market mood, Fear & Greed, BTC/USDT/stablecoin dominance or "altcoin season", call getSentiment.
+- For sectors or categories (meme coins, AI, RWA, Layer 1, DeFi…), call getSectorPerformance.
 - If a coin is unknown, use searchCoin. If the question is not about crypto or markets, say you can only help with crypto markets.
 - End answers that discuss specific coins with: "_Not financial advice._"`;
 
@@ -51,6 +56,15 @@ export function createChatService(deps: {
   logger: Logger;
 }) {
   const { market, logger } = deps;
+
+  // The Fear & Greed index changes once a day; one fetch per half hour is plenty.
+  let fearGreed: { at: number; points: FearGreedPoint[] } | null = null;
+  async function fearGreedPoints() {
+    if (fearGreed && Date.now() - fearGreed.at < 30 * 60_000) return fearGreed.points;
+    const points = await fetchFearGreed(31);
+    fearGreed = { at: Date.now(), points };
+    return points;
+  }
 
   function buildTools(track: (fetchedAt: string) => void) {
     const nameOf = async (id: string) =>
@@ -122,6 +136,73 @@ export function createChatService(deps: {
             return { fetchedAt: r.meta.fetchedAt, coins: r.data.map(facts) };
           },
         }),
+        getSentiment: tool({
+          description:
+            "Crypto Fear & Greed Index (today, yesterday, last week, last month), BTC/ETH/USDT/stablecoin dominance and how many of the top 50 altcoins beat Bitcoin over 7 days.",
+          inputSchema: z.object({}),
+          execute: async () => {
+            const [g, top, points] = await Promise.all([
+              market.global(),
+              market.markets(),
+              fearGreedPoints().catch(() => null),
+            ]);
+            track(g.meta.fetchedAt);
+            const read = (d: number) => {
+              const p = points && fgAgo(points, d);
+              return p ? { value: p.value, label: p.label } : null;
+            };
+            const alts = altcoinsVsBitcoin(top.data);
+            return {
+              fetchedAt: g.meta.fetchedAt,
+              fearGreed: points
+                ? { today: read(0), yesterday: read(1), lastWeek: read(7), lastMonth: read(30) }
+                : "unavailable",
+              dominancePct: dominance(g.data, top.data).map((d) => ({ [d.label]: d.share })),
+              altcoinsBeatingBitcoin7d: alts && {
+                beat: alts.beat,
+                of: alts.total,
+                bitcoinChange7dPct: alts.btcChange7d,
+              },
+            };
+          },
+        }),
+        getSectorPerformance: tool({
+          description:
+            "Sector performance among the top 250 coins (market-cap-weighted 24h/7d change, market cap). With a sector id, also its largest coins.",
+          inputSchema: z.object({
+            sector: z
+              .enum(SECTORS.map((x) => x.id) as [SectorId, ...SectorId[]])
+              .optional()
+              .describe("Omit for every sector."),
+          }),
+          execute: async ({ sector }) => {
+            const top = await market.markets();
+            track(top.meta.fetchedAt);
+            const row = (s: ReturnType<typeof statsFor>) => ({
+              sector: s.sector.label,
+              id: s.sector.id,
+              coins: s.coins.length,
+              marketCapUsd: s.marketCap,
+              change24hPct: s.change24h,
+              change7dPct: s.change7d,
+            });
+            if (!sector)
+              return { fetchedAt: top.meta.fetchedAt, sectors: sectorStats(top.data).map(row) };
+            const s = statsFor(
+              SECTORS.find((x) => x.id === sector)!,
+              top.data,
+            );
+            return {
+              fetchedAt: top.meta.fetchedAt,
+              ...row(s),
+              about: s.sector.blurb,
+              largest: s.coins.slice(0, 8).map((c) => ({
+                ...facts(c),
+                primarySector: primarySector(c.id)?.label,
+              })),
+            };
+          },
+        }),
       },
 
       /** Chip text shown while a tool runs, e.g. "Fetched: Solana price". */
@@ -138,6 +219,13 @@ export function createChatService(deps: {
             const top = (await market.markets().catch(() => null))?.data ?? [];
             const sym = (id: string) => top.find((c) => c.id === id)?.symbol ?? id;
             return `Fetched: ${ids.map(sym).join(" vs ")} data`;
+          }
+          case "getSentiment":
+            return "Fetched: Fear & Greed and dominance";
+          case "getSectorPerformance": {
+            const id = input.sector as string | undefined;
+            const label = SECTORS.find((x) => x.id === id)?.label;
+            return label ? `Fetched: ${label} sector` : "Fetched: sector performance";
           }
           default:
             return "Fetched: market overview";
