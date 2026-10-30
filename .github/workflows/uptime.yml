@@ -1,0 +1,73 @@
+name: Uptime
+
+# Checks the live site and API every 15 minutes. When a check still fails on a retry, an
+# issue labelled "uptime" is opened (one at a time); it is closed once everything is back.
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Probe the site and the API
+        id: probe
+        run: |
+          set +e
+          failures=""
+          probe() { # name url [expected text]
+            for attempt in 1 2; do
+              body=$(curl -sS --max-time 20 -w '\n%{http_code}' "$2")
+              code=$(tail -n1 <<<"$body")
+              if [ "$code" = 200 ] && { [ -z "$3" ] || grep -q "$3" <<<"$body"; }; then
+                echo "ok    $1 ($code)"
+                return
+              fi
+              sleep 20
+            done
+            echo "FAIL  $1 ($code)"
+            failures="$failures- **$1**: HTTP $code at $2"$'\n'
+          }
+          probe "Website"               https://triyuai.vercel.app/                       "TRIYU"
+          probe "API health"            https://triyuai-api.vercel.app/api/v1/health      '"status":"ok"'
+          probe "Market data via proxy" https://triyuai.vercel.app/api/v1/global          '"totalMarketCap"'
+          {
+            echo "failures<<EOF"
+            printf '%s' "$failures"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the outage issue
+        if: steps.probe.outputs.failures != ''
+        run: |
+          open=$(gh issue list --label uptime --state open --json number -q '.[0].number')
+          note=$(printf 'Checked %s UTC ([run](%s)):\n\n%s' "$(date -u '+%Y-%m-%d %H:%M')" \
+            "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            "${{ steps.probe.outputs.failures }}")
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body "$note"
+          else
+            gh label create uptime --color B60205 --description "Live site or API is down" 2>/dev/null || true
+            gh issue create --label uptime --title "Outage: TRIYUAI is not responding" --body "$note"
+          fi
+          exit 1
+
+      - name: Close the outage issue once recovered
+        if: steps.probe.outputs.failures == ''
+        run: |
+          for n in $(gh issue list --label uptime --state open --json number -q '.[].number'); do
+            gh issue close "$n" --comment "Recovered: all checks pass again ($(date -u '+%Y-%m-%d %H:%M') UTC)."
+          done
