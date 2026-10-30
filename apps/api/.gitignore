@@ -3,3 +3,4 @@ src/generated
 coverage
 .env
 api/index.mjs
+public

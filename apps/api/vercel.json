@@ -3,6 +3,7 @@
   "buildCommand": "pnpm vercel-build",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
+  "outputDirectory": "public",
   "rewrites": [
     {
       "source": "/(.*)",
