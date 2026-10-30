@@ -6,6 +6,7 @@ import {
   FIB_DEFAULT_LEVELS,
   changeLabel,
   drawingDefaults,
+  fibLevels,
   extendLine,
   hitTest,
   moveDrawing,
@@ -100,10 +101,10 @@ describe("drawing geometry options", () => {
       { x: 0, y: 0 },
       { x: 100, y: 100 },
     ]);
-    expect(hitTest(d({ extendRight: true }), [a, b], { x: 80, y: 80 }, 100)).toEqual({
+    expect(hitTest(d({ extendRight: true }), [a, b], { x: 80, y: 80 }, { width: 100 })).toEqual({
       part: "body",
     });
-    expect(hitTest(d(), [a, b], { x: 80, y: 80 }, 100)).toBeNull();
+    expect(hitTest(d(), [a, b], { x: 80, y: 80 }, { width: 100 })).toBeNull();
   });
 
   it("labels change, honours locks and per-type defaults", () => {
@@ -117,7 +118,8 @@ describe("drawing geometry options", () => {
     expect(
       moveDrawing(locked, { part: "body" }, { time: 0, price: 0 }, { time: 5, price: 5 }),
     ).toBe(locked);
-    expect(drawingDefaults("rect")).toEqual({ fillOpacity: 0.15 });
+    expect(drawingDefaults("rect")).toEqual({ fillOpacity: 0.12 });
+    expect(drawingDefaults("markup")).toEqual({ color: "#22c55e" });
     expect(drawingDefaults("hline")).toEqual({ showLabel: true });
     expect(drawingDefaults("text")).toEqual({ fontSize: 13 });
     expect(FIB_DEFAULT_LEVELS.filter((l) => l.visible)).toHaveLength(7);
@@ -292,7 +294,8 @@ describe("drawing settings and floating toolbar", () => {
     expect(get().levels!.at(-1)).toEqual({ value: 1.618, visible: true });
     refresh();
     await userEvent.click(screen.getByRole("button", { name: "Defaults" }));
-    expect(get().levels).toEqual(FIB_DEFAULT_LEVELS);
+    expect(get().levels).toBeUndefined();
+    expect(fibLevels(get())).toEqual(FIB_DEFAULT_LEVELS);
     expect(get().fillOpacity).toBe(0.08);
   });
 

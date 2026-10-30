@@ -35,9 +35,9 @@ export function ChatPanel() {
           onPointerEnter={() => void loadChatView()}
           onFocus={() => void loadChatView()}
           aria-label="Open Ask TRIYU"
-          className="ai-gradient h-13 shadow-ai-from/30 fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full pl-4 pr-5 font-medium text-white shadow-xl transition-transform hover:scale-[1.03] sm:bottom-6 sm:right-6"
+          className="ai-gradient h-13 shadow-ai-from/30 hover:shadow-ai-from/50 group fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full pl-4 pr-5 font-medium text-white shadow-xl transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 sm:bottom-6 sm:right-6"
         >
-          <Sparkle className="size-5" />
+          <Sparkle className="size-5 transition-transform duration-500 group-hover:rotate-[20deg] group-hover:scale-110" />
           <span>Ask TRIYU</span>
         </button>
       )}

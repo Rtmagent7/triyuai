@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy, Lock, LockOpen, Settings2, Trash2 } from "lucide-react";
-import { toolLabel, type Drawing } from "@/lib/ta/drawings";
+import { hasFill, hasLine, hasText, toolLabel, type Drawing } from "@/lib/ta/drawings";
 import { cn } from "@/lib/utils";
 import { ColorPicker } from "./color-picker";
 import { LineStylePicker } from "./line-style-picker";
@@ -23,17 +23,19 @@ export function SelectionToolbar({ drawing: d, onChange, onSettings, onClone, on
   return (
     <div
       role="toolbar"
-      aria-label={`${toolLabel[d.type]} options`}
+      aria-label={`${toolLabel(d.type)} options`}
       className="border-border bg-bg/95 absolute left-1/2 top-10 z-20 flex -translate-x-1/2 items-center gap-1 rounded-lg border p-1 shadow-lg backdrop-blur"
       // Keep chart pointer handlers from treating toolbar clicks as chart clicks.
       onPointerDown={(e) => e.stopPropagation()}
     >
-      <ColorPicker
-        label={d.type === "text" ? "Text background" : "Line colour"}
-        value={d.color}
-        onChange={(color) => set({ color })}
-      />
-      {d.type !== "text" && (
+      {d.type !== "long" && d.type !== "short" && (
+        <ColorPicker
+          label={hasText(d.type) ? "Text background" : hasLine(d.type) ? "Line colour" : "Colour"}
+          value={d.color}
+          onChange={(color) => set({ color })}
+        />
+      )}
+      {hasLine(d.type) && (
         <LineStylePicker
           label="Line style"
           width={d.width ?? 2}
@@ -41,16 +43,16 @@ export function SelectionToolbar({ drawing: d, onChange, onSettings, onClone, on
           onChange={(patch) => set(patch)}
         />
       )}
-      {(d.type === "rect" || d.type === "fib") && (
+      {hasFill(d.type) && (
         <ColorPicker
           label="Background"
           value={d.fill && d.fill !== "none" ? d.fill : d.color}
           onChange={(fill) => set({ fill })}
-          opacity={d.fillOpacity ?? (d.type === "fib" ? 0.08 : 0.15)}
+          opacity={d.fillOpacity ?? 0.12}
           onOpacity={(fillOpacity) => set({ fillOpacity })}
         />
       )}
-      {d.type === "text" && (
+      {hasText(d.type) && (
         <select
           aria-label="Font size"
           value={d.fontSize ?? 13}

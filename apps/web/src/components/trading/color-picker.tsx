@@ -49,7 +49,7 @@ export function ColorPicker({ label, value, onChange, opacity, onOpacity, classN
         <Popover.Content
           sideOffset={6}
           collisionPadding={8}
-          className="border-border bg-bg z-[60] w-[272px] space-y-3 rounded-xl border p-3 text-sm shadow-xl"
+          className="border-border bg-bg animate-pop-in z-[60] w-[272px] space-y-3 rounded-xl border p-3 text-sm shadow-xl"
         >
           <div role="radiogroup" aria-label={label} className="grid grid-cols-10 gap-0.5">
             {PALETTE.flat().map((c) => (

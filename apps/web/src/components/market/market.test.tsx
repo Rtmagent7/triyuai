@@ -65,7 +65,7 @@ describe("MarketTable", () => {
   it("shows skeleton rows while loading", () => {
     const { container } = renderWithClient(<MarketTable coins={[]} isLoading />);
     expect(container.querySelectorAll("tbody tr")).toHaveLength(10);
-    expect(container.querySelectorAll("[aria-hidden].animate-pulse").length).toBeGreaterThan(0);
+    expect(container.querySelectorAll("[aria-hidden].animate-shimmer").length).toBeGreaterThan(0);
   });
 
   it("links each coin to its page", () => {

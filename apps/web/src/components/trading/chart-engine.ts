@@ -77,7 +77,7 @@ export class ChartEngine {
   constructor(
     el: HTMLElement,
     private colors: ChartColors,
-    getDrawings: () => Omit<DrawingsState, "toScreen" | "background" | "step">,
+    getDrawings: () => Omit<DrawingsState, "toScreen" | "background" | "step" | "up" | "down">,
   ) {
     this.chart = createChart(el, {
       autoSize: true,
@@ -91,6 +91,8 @@ export class ChartEngine {
       toScreen: (a) => this.toScreen(a),
       background: this.colors.background,
       step: this.step,
+      up: this.colors.up,
+      down: this.colors.down,
     }));
     this.applyTheme(colors);
     this.createMain();

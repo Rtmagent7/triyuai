@@ -17,7 +17,7 @@ export function DropdownMenuContent({
       <DM.Content
         sideOffset={sideOffset}
         className={cn(
-          "border-border bg-bg z-50 min-w-36 overflow-hidden rounded-xl border p-1 text-sm shadow-xl shadow-black/10",
+          "border-border bg-bg animate-pop-in z-50 min-w-36 overflow-hidden rounded-xl border p-1 text-sm shadow-xl shadow-black/10",
           className,
         )}
         {...props}

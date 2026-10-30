@@ -3,9 +3,14 @@
 import { Plus, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
-  FIB_DEFAULT_LEVELS,
+  canExtend,
   drawingDefaults,
   fibLevels,
+  hasChangeLabel,
+  hasFill,
+  hasLevels,
+  hasLine,
+  hasText,
   toolLabel,
   type Drawing,
 } from "@/lib/ta/drawings";
@@ -34,13 +39,32 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
   }, [d.id]);
 
   const set = (patch: Partial<Drawing>) => update(coinId, { ...d, ...patch });
-  const isLine = d.type !== "text";
-  const hasFill = d.type === "rect" || d.type === "fib";
+  const t = d.type;
+  const isPosition = t === "long" || t === "short";
+  // Which label option this type has, and whether it is on by default.
+  const label =
+    t === "hline" || t === "hray"
+      ? { text: "Price label", on: d.showLabel !== false }
+      : hasLevels(t)
+        ? { text: "Level prices", on: d.showLabel !== false }
+        : hasChangeLabel(t)
+          ? { text: "Price change, % and bars", on: !!d.showLabel }
+          : null;
 
   const styleTab = (
     <>
-      {isLine && (
-        <Row label={d.type === "fib" ? "Trend line" : "Line"}>
+      {!hasLine(t) && !isPosition && !hasText(t) && (
+        <Row label="Colour">
+          <ColorPicker label="Colour" value={d.color} onChange={(color) => set({ color })} />
+        </Row>
+      )}
+      {isPosition && (
+        <p className="text-muted text-sm">
+          Drag the target and stop handles on the chart; the risk:reward ratio updates live.
+        </p>
+      )}
+      {hasLine(t) && (
+        <Row label={hasLevels(t) ? "Trend line" : "Line"}>
           <ColorPicker label="Line colour" value={d.color} onChange={(color) => set({ color })} />
           <LineStylePicker
             label="Line style"
@@ -50,18 +74,18 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
           />
         </Row>
       )}
-      {hasFill && (
+      {hasFill(t) && (
         <Row label="Background">
           <ColorPicker
             label="Background colour"
             value={d.fill ?? d.color}
             onChange={(fill) => set({ fill })}
-            opacity={d.fillOpacity ?? 0.15}
+            opacity={d.fillOpacity ?? 0.12}
             onOpacity={(fillOpacity) => set({ fillOpacity })}
           />
         </Row>
       )}
-      {(d.type === "trendline" || d.type === "fib") && (
+      {canExtend(t) && (
         <div className="flex flex-wrap gap-x-5 gap-y-2 py-1">
           <Checkbox
             label="Extend left"
@@ -75,18 +99,8 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
           />
         </div>
       )}
-      {d.type !== "rect" && d.type !== "text" && (
-        <Checkbox
-          label={
-            d.type === "hline"
-              ? "Price label"
-              : d.type === "fib"
-                ? "Level prices"
-                : "Price change, % and bars"
-          }
-          checked={d.type === "fib" || d.type === "hline" ? d.showLabel !== false : !!d.showLabel}
-          onChange={(v) => set({ showLabel: v })}
-        />
+      {label && (
+        <Checkbox label={label.text} checked={label.on} onChange={(v) => set({ showLabel: v })} />
       )}
       <Checkbox label="Lock in place" checked={!!d.locked} onChange={(v) => set({ locked: v })} />
     </>
@@ -205,7 +219,7 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
               className={`${inputCls} w-40 text-right`}
             />
           </Row>
-          {d.type !== "hline" && (
+          {t !== "hline" && t !== "hray" && (
             <Row label="Time (UTC)" htmlFor={`time-${i}`}>
               <input
                 id={`time-${i}`}
@@ -226,16 +240,17 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
   );
 
   const tabs: SettingsTab[] = [
-    ...(d.type === "text" ? [{ id: "text", label: "Text", content: textTab }] : []),
-    ...(d.type !== "text" ? [{ id: "style", label: "Style", content: styleTab }] : []),
-    ...(d.type === "fib" ? [{ id: "levels", label: "Levels", content: levelsTab }] : []),
-    { id: "coords", label: "Coordinates", content: coordsTab },
+    ...(hasText(t) ? [{ id: "text", label: "Text", content: textTab }] : []),
+    ...(t !== "text" ? [{ id: "style", label: "Style", content: styleTab }] : []),
+    ...(hasLevels(t) ? [{ id: "levels", label: "Levels", content: levelsTab }] : []),
+    // A brush has hundreds of points; editing them one by one is not useful.
+    ...(t !== "brush" ? [{ id: "coords", label: "Coordinates", content: coordsTab }] : []),
   ];
 
   return (
     <SettingsDialog
       open
-      title={`${toolLabel[d.type]} settings`}
+      title={`${toolLabel(d.type)} settings`}
       tabs={tabs}
       onClose={onClose}
       onCancel={() => update(coinId, snapshot.current)}
@@ -250,7 +265,7 @@ export function DrawingSettings({ coinId, drawing: d, onClose }: Props) {
           width: style.width,
           dash: style.dash,
           ...drawingDefaults(d.type),
-          ...(d.type === "fib" ? { levels: FIB_DEFAULT_LEVELS } : {}),
+          levels: undefined,
         });
       }}
     />

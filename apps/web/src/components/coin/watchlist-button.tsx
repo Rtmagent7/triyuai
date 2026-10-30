@@ -26,7 +26,11 @@ export function WatchlistButton({ id, name, className, withLabel }: Props) {
         className,
       )}
     >
-      <Star className={cn("size-4", active && "fill-current")} />
+      {/* Re-keyed so the pop plays each time the coin is starred. */}
+      <Star
+        key={String(active)}
+        className={cn("size-4", active && "animate-star-pop fill-current")}
+      />
       {withLabel && <span>{active ? "Watchlisted" : "Watchlist"}</span>}
     </button>
   );
