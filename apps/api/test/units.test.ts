@@ -56,6 +56,12 @@ describe("UpstashCache", () => {
 });
 
 describe("loadEnv", () => {
+  it("reads Upstash credentials under the Vercel Marketplace KV_* names", () => {
+    const env = loadEnv({ KV_REST_API_URL: "https://x.upstash.io", KV_REST_API_TOKEN: "t" });
+    expect(env.UPSTASH_REDIS_REST_URL).toBe("https://x.upstash.io");
+    expect(env.UPSTASH_REDIS_REST_TOKEN).toBe("t");
+  });
+
   it("has working development defaults", () => {
     expect(loadEnv({})).toMatchObject({
       PORT: 4000,

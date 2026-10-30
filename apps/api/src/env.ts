@@ -33,7 +33,12 @@ const envSchema = z.object({
 export type Env = z.infer<typeof envSchema>;
 
 export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
-  const env = envSchema.parse(source);
+  const env = envSchema.parse({
+    ...source,
+    // Upstash added through the Vercel Marketplace names its REST credentials KV_*.
+    UPSTASH_REDIS_REST_URL: source.UPSTASH_REDIS_REST_URL ?? source.KV_REST_API_URL,
+    UPSTASH_REDIS_REST_TOKEN: source.UPSTASH_REDIS_REST_TOKEN ?? source.KV_REST_API_TOKEN,
+  });
   if (env.NODE_ENV === "production") {
     if (env.JWT_SECRET.startsWith("dev-only"))
       throw new Error("JWT_SECRET must be set in production");
