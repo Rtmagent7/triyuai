@@ -14,7 +14,7 @@
     "db:migrate": "prisma migrate deploy",
     "postinstall": "prisma generate",
     "build": "prisma generate && esbuild src/vercel.ts --bundle --platform=node --target=node22 --format=esm --outfile=api/index.mjs --external:@node-rs/argon2 --external:@electric-sql/pglite --external:pglite-prisma-adapter --external:pg-native --external:pino --external:pino-http --external:pino-pretty --banner:js=\"import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\"",
-    "vercel-build": "pnpm build && mkdir -p public && if [ \"$VERCEL_ENV\" = production ]; then prisma migrate deploy; fi"
+    "vercel-build": "pnpm build && if [ \"$VERCEL_ENV\" = production ]; then prisma migrate deploy; fi"
   },
   "dependencies": {
     "@ai-sdk/google": "4.0.97",
