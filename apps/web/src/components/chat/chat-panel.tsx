@@ -1,5 +1,6 @@
 "use client";
 
+import { mockingEnabled } from "@/lib/api/mocking";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,7 +38,7 @@ export function ChatPanel() {
             <div className="min-w-0">
               <SheetTitle className="text-sm font-semibold">Ask TRIYU</SheetTitle>
               <SheetDescription className="text-muted text-[11px]">
-                AI market assistant · demo mode
+                AI market assistant{mockingEnabled ? " · demo mode" : ""}
               </SheetDescription>
             </div>
             <Link
