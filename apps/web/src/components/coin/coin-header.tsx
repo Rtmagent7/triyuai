@@ -3,7 +3,7 @@
 import { Check, Link2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CoinDetail } from "@triyuai/shared";
-import { Sparkle } from "@/components/chat/sparkle";
+import { AskMark } from "@/components/chat/ask-mark";
 import { Button } from "@/components/ui/button";
 import { useLivePriceFeed, useLiveTick } from "@/hooks/use-live-prices";
 import { useMoney } from "@/hooks/use-money";
@@ -106,7 +106,7 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
             })
           }
         >
-          <Sparkle /> Ask TRIYU about {coin.name}
+          <AskMark /> Ask TRIYU about {coin.name}
         </Button>
       </div>
     </div>

@@ -6,6 +6,8 @@
    brand blue (sampled from the logo, #0050f0–#00c0f0) as the one accent: links, focus,
    chart series and the 1px line that marks every selection. The primary button is
    ink-on-paper (near-black on light, inverted white on dark), never the accent.
+   Ask TRIYU is the one exception: its buttons are filled with the logo's own blue (--ai),
+   the deepest shade of it that still carries white text at 4.5:1.
    Every text tier reaches 4.5:1 on --bg and --surface; verified by the axe e2e suite. */
 :root {
   --bg: #ffffff;
@@ -18,6 +20,9 @@
   --brand-fg: #ffffff;
   --primary: #151517;
   --primary-fg: #ffffff;
+  --ai: #0a6ad6;
+  --ai-hover: #0858b4;
+  --ai-fg: #ffffff;
   --up: #1b7a46;
   --down: #c4242a;
   --up-soft: rgb(27 122 70 / 0.08);
@@ -37,6 +42,9 @@
   --brand-fg: #0a0a0b;
   --primary: #f1f1f3;
   --primary-fg: #0a0a0b;
+  --ai: #1570ef;
+  --ai-hover: #1263d6;
+  --ai-fg: #ffffff;
   --up: #3fc07a;
   --down: #f0586e;
   --up-soft: rgb(63 192 122 / 0.14);
@@ -56,6 +64,9 @@
   --color-brand-fg: var(--brand-fg);
   --color-primary: var(--primary);
   --color-primary-fg: var(--primary-fg);
+  --color-ai: var(--ai);
+  --color-ai-hover: var(--ai-hover);
+  --color-ai-fg: var(--ai-fg);
   --color-up: var(--up);
   --color-down: var(--down);
   --color-up-soft: var(--up-soft);

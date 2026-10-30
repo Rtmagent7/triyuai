@@ -8,7 +8,7 @@ import { LogOut, Menu, Monitor, Moon, Search, Star, Sun, UserRound } from "lucid
 import type { Currency } from "@triyuai/shared";
 import { currencies } from "@triyuai/shared/constants";
 import { preloadChatView } from "@/components/chat/chat-panel";
-import { Sparkle } from "@/components/chat/sparkle";
+import { AskMark } from "@/components/chat/ask-mark";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -97,7 +97,7 @@ export function Navbar() {
               aria-label="Open Ask TRIYU"
               className="px-2.5 sm:px-3.5 lg:px-2.5 xl:px-3.5"
             >
-              <Sparkle />
+              <AskMark />
               <span className="hidden sm:inline lg:hidden xl:inline">Ask TRIYU</span>
             </Button>
           )}
