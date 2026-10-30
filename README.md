@@ -4,7 +4,7 @@
 
 **Real-time crypto dashboard with an AI market assistant.** Portfolio project. The full spec is in [`PRDProject1.md`](./PRDProject1.md).
 
-**[Live demo](https://triyuai.vercel.app)** · **[Demo video (93 s)](https://github.com/Rtmagent7/triyuai/releases/download/v1.0.0/triyu-demo.mp4)** · **[API docs (Swagger)](https://triyuai-api.vercel.app/docs)** · one-click demo account on [/login](https://triyuai.vercel.app/login), no sign-up needed
+**[Live demo](https://triyuai.vercel.app)** · **[Demo video (1:46)](https://github.com/Rtmagent7/triyuai/releases/download/v1.0.0/triyu-demo.mp4)** · **[API docs (Swagger)](https://triyuai-api.vercel.app/docs)** · one-click demo account on [/login](https://triyuai.vercel.app/login), no sign-up needed
 
 ![Markets: live prices, highlights and sector tabs](docs/screenshots/home.png)
 
