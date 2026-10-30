@@ -13,6 +13,8 @@ import type {
   Rates,
   RegisterInput,
   User,
+  ChatConversation,
+  ChatThread,
 } from "@triyuai/shared";
 
 import { ensureMocks } from "./mocking";
@@ -126,6 +128,13 @@ export const api = {
     remove: (coinId: string) =>
       request<string[]>(`/watchlist/${encodeURIComponent(coinId)}`, { method: "DELETE" }),
     merge: (coinIds: string[]) => post<string[]>("/watchlist/merge", { coinIds }),
+  },
+
+  /** Saved Ask TRIYU conversations of the signed-in user (FR-24). */
+  chats: {
+    list: () => request<ChatConversation[]>("/chats"),
+    get: (id: string) => request<ChatThread>(`/chats/${encodeURIComponent(id)}`),
+    remove: (id: string) => request<void>(`/chats/${encodeURIComponent(id)}`, { method: "DELETE" }),
   },
 
   chat: async (body: ChatRequest, signal?: AbortSignal) => {

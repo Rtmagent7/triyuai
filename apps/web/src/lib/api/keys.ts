@@ -7,6 +7,7 @@ export const queryKeys = {
   coinsByIds: (ids: string[]) => ["coins", "ids", ...ids] as const,
   coin: (id: string) => ["coin", id] as const,
   chart: (id: string, range: ChartRange) => ["chart", id, range] as const,
+  chats: ["chats"] as const,
   highlights: ["highlights"] as const,
   search: (q: string) => ["search", q] as const,
   me: ["me"] as const,

@@ -6,9 +6,16 @@
 import { http, HttpResponse, delay } from "msw";
 import { coinIdSchema, loginSchema, registerSchema, watchlistMergeSchema } from "@triyuai/shared";
 import { WATCHLIST_MAX } from "@triyuai/shared/constants";
+import type { ChatThread } from "@triyuai/shared";
 
 type MockUser = { id: string; email: string; name: string; password: string; isDemo: boolean };
-type State = { users: MockUser[]; session: string | null; watchlists: Record<string, string[]> };
+type State = {
+  users: MockUser[];
+  session: string | null;
+  watchlists: Record<string, string[]>;
+  /** Saved Ask TRIYU conversations per user, newest first (FR-24). */
+  chats?: Record<string, ChatThread[]>;
+};
 
 const KEY = "triyu:mock-auth";
 const DEMO: MockUser = {
@@ -66,6 +73,72 @@ const withUser =
   };
 
 const list = (state: State, user: MockUser) => state.watchlists[user.id] ?? [];
+
+const titleFrom = (text: string) => {
+  const line = text.replace(/\s+/g, " ").trim();
+  return line.length > 60 ? `${line.slice(0, 57).trimEnd()}…` : line || "New chat";
+};
+
+/**
+ * Saves one chat exchange for the signed-in mock user, like apps/api does. Returns the
+ * conversation id, or null for guests (their chats aren't saved).
+ */
+export function saveMockExchange(opts: {
+  conversationId?: string;
+  question: string;
+  regenerate?: boolean;
+}) {
+  const state = load();
+  const user = current(state);
+  if (!user) return null;
+  const threads = ((state.chats ??= {})[user.id] ??= []);
+  const now = () => new Date().toISOString();
+  let thread = threads.find((t) => t.id === opts.conversationId);
+  if (!thread) {
+    thread = {
+      id: crypto.randomUUID(),
+      title: titleFrom(opts.question),
+      updatedAt: now(),
+      messages: [],
+    };
+    threads.unshift(thread);
+    threads.splice(50);
+  }
+  const t = thread;
+  if (opts.regenerate) {
+    if (t.messages.at(-1)?.role === "assistant") t.messages.pop();
+  } else {
+    t.messages.push({
+      id: crypto.randomUUID(),
+      role: "user",
+      content: opts.question,
+      tools: [],
+      createdAt: now(),
+    });
+  }
+  t.updatedAt = now();
+  save(state);
+  return {
+    id: t.id,
+    /** Stores the finished answer. */
+    answer(content: string, tools: string[]) {
+      if (!content.trim()) return;
+      const s = load();
+      const saved = s.chats?.[user.id]?.find((x) => x.id === t.id);
+      if (!saved) return;
+      saved.messages.push({
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content,
+        tools,
+        createdAt: now(),
+      });
+      saved.updatedAt = now();
+      s.chats![user.id]!.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+      save(s);
+    },
+  };
+}
 const sendList = (state: State, user: MockUser, ids: string[], status = 200) => {
   state.watchlists[user.id] = ids;
   save(state);
@@ -158,6 +231,40 @@ export const authHandlers = [
       return sendList(state, user, [...ids, coinId as string], 201);
     })();
   }),
+
+  http.get(
+    `${BASE}/chats`,
+    withUser((state, user) =>
+      HttpResponse.json({
+        data: (state.chats?.[user.id] ?? []).map(({ id, title, updatedAt }) => ({
+          id,
+          title,
+          updatedAt,
+        })),
+        meta: meta(),
+      }),
+    ),
+  ),
+
+  http.get(`${BASE}/chats/:id`, ({ params }) =>
+    withUser((state, user) => {
+      const t = state.chats?.[user.id]?.find((x) => x.id === params.id);
+      return t
+        ? HttpResponse.json({ data: t, meta: meta() })
+        : error(404, "NOT_FOUND", "Conversation not found");
+    })(),
+  ),
+
+  http.delete(`${BASE}/chats/:id`, ({ params }) =>
+    withUser((state, user) => {
+      const threads = state.chats?.[user.id] ?? [];
+      if (!threads.some((x) => x.id === params.id))
+        return error(404, "NOT_FOUND", "Conversation not found");
+      state.chats![user.id] = threads.filter((x) => x.id !== params.id);
+      save(state);
+      return new HttpResponse(null, { status: 204 });
+    })(),
+  ),
 
   http.delete(`${BASE}/watchlist/:coinId`, ({ params }) =>
     withUser((state, user) =>

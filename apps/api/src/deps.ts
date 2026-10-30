@@ -7,6 +7,7 @@ import { createDb } from "./db";
 import type { Env } from "./env";
 import { createLogger } from "./lib/logger";
 import { createAuthService } from "./services/auth";
+import { createChatHistoryService } from "./services/chats";
 import { createCoinGecko } from "./services/coingecko";
 import { createMarketService, prismaSnapshots } from "./services/market";
 import { createWatchlistService } from "./services/watchlist";
@@ -61,5 +62,6 @@ export async function buildDeps(env: Env): Promise<Deps> {
     auth: createAuthService({ db, cache, jwtSecret: env.JWT_SECRET }),
     watchlist: createWatchlistService(db),
     chat: createChatService({ market, models, logger }),
+    history: createChatHistoryService(db),
   };
 }

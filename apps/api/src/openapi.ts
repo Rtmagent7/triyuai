@@ -3,8 +3,10 @@ import {
   apiErrorSchema,
   apiResponse,
   chartDataSchema,
+  chatConversationSchema,
   chatRequestSchema,
   chatStreamEventSchema,
+  chatThreadSchema,
   coinDetailSchema,
   coinSchema,
   coinSummarySchema,
@@ -256,7 +258,8 @@ export function buildOpenApi(version: string) {
           summary: "Ask TRIYU (Server-Sent Events)",
           description:
             "Streams `data: <event>` lines: `tool-call` → `tool-result` → `text-delta`… → `finish`. " +
-            "Guests get 10 messages a day, signed-in users 30.",
+            "Guests get 10 messages a day, signed-in users 30. Signed-in users get a `conversation` event first: " +
+            "the exchange is saved there (pass it back as `conversationId` to continue).",
           requestBody: body(chatRequestSchema),
           responses: {
             200: {
@@ -265,6 +268,38 @@ export function buildOpenApi(version: string) {
             },
             429: err("Daily quota used up"),
             503: err("AI provider not configured"),
+          },
+        },
+      },
+      "/api/v1/chats": {
+        get: {
+          tags: ["AI"],
+          summary: "Saved Ask TRIYU conversations, newest first (50 at most)",
+          security: auth,
+          responses: { 200: ok(z.array(chatConversationSchema)), 401: err("Not signed in") },
+        },
+      },
+      "/api/v1/chats/{id}": {
+        get: {
+          tags: ["AI"],
+          summary: "One conversation with its messages",
+          security: auth,
+          parameters: [{ ...coinId, name: "id", description: "Conversation id" }],
+          responses: {
+            200: ok(chatThreadSchema),
+            401: err("Not signed in"),
+            404: err("Not found (or not yours)"),
+          },
+        },
+        delete: {
+          tags: ["AI"],
+          summary: "Delete a conversation",
+          security: auth,
+          parameters: [{ ...coinId, name: "id", description: "Conversation id" }],
+          responses: {
+            204: { description: "Deleted" },
+            401: err("Not signed in"),
+            404: err("Not found"),
           },
         },
       },

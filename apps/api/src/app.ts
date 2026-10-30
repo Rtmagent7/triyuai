@@ -11,9 +11,11 @@ import { errorHandler, notFound, optionalUser, rateLimit } from "./middleware";
 import { buildOpenApi, swaggerHtml, swaggerInit } from "./openapi";
 import { aiRoutes } from "./routes/ai";
 import { authRoutes } from "./routes/auth";
+import { chatRoutes } from "./routes/chats";
 import { marketRoutes } from "./routes/market";
 import { watchlistRoutes } from "./routes/watchlist";
 import type { AuthService } from "./services/auth";
+import type { ChatHistoryService } from "./services/chats";
 import type { MarketService } from "./services/market";
 import type { WatchlistService } from "./services/watchlist";
 
@@ -27,6 +29,7 @@ export type Deps = {
   auth: AuthService;
   watchlist: WatchlistService;
   chat: ChatService;
+  history: ChatHistoryService;
 };
 
 export function createApp(deps: Deps) {
@@ -77,7 +80,11 @@ export function createApp(deps: Deps) {
   v1.use(marketRoutes(deps.market));
   v1.use("/auth", authRoutes(deps.auth, deps.watchlist, env.NODE_ENV === "production"));
   v1.use("/watchlist", watchlistRoutes(deps.watchlist));
-  v1.use("/ai", aiRoutes({ chat: deps.chat, cache: deps.cache, salt: env.IP_HASH_SALT }));
+  v1.use("/chats", chatRoutes(deps.history));
+  v1.use(
+    "/ai",
+    aiRoutes({ chat: deps.chat, history: deps.history, cache: deps.cache, salt: env.IP_HASH_SALT }),
+  );
   app.use("/api/v1", v1);
 
   app.use(notFound);
