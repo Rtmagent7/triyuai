@@ -7,6 +7,12 @@ import { http, HttpResponse, delay } from "msw";
 import { coinIdSchema, loginSchema, registerSchema, watchlistMergeSchema } from "@triyuai/shared";
 import { WATCHLIST_MAX } from "@triyuai/shared/constants";
 import type { ChatThread } from "@triyuai/shared";
+import {
+  PORTFOLIO_MAX_TRANSACTIONS,
+  heldQuantity,
+  transactionInputSchema,
+  type Transaction,
+} from "@triyuai/shared/portfolio";
 
 type MockUser = { id: string; email: string; name: string; password: string; isDemo: boolean };
 type State = {
@@ -15,6 +21,8 @@ type State = {
   watchlists: Record<string, string[]>;
   /** Saved Ask TRIYU conversations per user, newest first (FR-24). */
   chats?: Record<string, ChatThread[]>;
+  /** Portfolio tracker transactions per user (P2). */
+  portfolios?: Record<string, Transaction[]>;
 };
 
 const KEY = "triyu:mock-auth";
@@ -73,6 +81,18 @@ const withUser =
   };
 
 const list = (state: State, user: MockUser) => state.watchlists[user.id] ?? [];
+
+/** Newest first, like apps/api. */
+const sendTransactions = (list: Transaction[], status = 200) =>
+  HttpResponse.json(
+    {
+      data: [...list].sort(
+        (a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt),
+      ),
+      meta: meta(),
+    },
+    { status },
+  );
 
 const titleFrom = (text: string) => {
   const line = text.replace(/\s+/g, " ").trim();
@@ -231,6 +251,60 @@ export const authHandlers = [
       return sendList(state, user, [...ids, coinId as string], 201);
     })();
   }),
+
+  http.get(
+    `${BASE}/portfolio/transactions`,
+    withUser((state, user) => sendTransactions(state.portfolios?.[user.id] ?? [])),
+  ),
+
+  http.post(`${BASE}/portfolio/transactions`, async ({ request }) => {
+    const body = transactionInputSchema.safeParse(await request.json());
+    if (!body.success) return error(400, "BAD_REQUEST", body.error.issues[0]!.message);
+    return withUser((state, user) => {
+      const list = ((state.portfolios ??= {})[user.id] ??= []);
+      if (list.length >= PORTFOLIO_MAX_TRANSACTIONS)
+        return error(
+          422,
+          "PORTFOLIO_FULL",
+          `A portfolio holds up to ${PORTFOLIO_MAX_TRANSACTIONS} transactions`,
+        );
+      const t = body.data;
+      if (t.type === "sell") {
+        const when = new Date(t.date).toISOString();
+        const held = heldQuantity(
+          list.filter((x) => x.date <= when),
+          t.coinId,
+        );
+        if (t.quantity > held + 1e-12)
+          return error(
+            422,
+            "INSUFFICIENT_HOLDINGS",
+            held > 0
+              ? `You held ${held} of this coin on that date, so you can't sell ${t.quantity}.`
+              : "You didn't hold this coin on that date.",
+          );
+      }
+      list.push({
+        ...t,
+        date: new Date(t.date).toISOString(),
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+      });
+      save(state);
+      return sendTransactions(list, 201);
+    })();
+  }),
+
+  http.delete(`${BASE}/portfolio/transactions/:id`, ({ params }) =>
+    withUser((state, user) => {
+      const list = state.portfolios?.[user.id] ?? [];
+      if (!list.some((t) => t.id === params.id))
+        return error(404, "NOT_FOUND", "Transaction not found");
+      state.portfolios![user.id] = list.filter((t) => t.id !== params.id);
+      save(state);
+      return sendTransactions(state.portfolios![user.id]!);
+    })(),
+  ),
 
   http.get(
     `${BASE}/chats`,

@@ -13,6 +13,7 @@ const pages = [
   "/derivatives",
   "/compare",
   "/exchanges",
+  "/portfolio",
   "/converter",
   "/watchlist",
   "/ask",

@@ -16,6 +16,7 @@ import type {
   ChatConversation,
   ChatThread,
 } from "@triyuai/shared";
+import type { Transaction, TransactionInput } from "@triyuai/shared/portfolio";
 
 import { ensureMocks } from "./mocking";
 
@@ -128,6 +129,16 @@ export const api = {
     remove: (coinId: string) =>
       request<string[]>(`/watchlist/${encodeURIComponent(coinId)}`, { method: "DELETE" }),
     merge: (coinIds: string[]) => post<string[]>("/watchlist/merge", { coinIds }),
+  },
+
+  /** Portfolio tracker (P2): the signed-in user's transactions. */
+  portfolio: {
+    list: () => request<Transaction[]>("/portfolio/transactions"),
+    add: (input: TransactionInput) => post<Transaction[]>("/portfolio/transactions", input),
+    remove: (id: string) =>
+      request<Transaction[]>(`/portfolio/transactions/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      }),
   },
 
   /** Saved Ask TRIYU conversations of the signed-in user (FR-24). */

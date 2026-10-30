@@ -10,6 +10,7 @@ import { createAuthService } from "./services/auth";
 import { createChatHistoryService } from "./services/chats";
 import { createCoinGecko } from "./services/coingecko";
 import { createMarketService, prismaSnapshots } from "./services/market";
+import { createPortfolioService } from "./services/portfolio";
 import { createWatchlistService } from "./services/watchlist";
 
 /** Wires real services from the environment. Tests build their own Deps. */
@@ -63,5 +64,6 @@ export async function buildDeps(env: Env): Promise<Deps> {
     watchlist: createWatchlistService(db),
     chat: createChatService({ market, models, logger }),
     history: createChatHistoryService(db),
+    portfolio: createPortfolioService(db),
   };
 }

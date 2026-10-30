@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useTheme } from "next-themes";
-import { LogOut, Menu, Monitor, Moon, Search, Star, Sun, UserRound } from "lucide-react";
+import { LogOut, Menu, Monitor, Moon, Search, Star, Sun, UserRound, Wallet } from "lucide-react";
 import type { Currency } from "@triyuai/shared";
 import { currencies } from "@triyuai/shared/constants";
 import { preloadChatView } from "@/components/chat/chat-panel";
@@ -145,6 +145,11 @@ function AccountMenu() {
             <Star className="size-4" /> Watchlist
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/portfolio">
+            <Wallet className="size-4" /> Portfolio
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={() => void logout()}>
           <LogOut className="size-4" /> Sign out
         </DropdownMenuItem>
@@ -229,6 +234,7 @@ function MobileMenu({ isActive }: { isActive: (href: string) => boolean }) {
           {[
             ...links,
             { href: "/highlights", label: "Highlights" },
+            { href: "/portfolio", label: "Portfolio" },
             { href: "/compare", label: "Compare" },
             { href: "/exchanges", label: "Exchanges" },
             { href: "/converter", label: "Converter" },
