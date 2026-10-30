@@ -8,7 +8,9 @@
     "./constants": "./src/constants.ts",
     "./chart": "./src/chart.ts",
     "./coingecko": "./src/coingecko.ts",
-    "./sectors": "./src/sectors.ts"
+    "./sectors": "./src/sectors.ts",
+    "./sector-stats": "./src/sector-stats.ts",
+    "./fear-greed": "./src/fear-greed.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

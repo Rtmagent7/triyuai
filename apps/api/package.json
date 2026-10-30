@@ -12,7 +12,8 @@
     "test:coverage": "vitest run --coverage",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "build": "prisma generate && esbuild src/vercel.ts --bundle --platform=node --target=node22 --format=esm --outfile=api/index.mjs --external:@node-rs/argon2 --external:@electric-sql/pglite --external:pglite-prisma-adapter --external:pg-native --external:pino --external:pino-http --external:pino-pretty --banner:js=\"import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\""
   },
   "dependencies": {
     "@ai-sdk/google": "4.0.97",
@@ -42,6 +43,7 @@
     "@types/pg": "^8.23.1",
     "@types/supertest": "^7.2.1",
     "@vitest/coverage-v8": "3.2.7",
+    "esbuild": "0.28.2",
     "eslint": "^9.39.5",
     "pglite-prisma-adapter": "0.7.2",
     "pino-pretty": "^13.2.0",

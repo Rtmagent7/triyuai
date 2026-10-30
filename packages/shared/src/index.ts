@@ -3,3 +3,5 @@ export * from "./schemas";
 export * from "./chart";
 export * from "./coingecko";
 export * from "./sectors";
+export * from "./sector-stats";
+export * from "./fear-greed";
