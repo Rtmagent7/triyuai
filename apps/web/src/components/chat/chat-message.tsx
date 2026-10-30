@@ -24,7 +24,7 @@ export function ChatMessage({ message, isLast, onRegenerate }: Props) {
   const streaming = message.status === "streaming";
   return (
     <div className="animate-fade-up flex gap-2.5">
-      <span className="ai-gradient mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full text-white">
+      <span className="bg-surface-2 text-brand mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full">
         <Sparkle className="size-3.5" />
       </span>
       <div className="min-w-0 flex-1 space-y-2">

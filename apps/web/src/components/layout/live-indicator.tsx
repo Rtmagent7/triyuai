@@ -23,12 +23,8 @@ export function LiveIndicator({ className }: { className?: string }) {
       title={l.title}
       aria-live="polite"
     >
-      <span className="relative flex size-2">
-        {status === "live" && (
-          <span className="bg-up absolute inline-flex size-full animate-ping rounded-full opacity-60" />
-        )}
-        <span className={cn("relative inline-flex size-2 rounded-full", l.dot)} />
-      </span>
+      {/* A steady dot: the flashing prices already show that data is moving. */}
+      <span className={cn("inline-flex size-1.5 rounded-full", l.dot)} />
       {l.text}
     </span>
   );

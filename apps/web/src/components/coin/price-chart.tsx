@@ -243,7 +243,7 @@ function Segmented({
   onChange: (v: string) => void;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="bg-surface-2 inline-flex rounded-lg p-0.5">
+    <div role="radiogroup" aria-label={label} className="border-border inline-flex border-b">
       {options.map((o) => (
         <button
           key={o.value}
@@ -252,8 +252,10 @@ function Segmented({
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            "text-muted hover:text-text rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
-            value === o.value && "bg-bg text-text shadow-sm",
+            "text-muted hover:text-text relative px-2 py-1 text-[13px] font-medium transition-colors",
+            // Selection is a 1px brand line under the label, the same mark used across the app.
+            value === o.value &&
+              "text-text after:bg-brand after:absolute after:inset-x-2 after:-bottom-px after:h-px",
           )}
         >
           {o.label}

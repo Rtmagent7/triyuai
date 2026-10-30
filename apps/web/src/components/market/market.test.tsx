@@ -65,7 +65,7 @@ describe("MarketTable", () => {
   it("shows skeleton rows while loading", () => {
     const { container } = renderWithClient(<MarketTable coins={[]} isLoading />);
     expect(container.querySelectorAll("tbody tr")).toHaveLength(10);
-    expect(container.querySelectorAll("[aria-hidden].animate-shimmer").length).toBeGreaterThan(0);
+    expect(container.querySelectorAll("[aria-hidden].animate-pulse").length).toBeGreaterThan(0);
   });
 
   it("links each coin to its page", () => {
@@ -108,11 +108,11 @@ describe("HighlightCards", () => {
     const send = vi.fn().mockResolvedValue(undefined);
     useChat.setState({ send });
     renderWithClient(<HighlightCards highlights={h} />);
-    for (const t of ["Trending", "Top Gainers", "Top Losers"]) {
+    for (const t of ["Trending", "Top gainers · 24h", "Top losers · 24h", "Ask TRIYU"]) {
       expect(screen.getByRole("heading", { name: t })).toBeInTheDocument();
     }
     expect(screen.getByRole("link", { name: new RegExp(h.gainers[0]!.name) })).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: /Ask now/ }));
+    await userEvent.click(screen.getByRole("button", { name: /moving the market today/ }));
     expect(useChat.getState().open).toBe(true);
     expect(send).toHaveBeenCalledWith("What's moving the market today?");
   });
@@ -124,10 +124,11 @@ describe("WatchlistView", () => {
     void useWatchlist.persist.rehydrate();
   });
 
-  it("shows an empty state with a link back to the market", async () => {
+  it("when empty, offers the five largest coins to star", async () => {
     renderWithClient(<WatchlistView />);
-    expect(await screen.findByText("Your watchlist is empty")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Browse the market" })).toHaveAttribute("href", "/");
+    expect(await screen.findByText(/Nothing starred yet/)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(6));
+    expect(screen.getByRole("button", { name: "Add Bitcoin to watchlist" })).toBeInTheDocument();
   });
 
   it("lists starred coins by rank", async () => {

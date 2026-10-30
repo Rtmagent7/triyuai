@@ -120,7 +120,8 @@ export default async function CoinPage({ params }: Props) {
             )}
           </section>
         </div>
-        <aside className="stagger space-y-6">
+        {/* Sticky so the stats stay beside the long description instead of ending in a blank column. */}
+        <aside className="space-y-6 self-start lg:sticky lg:top-20">
           <StatsGrid coin={coin} />
           <MiniConverter coin={toSummary(coin)} />
         </aside>

@@ -35,7 +35,7 @@ export default function AboutPage() {
     <article className="mx-auto max-w-3xl space-y-10">
       <header className="space-y-3">
         <p className="text-brand text-sm font-medium">Case study</p>
-        <h1 className="text-3xl font-semibold tracking-tight">How I built TRIYUAI</h1>
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">How I built TRIYUAI</h1>
         <p className="text-muted">
           A real-time crypto market dashboard with an AI market assistant, built to demonstrate
           production-grade frontend and full-stack skills: a fast data-heavy UI, live updates, AI

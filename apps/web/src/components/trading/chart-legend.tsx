@@ -34,7 +34,7 @@ export function ChartLegend({ title, bars, index, computed, formatPrice, editabl
   const tone = bar.close >= bar.open ? "text-up" : "text-down";
 
   return (
-    <div className="pointer-events-none absolute left-2 top-2 z-10 max-w-[calc(100%-5rem)] space-y-0.5 text-xs">
+    <div className="pointer-events-none absolute left-2 top-2 z-10 max-w-[calc(100%-5rem)] space-y-0.5 text-[13px]">
       <p className="tabular flex flex-wrap items-baseline gap-x-2" data-testid="ohlc-legend">
         <span className="text-text font-semibold">{title}</span>
         <span className="text-muted">

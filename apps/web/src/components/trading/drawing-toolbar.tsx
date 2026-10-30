@@ -27,7 +27,8 @@ import { LineStylePicker } from "./line-style-picker";
 
 const btn =
   "text-muted hover:bg-surface-2 hover:text-text relative flex size-9 shrink-0 items-center justify-center rounded-lg transition-[color,background-color,transform] duration-150 active:scale-90";
-const on = "bg-brand/15 text-brand hover:bg-brand/20 hover:text-brand";
+// Active tool: a neutral fill with the icon in the brand blue (colour on the mark, not the chrome).
+const on = "bg-surface-2 text-brand hover:bg-surface-2 hover:text-brand";
 
 type Props = {
   tool: DrawingTool;
@@ -189,11 +190,9 @@ function GroupButton({
           sideOffset={8}
           collisionPadding={8}
           aria-label={`${label} tools`}
-          className="border-border bg-bg/95 animate-pop-in z-50 w-[22rem] max-w-[calc(100vw-1rem)] rounded-2xl border p-2 shadow-2xl backdrop-blur"
+          className="border-border bg-bg animate-pop-in z-50 w-[22rem] max-w-[calc(100vw-1rem)] rounded-xl border p-2 shadow-xl"
         >
-          <p className="text-muted px-2 pb-2 pt-1 text-xs font-medium uppercase tracking-wide">
-            {label}
-          </p>
+          <p className="text-muted px-2 pb-1.5 pt-1 text-xs font-medium">{label}</p>
           <div role="menu" aria-label={`${label} tools`} className="grid grid-cols-2 gap-1">
             {toolsIn(group).map((t) => (
               <button
@@ -207,13 +206,13 @@ function GroupButton({
                 }}
                 className={cn(
                   "hover:bg-surface-2 group flex min-h-14 items-start gap-2.5 rounded-xl p-2 text-left transition-colors",
-                  tool === t && "bg-brand/10",
+                  tool === t && "bg-surface",
                 )}
               >
                 <span
                   className={cn(
                     "bg-surface-2 text-text group-hover:bg-bg flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors",
-                    tool === t && "bg-brand/15 text-brand",
+                    tool === t && "bg-surface-2 text-brand",
                   )}
                 >
                   <ToolIcon tool={t} />

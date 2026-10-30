@@ -133,7 +133,7 @@ describe("ChartLegend", () => {
             key: "rsi",
             label: "RSI",
             kind: "line" as const,
-            color: "#a855f7",
+            color: "#1a9bff",
             values: [null, 61.234],
           },
         ],

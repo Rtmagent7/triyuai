@@ -70,12 +70,15 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
           />
         </div>
         <div>
-          <div
-            className="from-down to-up relative h-1.5 rounded-full bg-gradient-to-r via-amber-400"
-            aria-hidden
-          >
+          {/* Where today's price sits between the 24h low and high: a quiet track, the
+              covered part in grey, the price as an ink tick. */}
+          <div className="bg-surface-2 relative h-1 rounded-full" aria-hidden>
             <span
-              className="border-bg bg-text absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
+              className="bg-muted/45 absolute inset-y-0 left-0 rounded-full"
+              style={{ width: `${pos}%` }}
+            />
+            <span
+              className="bg-text absolute top-1/2 h-3 w-0.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{ left: `${pos}%` }}
             />
           </div>
@@ -103,7 +106,7 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
             })
           }
         >
-          <Sparkle className="text-white" /> Ask TRIYU about {coin.name}
+          <Sparkle /> Ask TRIYU about {coin.name}
         </Button>
       </div>
     </div>

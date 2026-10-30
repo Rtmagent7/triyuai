@@ -24,7 +24,7 @@ export function SelectionToolbar({ drawing: d, onChange, onSettings, onClone, on
     <div
       role="toolbar"
       aria-label={`${toolLabel(d.type)} options`}
-      className="border-border bg-bg/95 absolute left-1/2 top-10 z-20 flex -translate-x-1/2 items-center gap-1 rounded-lg border p-1 shadow-lg backdrop-blur"
+      className="border-border bg-bg absolute left-1/2 top-10 z-20 flex -translate-x-1/2 items-center gap-1 rounded-lg border p-1 shadow-lg"
       // Keep chart pointer handlers from treating toolbar clicks as chart clicks.
       onPointerDown={(e) => e.stopPropagation()}
     >

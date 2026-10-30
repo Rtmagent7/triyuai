@@ -18,8 +18,8 @@ export function PercentBadge({ value, variant = "text", digits = 2, className }:
       className={cn(
         "tabular inline-flex items-center gap-0.5 whitespace-nowrap font-medium",
         up ? "text-up" : "text-down",
-        variant === "pill" &&
-          (up ? "bg-up-soft rounded-md px-1.5 py-0.5" : "bg-down-soft rounded-md px-1.5 py-0.5"),
+        // "pill" is the headline size of the same mark: colour on the figure only, no tinted box.
+        variant === "pill" && "text-[1.05em] font-semibold",
         className,
       )}
     >

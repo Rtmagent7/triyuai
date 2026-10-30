@@ -63,7 +63,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   const title = mode === "register" ? "Create your account" : "Welcome back";
   return (
-    <Card className="animate-fade-up mx-auto w-full max-w-md p-6 sm:p-8">
+    <Card className="mx-auto w-full max-w-md p-6 sm:p-8">
       <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
       <p className="text-muted mt-1 text-sm">
         {mode === "register"
@@ -73,7 +73,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
       <Button
         type="button"
-        variant="ai"
+        variant="outline"
         size="lg"
         className="mt-6 w-full"
         disabled={demoPending || isSubmitting}

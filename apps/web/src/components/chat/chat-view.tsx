@@ -8,7 +8,6 @@ import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 import { useChat } from "@/stores/chat";
 import { ChatMessage } from "./chat-message";
-import { Sparkle } from "./sparkle";
 
 const GENERAL_PROMPTS = [
   "What's moving the market today?",
@@ -63,29 +62,33 @@ export function ChatView({ className, autoFocus }: { className?: string; autoFoc
     <div className={cn("flex min-h-0 flex-1 flex-col", className)}>
       <div ref={scroller} className="min-h-0 flex-1 space-y-5 overflow-y-auto px-4 py-5">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center px-2 pt-6 text-center">
-            <span className="ai-gradient shadow-ai-from/30 flex size-12 items-center justify-center rounded-2xl text-white shadow-lg">
-              <Sparkle className="size-6" />
-            </span>
-            <h3 className="mt-4 text-lg font-semibold">
-              Ask <span className="ai-text">TRIYU</span>
-            </h3>
-            <p className="text-muted mt-1 max-w-xs text-sm">
-              Your AI market assistant. Answers are grounded in the latest market data
-              {coinName ? `, with ${coinName} as context` : ""}.
+          <div className="px-1 pt-2">
+            {/* The panel or page header already names Ask TRIYU; the empty state says what it does. */}
+            <p className="text-muted text-sm">
+              Answers come from live prices and market data
+              {coinName ? `, with ${coinName} as context` : ""}, and each one shows the data it
+              used. It won&apos;t tell you what to buy.
             </p>
-            <div className="mt-6 flex w-full flex-col gap-2">
+            <p className="text-muted mb-1 mt-6 text-xs">Try one of these</p>
+            <ul className="border-border divide-border divide-y rounded-lg border">
               {prompts.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => submit(p)}
-                  className="border-border bg-surface hover:border-ai-from/50 hover:bg-surface-2 rounded-xl border px-3.5 py-2.5 text-left text-sm transition-colors"
-                >
-                  {p}
-                </button>
+                <li key={p}>
+                  <button
+                    type="button"
+                    onClick={() => submit(p)}
+                    className="hover:bg-surface group flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-sm transition-colors"
+                  >
+                    {p}
+                    <span
+                      aria-hidden
+                      className="text-muted group-hover:text-text transition-transform group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
+                  </button>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ) : (
           messages.map((m, i) => (
@@ -105,7 +108,7 @@ export function ChatView({ className, autoFocus }: { className?: string; autoFoc
             e.preventDefault();
             submit();
           }}
-          className="border-border bg-surface focus-within:border-ai-from/60 flex items-end gap-2 rounded-2xl border p-1.5"
+          className="border-border bg-surface focus-within:border-brand flex items-end gap-2 rounded-2xl border p-1.5"
         >
           <label htmlFor="chat-input" className="sr-only">
             Message Ask TRIYU

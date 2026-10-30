@@ -25,7 +25,7 @@ export function SheetContent({
 }: SheetContentProps) {
   return (
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] data-[state=open]:animate-[fade-in_150ms_ease-out]" />
+      <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 data-[state=open]:animate-[fade-in_150ms_ease-out]" />
       <Dialog.Content
         className={cn(
           "bg-bg sm:border-border fixed inset-y-0 z-50 flex w-full flex-col shadow-2xl outline-none sm:max-w-md",
