@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Check, Link2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CoinDetail } from "@triyuai/shared";
@@ -58,7 +59,15 @@ export function CoinHeader({ coin }: { coin: CoinDetail }) {
               </span>
               {tick && <LiveIndicator />}
             </div>
-            <SectorTags coinId={coin.id} className="mt-2" />
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <SectorTags coinId={coin.id} />
+              <Link
+                href={`/compare?coins=${coin.id},${coin.id === "bitcoin" ? "ethereum" : "bitcoin"}`}
+                className="text-muted hover:text-text text-xs underline-offset-2 hover:underline"
+              >
+                Compare with {coin.id === "bitcoin" ? "Ethereum" : "Bitcoin"}
+              </Link>
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap items-baseline gap-3">
