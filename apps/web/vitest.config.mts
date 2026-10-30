@@ -41,6 +41,7 @@ export default defineConfig({
         "src/components/trading/drawings-primitive.ts",
         "src/components/trading/trading-chart.tsx",
         "src/components/trading/trading-chart-lazy.tsx",
+        "src/components/compare/performance-chart.tsx",
       ],
     },
   },
