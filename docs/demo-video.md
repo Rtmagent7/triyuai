@@ -32,4 +32,4 @@ the TA chart, compare and saved chats. Record it on the live site, not localhost
 - Trim dead time (waiting for answers) with a cut, not a speed-up.
 - Export 1080p MP4 (H.264), under 50 MB so GitHub can host it.
 - Upload it to the repo's README (drag into the GitHub editor) or YouTube (unlisted), and
-  replace the "Demo video" link in the README.
+  add a "Demo video" link next to "Live demo" at the top of the README.
