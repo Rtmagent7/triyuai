@@ -1,6 +1,6 @@
 # Demo video (75–90 s)
 
-Recorded: [`triyu-demo.mp4`](https://github.com/Rtmagent7/triyuai/releases/download/v1.0.0/triyu-demo.mp4) on the v1.0.0 release (88 s, 1920×1080, the live site driven by a script with idle waits cut).
+Recorded: [`triyu-demo.mp4`](https://github.com/Rtmagent7/triyuai/releases/download/v1.0.0/triyu-demo.mp4) on the v1.0.0 release (93 s, 1920×1080, the live site driven by a script with idle waits cut).
 
 The PRD's 60-second demo script, extended with what was built since: sectors, insights,
 the TA chart, compare and saved chats. Record it on the live site, not localhost.
