@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { transactionInputSchema, transactionSchema } from "@triyuai/shared/portfolio";
 import {
   apiErrorSchema,
   apiResponse,
@@ -309,6 +310,38 @@ export function buildOpenApi(version: string) {
           tags: ["Market"],
           summary: "Top 100 exchanges by CoinGecko Trust Score, with 24h volume in BTC and USD",
           responses: { 200: ok(z.array(exchangeSchema)) },
+        },
+      },
+      "/api/v1/portfolio/transactions": {
+        get: {
+          tags: ["Portfolio"],
+          summary: "The signed-in user's buys and sells, newest first",
+          security: auth,
+          responses: { 200: ok(z.array(transactionSchema)), 401: err("Not signed in") },
+        },
+        post: {
+          tags: ["Portfolio"],
+          summary: "Record a buy or sell (prices in USD); returns the updated list",
+          security: auth,
+          requestBody: body(transactionInputSchema),
+          responses: {
+            201: ok(z.array(transactionSchema), "Recorded"),
+            401: err("Not signed in"),
+            422: err("Sell larger than the holding on that date, or portfolio full"),
+          },
+        },
+      },
+      "/api/v1/portfolio/transactions/{id}": {
+        delete: {
+          tags: ["Portfolio"],
+          summary: "Delete a transaction",
+          security: auth,
+          parameters: [{ ...coinId, name: "id", description: "Transaction id" }],
+          responses: {
+            200: ok(z.array(transactionSchema)),
+            401: err("Not signed in"),
+            404: err("Not found (or not yours)"),
+          },
         },
       },
       "/api/v1/health": {

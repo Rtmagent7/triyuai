@@ -13,10 +13,12 @@ import { aiRoutes } from "./routes/ai";
 import { authRoutes } from "./routes/auth";
 import { chatRoutes } from "./routes/chats";
 import { marketRoutes } from "./routes/market";
+import { portfolioRoutes } from "./routes/portfolio";
 import { watchlistRoutes } from "./routes/watchlist";
 import type { AuthService } from "./services/auth";
 import type { ChatHistoryService } from "./services/chats";
 import type { MarketService } from "./services/market";
+import type { PortfolioService } from "./services/portfolio";
 import type { WatchlistService } from "./services/watchlist";
 
 export const VERSION = "0.3.0";
@@ -30,6 +32,7 @@ export type Deps = {
   watchlist: WatchlistService;
   chat: ChatService;
   history: ChatHistoryService;
+  portfolio: PortfolioService;
 };
 
 export function createApp(deps: Deps) {
@@ -81,6 +84,7 @@ export function createApp(deps: Deps) {
   v1.use("/auth", authRoutes(deps.auth, deps.watchlist, env.NODE_ENV === "production"));
   v1.use("/watchlist", watchlistRoutes(deps.watchlist));
   v1.use("/chats", chatRoutes(deps.history));
+  v1.use("/portfolio", portfolioRoutes(deps.portfolio));
   v1.use(
     "/ai",
     aiRoutes({ chat: deps.chat, history: deps.history, cache: deps.cache, salt: env.IP_HASH_SALT }),

@@ -36,6 +36,7 @@ export function Footer() {
           <FooterLink href="/derivatives">Derivatives</FooterLink>
           <FooterLink href="/compare">Compare</FooterLink>
           <FooterLink href="/exchanges">Exchanges</FooterLink>
+          <FooterLink href="/portfolio">Portfolio</FooterLink>
           <FooterLink href="/highlights">Highlights</FooterLink>
           <FooterLink href="/converter">Converter</FooterLink>
           <FooterLink href="/watchlist">Watchlist</FooterLink>

@@ -10,7 +10,8 @@
     "./coingecko": "./src/coingecko.ts",
     "./sectors": "./src/sectors.ts",
     "./sector-stats": "./src/sector-stats.ts",
-    "./fear-greed": "./src/fear-greed.ts"
+    "./fear-greed": "./src/fear-greed.ts",
+    "./portfolio": "./src/portfolio.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

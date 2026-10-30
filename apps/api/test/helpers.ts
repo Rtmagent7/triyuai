@@ -13,6 +13,7 @@ import type { CoinGeckoClient } from "../src/services/coingecko";
 import { createMarketService, prismaSnapshots } from "../src/services/market";
 import { createWatchlistService } from "../src/services/watchlist";
 import { createChatHistoryService } from "../src/services/chats";
+import { createPortfolioService } from "../src/services/portfolio";
 
 export const silentLogger = pino({ level: "silent" });
 
@@ -292,6 +293,7 @@ export async function createTestContext(
     auth: createAuthService({ db, cache, jwtSecret: env.JWT_SECRET }),
     watchlist: createWatchlistService(db),
     history: createChatHistoryService(db),
+    portfolio: createPortfolioService(db),
     chat: createChatService({ market, models: opts.models ?? [], logger: silentLogger }),
   };
   return { app: createApp(deps), deps, db, cache, cg };
