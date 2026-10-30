@@ -1,8 +1,8 @@
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
-const compat = new FlatCompat({ baseDirectory: dirname(fileURLToPath(import.meta.url)) });
+// eslint-config-next 16 ships flat configs, so no FlatCompat layer is needed.
+const reactHooks = nextVitals.find((c) => c.plugins?.["react-hooks"])?.plugins["react-hooks"];
 
 const eslintConfig = [
   {
@@ -16,7 +16,22 @@ const eslintConfig = [
       "test-results/**",
     ],
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextVitals,
+  ...nextTs,
+  {
+    // New in eslint-config-next 16 (react-hooks v7, React Compiler checks). They flag existing,
+    // working code (mostly the imperative chart engine reading refs), so they warn until that
+    // code is reworked for the compiler instead of failing the build.
+    plugins: { "react-hooks": reactHooks },
+    rules: {
+      "react-hooks/refs": "warn",
+      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/immutability": "warn",
+      "react-hooks/purity": "warn",
+      "react-hooks/preserve-manual-memoization": "warn",
+      "react-hooks/incompatible-library": "warn",
+    },
+  },
   {
     // Playwright fixtures call `use()`, which is not React's hook.
     files: ["e2e/**"],

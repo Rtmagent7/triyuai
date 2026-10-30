@@ -32,7 +32,8 @@ test("compare: a coin page links to it", async ({ page }) => {
 test("compare: three coins fit a phone screen", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/compare?coins=bitcoin,ethereum,solana");
-  await expect(page.getByRole("table")).toBeVisible();
+  // The table renders once all three coins have loaded.
+  await expect(page.getByRole("columnheader", { name: /Solana/ })).toBeVisible({ timeout: 20_000 });
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - 390);
   expect(overflow).toBeLessThanOrEqual(0);
 });
