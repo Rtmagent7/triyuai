@@ -11,6 +11,7 @@ const pages = [
   "/categories",
   "/categories/meme",
   "/derivatives",
+  "/compare",
   "/converter",
   "/watchlist",
   "/ask",
