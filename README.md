@@ -1,5 +1,7 @@
 # TRIYUAI
 
+[![CI](https://github.com/Rtmagent7/triyuai/actions/workflows/ci.yml/badge.svg)](https://github.com/Rtmagent7/triyuai/actions/workflows/ci.yml) [![Uptime](https://github.com/Rtmagent7/triyuai/actions/workflows/uptime.yml/badge.svg)](https://github.com/Rtmagent7/triyuai/actions/workflows/uptime.yml)
+
 **Real-time crypto dashboard with an AI market assistant.** Portfolio project. The full spec is in [`PRDProject1.md`](./PRDProject1.md).
 
 **[Live demo](https://triyuai.vercel.app)** · **[API docs (Swagger)](https://triyuai-api.vercel.app/docs)** · one-click demo account on [/login](https://triyuai.vercel.app/login), no sign-up needed
@@ -132,6 +134,8 @@ pnpm build && pnpm test:e2e       # E2E against the production build
 # locally, reuse installed Chrome instead of downloading Chromium:
 E2E_CHANNEL=chrome pnpm test:e2e
 ```
+
+An uptime workflow (`.github/workflows/uptime.yml`) checks the site, the API and the proxied market data every 15 minutes, opens an `uptime` issue when a check still fails on a retry 20 s later, and closes it on recovery.
 
 CI (`.github/workflows/ci.yml`) runs four parallel jobs on every PR and on every push to `main`: quality, API tests against a Postgres service, E2E + accessibility, and Lighthouse. Dependabot opens weekly update PRs.
 
