@@ -1,6 +1,10 @@
 "use client";
 
-export default function GlobalError({ reset }: { error: Error; reset: () => void }) {
+import { useEffect } from "react";
+import { captureError } from "@/lib/monitoring";
+
+export default function GlobalError({ error, reset }: { error: Error; reset: () => void }) {
+  useEffect(() => captureError(error), [error]);
   return (
     <html lang="en">
       <body

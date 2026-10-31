@@ -7,6 +7,7 @@ import type { ChatService } from "./ai/chat";
 import type { Cache } from "./cache";
 import type { Env } from "./env";
 import type { Logger } from "./lib/logger";
+import type { ErrorReporter } from "./lib/reporter";
 import { errorHandler, notFound, optionalUser, rateLimit } from "./middleware";
 import { buildOpenApi, swaggerHtml, swaggerInit } from "./openapi";
 import { aiRoutes } from "./routes/ai";
@@ -16,6 +17,7 @@ import { marketRoutes } from "./routes/market";
 import { portfolioRoutes } from "./routes/portfolio";
 import { watchlistRoutes } from "./routes/watchlist";
 import type { AuthService } from "./services/auth";
+import type { GoogleClient } from "./services/google";
 import type { ChatHistoryService } from "./services/chats";
 import type { MarketService } from "./services/market";
 import type { NewsService } from "./services/news";
@@ -35,6 +37,10 @@ export type Deps = {
   history: ChatHistoryService;
   portfolio: PortfolioService;
   news: NewsService;
+  /** Null until GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET are set. */
+  google?: GoogleClient | null;
+  /** Sentry when SENTRY_DSN is set. */
+  reporter?: ErrorReporter;
 };
 
 export function createApp(deps: Deps) {
@@ -83,7 +89,13 @@ export function createApp(deps: Deps) {
   );
   v1.use(optionalUser(deps.auth));
   v1.use(marketRoutes(deps.market, deps.news));
-  v1.use("/auth", authRoutes(deps.auth, deps.watchlist, env.NODE_ENV === "production"));
+  v1.use(
+    "/auth",
+    authRoutes(deps.auth, deps.watchlist, env.NODE_ENV === "production", {
+      client: deps.google ?? null,
+      webOrigin: env.WEB_ORIGIN.split(",")[0]!.replace(/\/$/, ""),
+    }),
+  );
   v1.use("/watchlist", watchlistRoutes(deps.watchlist));
   v1.use("/chats", chatRoutes(deps.history));
   v1.use("/portfolio", portfolioRoutes(deps.portfolio));
@@ -94,6 +106,6 @@ export function createApp(deps: Deps) {
   app.use("/api/v1", v1);
 
   app.use(notFound);
-  app.use(errorHandler(logger));
+  app.use(errorHandler(logger, deps.reporter));
   return app;
 }

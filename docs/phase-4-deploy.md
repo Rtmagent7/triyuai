@@ -10,13 +10,15 @@ serves it as one Vercel Function.
 
 ## 1. Accounts (free tiers)
 
-| Service                                                  | What it is for                                                            | Env var(s) on the API                                |
-| -------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------- |
-| [Neon](https://neon.tech)                                | Postgres: users, watchlists, saved snapshots                              | `DATABASE_URL`                                       |
-| [Upstash](https://upstash.com) Redis                     | Shared cache and rate limits across function instances                    | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` |
-| [CoinGecko](https://www.coingecko.com/en/api) Demo key   | Higher, dedicated rate limit (keyless works, but is shared and throttled) | `COINGECKO_API_KEY`                                  |
-| [Groq](https://console.groq.com)                         | Ask TRIYU's main model                                                    | `GROQ_API_KEY`                                       |
-| [Google AI Studio](https://aistudio.google.com) (Gemini) | Fallback model when Groq fails                                            | `GOOGLE_GENERATIVE_AI_API_KEY`                       |
+| Service                                                       | What it is for                                                                                                                   | Env var(s) on the API                                |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [Neon](https://neon.tech)                                     | Postgres: users, watchlists, saved snapshots                                                                                     | `DATABASE_URL`                                       |
+| [Upstash](https://upstash.com) Redis                          | Shared cache and rate limits across function instances                                                                           | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` |
+| [CoinGecko](https://www.coingecko.com/en/api) Demo key        | Higher, dedicated rate limit (keyless works, but is shared and throttled)                                                        | `COINGECKO_API_KEY`                                  |
+| [Groq](https://console.groq.com)                              | Ask TRIYU's main model                                                                                                           | `GROQ_API_KEY`                                       |
+| [Google AI Studio](https://aistudio.google.com) (Gemini)      | Fallback model when Groq fails                                                                                                   | `GOOGLE_GENERATIVE_AI_API_KEY`                       |
+| [Google Cloud](https://console.cloud.google.com) OAuth client | Sign in with Google (redirect URI `<WEB_ORIGIN>/api/v1/auth/google/callback`); web also needs `NEXT_PUBLIC_GOOGLE_LOGIN=enabled` | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`           |
+| [Sentry](https://sentry.io)                                   | Error monitoring; the web project takes the same DSN as `NEXT_PUBLIC_SENTRY_DSN`                                                 | `SENTRY_DSN`                                         |
 
 Neon and Upstash can also be added from the Vercel Marketplace, which fills in their
 env vars on the API project automatically.

@@ -24,6 +24,12 @@ const envSchema = z.object({
   /** Salt for hashing guest IPs before they are used as quota keys. */
   IP_HASH_SALT: z.string().default("dev-salt"),
 
+  /** "Sign in with Google" OAuth client; the button stays hidden without it. */
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  /** Error monitoring; off when unset. */
+  SENTRY_DSN: z.string().url().optional(),
+
   GROQ_API_KEY: z.string().optional(),
   GROQ_MODEL: z.string().default("openai/gpt-oss-120b"),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(),
