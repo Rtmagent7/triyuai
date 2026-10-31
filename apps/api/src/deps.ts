@@ -12,6 +12,7 @@ import { createCoinGecko } from "./services/coingecko";
 import { createMarketService, prismaSnapshots } from "./services/market";
 import { createPortfolioService } from "./services/portfolio";
 import { createNewsService } from "./services/news";
+import { createGoogleClient } from "./services/google";
 import { createWatchlistService } from "./services/watchlist";
 
 /** Wires real services from the environment. Tests build their own Deps. */
@@ -52,11 +53,22 @@ export async function buildDeps(env: Env): Promise<Deps> {
       db: env.DATABASE_URL.startsWith("pglite:") ? "pglite" : "postgres",
       coingecko: env.COINGECKO_API_KEY ? "demo-key" : "keyless",
       ai: models.map((m) => m.name),
+      google: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
     },
     "services configured",
   );
 
   const news = createNewsService({ cache, market, logger });
+  const webOrigin = env.WEB_ORIGIN.split(",")[0]!.replace(/\/$/, "");
+  const google =
+    env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      ? createGoogleClient({
+          clientId: env.GOOGLE_CLIENT_ID,
+          clientSecret: env.GOOGLE_CLIENT_SECRET,
+          // Through the web app's /api/v1 proxy, so the session cookies are first-party.
+          redirectUri: `${webOrigin}/api/v1/auth/google/callback`,
+        })
+      : null;
 
   return {
     env,
@@ -69,5 +81,6 @@ export async function buildDeps(env: Env): Promise<Deps> {
     history: createChatHistoryService(db),
     portfolio: createPortfolioService(db),
     news,
+    google,
   };
 }

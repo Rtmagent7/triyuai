@@ -5,6 +5,7 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import type { ApiResponse, GlobalStats, Rates } from "@triyuai/shared";
+import { GoogleReturn } from "@/components/auth/google";
 import { queryKeys } from "@/lib/api/keys";
 import { useChat } from "@/stores/chat";
 import { usePreferences } from "@/stores/preferences";
@@ -49,6 +50,7 @@ export function Providers({ children, initial }: Props) {
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
         {children}
         <ThemedToaster />
+        <GoogleReturn />
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -17,6 +17,8 @@ model User {
   passwordHash  String
   name          String
   isDemo        Boolean                @default(false)
+  /// "Sign in with Google" subject id, set when the account signs in with Google.
+  googleId      String?                @unique
   createdAt     DateTime               @default(now())
   refreshTokens RefreshToken[]
   watchlist     WatchlistItem[]

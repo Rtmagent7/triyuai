@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import { useAuthActions, useSession } from "@/hooks/use-session";
 import { ApiRequestError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
+import { GOOGLE_ERRORS, GoogleButton, googleLoginEnabled } from "./google";
 
 type Mode = "login" | "register";
 type Values = RegisterInput & LoginInput;
@@ -23,7 +24,9 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const next = params.get("next")?.startsWith("/") ? params.get("next")! : "/watchlist";
   const { data: user } = useSession();
   const actions = useAuthActions();
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(
+    () => GOOGLE_ERRORS[params.get("error") ?? ""] ?? null,
+  );
   const [demoPending, setDemoPending] = useState(false);
 
   const form = useForm<Values>({
@@ -71,11 +74,16 @@ export function AuthForm({ mode }: { mode: Mode }) {
           : "Sign in to sync your watchlist and chat more with Ask TRIYU."}
       </p>
 
+      {googleLoginEnabled && (
+        <div className="mt-6">
+          <GoogleButton next={next} />
+        </div>
+      )}
       <Button
         type="button"
         variant="outline"
         size="lg"
-        className="mt-6 w-full"
+        className={cn("w-full", googleLoginEnabled ? "mt-3" : "mt-6")}
         disabled={demoPending || isSubmitting}
         onClick={async () => {
           setDemoPending(true);
@@ -167,7 +175,7 @@ function Field({ label, hint, error, type = "text", autoComplete, ...input }: Fi
         aria-invalid={!!error}
         aria-describedby={describedBy || undefined}
         className={cn(
-          "border-border bg-bg h-11 w-full rounded-xl border px-3 text-base outline-none transition-colors sm:text-sm",
+          "border-border bg-bg h-11 w-full rounded-xl border px-3 text-base transition-colors outline-none sm:text-sm",
           "focus-visible:border-ring",
           error && "border-down",
         )}
