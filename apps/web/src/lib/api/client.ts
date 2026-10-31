@@ -38,7 +38,7 @@ export type Me = User & { watchlist: string[] };
 
 /** Non-secret cookie set next to the httpOnly session cookies; guests skip /auth/me entirely. */
 export const hasSessionHint = () =>
-  typeof document !== "undefined" && /(?:^|;s*)triyu_session=/.test(document.cookie);
+  typeof document !== "undefined" && /(?:^|;\s*)triyu_session=/.test(document.cookie);
 
 let refreshing: Promise<boolean> | null = null;
 

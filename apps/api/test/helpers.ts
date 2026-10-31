@@ -15,6 +15,7 @@ import { createWatchlistService } from "../src/services/watchlist";
 import { createChatHistoryService } from "../src/services/chats";
 import { createPortfolioService } from "../src/services/portfolio";
 import { createNewsService } from "../src/services/news";
+import type { GoogleClient } from "../src/services/google";
 
 export const silentLogger = pino({ level: "silent" });
 
@@ -273,6 +274,8 @@ export async function createTestContext(
     internalKey?: string;
     /** Answers the news feeds (RSS); real fetch otherwise. */
     fetch?: typeof fetch;
+    /** A stand-in for Google sign-in. */
+    google?: GoogleClient;
   } = {},
 ) {
   const env = loadEnv({
@@ -280,6 +283,7 @@ export async function createTestContext(
     DATABASE_URL: "pglite:memory",
     JWT_SECRET: "test-secret-0123456789abcdef0123456789",
     INTERNAL_API_KEY: opts.internalKey,
+    WEB_ORIGIN: "https://triyu.test",
   });
   const db = opts.db ?? (await createDb("pglite:memory"));
   const cache = new MemoryCache();
@@ -303,6 +307,7 @@ export async function createTestContext(
     history: createChatHistoryService(db),
     portfolio: createPortfolioService(db),
     news,
+    google: opts.google ?? null,
     chat: createChatService({ market, news, models: opts.models ?? [], logger: silentLogger }),
   };
   return { app: createApp(deps), deps, db, cache, cg };

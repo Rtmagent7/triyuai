@@ -47,6 +47,11 @@ export function useAuthActions() {
     login: async (input: LoginInput) => signedIn((await api.auth.login(input)).data),
     register: async (input: RegisterInput) => signedIn((await api.auth.register(input)).data),
     demo: async () => signedIn((await api.auth.demo()).data),
+    /** After the Google redirect the cookies are already set; finish like any other sign-in. */
+    google: async () => {
+      const me = await api.auth.me();
+      return me ? signedIn(me) : null;
+    },
     logout: async () => {
       await api.auth.logout().catch(() => undefined);
       qc.setQueryData(queryKeys.me, null);

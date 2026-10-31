@@ -4,6 +4,7 @@ import { SignJWT, jwtVerify } from "jose";
 import type { User } from "@triyuai/shared";
 import type { Cache } from "../cache";
 import type { Db } from "../db";
+import type { GoogleProfile } from "./google";
 import { AppError, UnauthorizedError } from "../lib/errors";
 
 export const ACCESS_TTL_S = 15 * 60;
@@ -56,6 +57,33 @@ export function createAuthService(deps: { db: Db; cache: Cache; jwtSecret: strin
       const user = await db.user.create({
         data: { name: input.name, email: input.email, passwordHash: await hash(input.password) },
       });
+      return issue(toUser(user));
+    },
+
+    /**
+     * Google sign-in: the account already linked to this Google id, else the account with
+     * the same (Google-verified) email gets linked, else a new account. Never the demo.
+     */
+    async google(p: GoogleProfile) {
+      if (p.email === DEMO_EMAIL)
+        throw new AppError(409, "EMAIL_TAKEN", "This email can't be used with Google sign-in");
+      let user = await db.user.findUnique({ where: { googleId: p.sub } });
+      if (!user) {
+        const byEmail = await db.user.findUnique({ where: { email: p.email } });
+        if (byEmail?.isDemo)
+          throw new AppError(409, "EMAIL_TAKEN", "This email can't be used with Google sign-in");
+        user = byEmail
+          ? await db.user.update({ where: { id: byEmail.id }, data: { googleId: p.sub } })
+          : await db.user.create({
+              data: {
+                name: p.name,
+                email: p.email,
+                googleId: p.sub,
+                // No password: this account signs in with Google (a password can't be guessed).
+                passwordHash: await hash(randomBytes(32).toString("base64url")),
+              },
+            });
+      }
       return issue(toUser(user));
     },
 
