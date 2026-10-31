@@ -1,12 +1,18 @@
 "use client";
 
 import {
+  columnFilteringFeature,
   createColumnHelper,
+  createCoreRowModel,
+  createFilteredRowModel,
+  createSortedRowModel,
+  filterFns,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  useReactTable,
+  globalFilteringFeature,
+  rowSortingFeature,
+  sortFns,
+  tableFeatures,
+  useTable,
   type SortingState,
 } from "@tanstack/react-table";
 import Link from "next/link";
@@ -22,7 +28,19 @@ import { Money } from "@/components/coin/money";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-const col = createColumnHelper<Coin>();
+// TanStack Table v9: a table declares the features (and their row models) it uses.
+const features = tableFeatures({
+  rowSortingFeature,
+  columnFilteringFeature,
+  globalFilteringFeature,
+  coreRowModel: createCoreRowModel(),
+  sortedRowModel: createSortedRowModel(),
+  filteredRowModel: createFilteredRowModel(),
+  sortFns,
+  filterFns,
+});
+
+const col = createColumnHelper<typeof features, Coin>();
 
 function LiveChange({ coin }: { coin: Coin }) {
   return <PercentBadge value={useLiveChange(coin.id, coin.change24h)} />;
@@ -61,71 +79,73 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
   useEffect(() => startTransition(() => setRowLimit(Number.POSITIVE_INFINITY)), []);
 
   const columns = useMemo(
-    () => [
-      col.accessor("rank", {
-        header: "#",
-        sortingFn: "basic",
-        cell: ({ row }) => (
-          <span className="text-muted tabular flex items-center gap-1">
-            <WatchlistButton id={row.original.id} name={row.original.name} />
-            {row.original.rank}
-          </span>
-        ),
-      }),
-      col.accessor("name", {
-        header: "Coin",
-        cell: ({ row }) => {
-          const c = row.original;
-          return (
-            <Link
-              href={`/coins/${c.id}`}
-              // Lists show many coins; prefetching each would render every page (and call the API) up front.
-              prefetch={false}
-              className="hover:text-brand flex min-w-0 items-center gap-2.5 font-medium"
-            >
-              <CoinLogo src={c.image} name={c.name} size={24} />
-              <span className="truncate">{c.name}</span>
-              <span className="text-muted text-xs">{c.symbol}</span>
-            </Link>
-          );
-        },
-      }),
-      col.accessor("price", {
-        header: "Price",
-        cell: ({ row }) => <PriceCell id={row.original.id} price={row.original.price} />,
-      }),
-      col.accessor("change1h", {
-        header: "1h %",
-        sortUndefined: "last",
-        cell: (i) => <PercentBadge value={i.getValue()} />,
-      }),
-      col.accessor("change24h", {
-        header: "24h %",
-        cell: ({ row }) => <LiveChange coin={row.original} />,
-      }),
-      col.accessor("change7d", {
-        header: "7d %",
-        cell: (i) => <PercentBadge value={i.getValue()} />,
-      }),
-      col.accessor("volume24h", {
-        header: "24h Volume",
-        cell: (i) => <Money value={i.getValue()} />,
-      }),
-      col.accessor("marketCap", {
-        header: "Market Cap",
-        cell: (i) => <Money value={i.getValue()} />,
-      }),
-      col.accessor("sparkline7d", {
-        id: "sparkline",
-        header: "Last 7 Days",
-        enableSorting: false,
-        cell: (i) => <Sparkline data={i.getValue()} width={112} height={34} />,
-      }),
-    ],
+    () =>
+      col.columns([
+        col.accessor("rank", {
+          header: "#",
+          sortFn: "basic",
+          cell: ({ row }) => (
+            <span className="text-muted tabular flex items-center gap-1">
+              <WatchlistButton id={row.original.id} name={row.original.name} />
+              {row.original.rank}
+            </span>
+          ),
+        }),
+        col.accessor("name", {
+          header: "Coin",
+          cell: ({ row }) => {
+            const c = row.original;
+            return (
+              <Link
+                href={`/coins/${c.id}`}
+                // Lists show many coins; prefetching each would render every page (and call the API) up front.
+                prefetch={false}
+                className="hover:text-brand flex min-w-0 items-center gap-2.5 font-medium"
+              >
+                <CoinLogo src={c.image} name={c.name} size={24} />
+                <span className="truncate">{c.name}</span>
+                <span className="text-muted text-xs">{c.symbol}</span>
+              </Link>
+            );
+          },
+        }),
+        col.accessor("price", {
+          header: "Price",
+          cell: ({ row }) => <PriceCell id={row.original.id} price={row.original.price} />,
+        }),
+        col.accessor("change1h", {
+          header: "1h %",
+          sortUndefined: "last",
+          cell: (i) => <PercentBadge value={i.getValue()} />,
+        }),
+        col.accessor("change24h", {
+          header: "24h %",
+          cell: ({ row }) => <LiveChange coin={row.original} />,
+        }),
+        col.accessor("change7d", {
+          header: "7d %",
+          cell: (i) => <PercentBadge value={i.getValue()} />,
+        }),
+        col.accessor("volume24h", {
+          header: "24h Volume",
+          cell: (i) => <Money value={i.getValue()} />,
+        }),
+        col.accessor("marketCap", {
+          header: "Market Cap",
+          cell: (i) => <Money value={i.getValue()} />,
+        }),
+        col.accessor("sparkline7d", {
+          id: "sparkline",
+          header: "Last 7 Days",
+          enableSorting: false,
+          cell: (i) => <Sparkline data={i.getValue()} width={112} height={34} />,
+        }),
+      ]),
     [],
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features,
     data: coins,
     columns,
     state: { sorting, globalFilter: filter },
@@ -138,9 +158,6 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
         row.original.symbol.toLowerCase().includes(q)
       );
     },
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   });
 
   const allRows = table.getRowModel().rows;
@@ -168,7 +185,7 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
                       sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined
                     }
                     className={cn(
-                      "border-border text-muted h-11 whitespace-nowrap border-b px-2.5 text-xs font-medium first:rounded-tl-2xl last:rounded-tr-2xl",
+                      "border-border text-muted h-11 border-b px-2.5 text-xs font-medium whitespace-nowrap first:rounded-tl-2xl last:rounded-tr-2xl",
                       cellClass[h.column.id],
                       h.column.id === "name" && "bg-surface text-left",
                       h.column.id === "rank" && "text-left",
@@ -223,11 +240,11 @@ export function MarketTable({ coins, filter = "", isLoading, emptyState, classNa
                   key={row.id}
                   className="border-border hover:bg-surface group border-b transition-colors last:border-0"
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getAllCells().map((cell) => (
                     <td
                       key={cell.id}
                       className={cn(
-                        "tabular h-14 whitespace-nowrap px-2.5",
+                        "tabular h-14 px-2.5 whitespace-nowrap",
                         cellClass[cell.column.id],
                       )}
                     >
