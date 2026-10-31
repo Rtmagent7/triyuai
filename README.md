@@ -109,6 +109,8 @@ scripts/fetch-fixtures.ts snapshot generator (CoinGecko public API, same mappers
 
 ## Engineering decisions
 
+The reasoning behind the main ones is written up as [architecture decision records](docs/adr/README.md).
+
 - **Contract first, MSW second.** `packages/shared` defines every `/api/v1` request and response with Zod. MSW, the Express API and the Swagger docs all use the same schemas, and the API tests check every response against them. Switching the frontend to the real API only needs `NEXT_PUBLIC_API_MOCKING=disabled` and `API_ORIGIN`.
 - **Same-origin API.** The browser calls `/api/v1` on the web origin and Next.js rewrites it to the API. Auth cookies stay first-party (`SameSite=Lax`, `httpOnly`), and no CORS preflight is needed. A readable `triyu_session` hint cookie (no secret) lets guests skip `/auth/me` entirely, so they never trigger a 401.
 - **Stay inside 10,000 CoinGecko calls a month.** Every response is cached in Redis with a per-endpoint TTL (5 min to 6 h), and concurrent misses share one upstream call. Above 80% of the monthly budget all TTLs triple. Prices are fetched in USD only, and IDR/EUR are converted with hourly rates. Coin pages render on demand (ISR) instead of 100 at build time, and list links do not prefetch coin pages.
