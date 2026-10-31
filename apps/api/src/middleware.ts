@@ -4,6 +4,7 @@ import type { Cache } from "./cache";
 import { AppError, UnauthorizedError } from "./lib/errors";
 import { clientKey } from "./lib/http";
 import type { Logger } from "./lib/logger";
+import { noopReporter, type ErrorReporter } from "./lib/reporter";
 import type { AuthService } from "./services/auth";
 
 export const ACCESS_COOKIE = "triyu_at";
@@ -63,8 +64,8 @@ export const notFound: RequestHandler = (_req, res) => {
 };
 
 export const errorHandler =
-  (logger: Logger): ErrorRequestHandler =>
-  (err, req, res, _next) => {
+  (logger: Logger, reporter: ErrorReporter = noopReporter): ErrorRequestHandler =>
+  async (err, req, res, _next) => {
     if (err instanceof AppError) {
       res.status(err.status).json({ error: { code: err.code, message: err.message } });
       return;
@@ -81,5 +82,7 @@ export const errorHandler =
       return;
     }
     logger.error({ err, path: req.path }, "unhandled error");
+    reporter.capture(err, { method: req.method, path: req.path });
+    await reporter.flush().catch(() => undefined);
     res.status(500).json({ error: { code: "INTERNAL", message: "Something went wrong" } });
   };
