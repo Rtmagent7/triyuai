@@ -7,6 +7,7 @@ import type { ChatService } from "./ai/chat";
 import type { Cache } from "./cache";
 import type { Env } from "./env";
 import type { Logger } from "./lib/logger";
+import type { ErrorReporter } from "./lib/reporter";
 import { errorHandler, notFound, optionalUser, rateLimit } from "./middleware";
 import { buildOpenApi, swaggerHtml, swaggerInit } from "./openapi";
 import { aiRoutes } from "./routes/ai";
@@ -38,6 +39,8 @@ export type Deps = {
   news: NewsService;
   /** Null until GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET are set. */
   google?: GoogleClient | null;
+  /** Sentry when SENTRY_DSN is set. */
+  reporter?: ErrorReporter;
 };
 
 export function createApp(deps: Deps) {
@@ -103,6 +106,6 @@ export function createApp(deps: Deps) {
   app.use("/api/v1", v1);
 
   app.use(notFound);
-  app.use(errorHandler(logger));
+  app.use(errorHandler(logger, deps.reporter));
   return app;
 }

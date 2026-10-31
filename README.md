@@ -29,7 +29,12 @@
 | **Ask TRIYU** chatbot: streaming, tool chips, markdown tables, Stop/Copy/Regenerate, refuses buy/sell advice, 10 guest messages/day | floating panel + `/ask`                   |
 | Converter synced to the URL                                                                                                         | `/converter?from=bitcoin&to=idr&amount=1` |
 | Watchlist: on the device for guests, synced to the account when signed in (local list merged on first login, optimistic updates)    | `/watchlist`                              |
-| Accounts: register, login, one-click demo account, httpOnly cookie sessions                                                         | `/login`, `/register`                     |
+| Accounts: register, login, **Sign in with Google**, one-click demo account, httpOnly cookie sessions                                | `/login`, `/register`                     |
+| Saved Ask TRIYU conversations per account (rename, delete, continue later)                                                          | `/ask`                                    |
+| Compare up to 4 coins: side-by-side stats and a normalised performance chart                                                        | `/compare?coins=bitcoin,ethereum`         |
+| Portfolio tracker: buys and sells, average cost, realised and unrealised PnL, allocation, live prices                               | `/portfolio`                              |
+| News from CoinDesk, Cointelegraph, Decrypt and The Block, tagged by coin (also on coin pages and in Ask TRIYU)                      | `/news`                                   |
+| Exchange rankings: trust score, 24h volume, year established                                                                        | `/exchanges`                              |
 | Technical-analysis chart: Binance candles, 1m–1M, indicators with full settings, 27 drawing tools, saved layouts                    | `/chart/[id]`, coin pages                 |
 | Sectors: all top-250 coins filed under their real CoinGecko categories (Layer 1, Meme, AI, RWA, DeFi…), sector performance          | `/categories`, `/categories/[id]`         |
 | Insights: Crypto Fear & Greed Index with history, BTC/ETH/USDT/stablecoin dominance, altcoins vs Bitcoin                            | `/insights`, stats bar                    |
@@ -62,12 +67,14 @@ API_ORIGIN=http://localhost:4000
 
 Without credentials, the API falls back to local stand-ins:
 
-| Service                   | With credentials              | Without (local development)                              |
-| ------------------------- | ----------------------------- | -------------------------------------------------------- |
-| Postgres                  | Neon (`DATABASE_URL`)         | Embedded PGlite in `apps/api/.pglite`, migrated on start |
-| Cache, rate limit, quotas | Upstash Redis                 | In-memory (single process)                               |
-| Market data               | CoinGecko Demo key            | Keyless public API (low, shared rate limit)              |
-| Ask TRIYU                 | Groq, then Gemini as fallback | `/ai/chat` returns 503                                   |
+| Service                   | With credentials                                                              | Without (local development)                              |
+| ------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Postgres                  | Neon (`DATABASE_URL`)                                                         | Embedded PGlite in `apps/api/.pglite`, migrated on start |
+| Cache, rate limit, quotas | Upstash Redis                                                                 | In-memory (single process)                               |
+| Market data               | CoinGecko Demo key                                                            | Keyless public API (low, shared rate limit)              |
+| Ask TRIYU                 | Groq, then Gemini as fallback                                                 | `/ai/chat` returns 503                                   |
+| Sign in with Google       | `GOOGLE_CLIENT_ID`/`SECRET` (+ `NEXT_PUBLIC_GOOGLE_LOGIN=enabled` on the web) | Button hidden                                            |
+| Error monitoring          | Sentry (`SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`)                               | Logs only                                                |
 
 Other scripts:
 
@@ -86,9 +93,10 @@ apps/api/                 Express 5 API (Vercel Function in Phase 4)
   src/services/           CoinGecko client, cached market service, auth, watchlist
   src/ai/chat.ts          Ask TRIYU: AI SDK tools + Groq → Gemini fallback, SSE events
   src/routes/             /api/v1 routers; OpenAPI document + Swagger UI at /docs
-  prisma/                 schema + SQL migrations (User, RefreshToken, WatchlistItem, MarketSnapshot)
+  prisma/                 schema + SQL migrations (User, RefreshToken, WatchlistItem, MarketSnapshot,
+                          ChatConversation/ChatMessage, PortfolioTransaction)
   test/                   Supertest contract/integration tests on PGlite + optional real Postgres
-apps/web/                 Next.js 15 (App Router), React 19, Tailwind CSS v4
+apps/web/                 Next.js 16 (App Router), React 19, Tailwind CSS v4
   src/app/                routes (SSR/ISR/SSG per PRD §8)
   src/components/         UI by domain: market, coin, chat, search, layout, converter, ui
   src/hooks/              TanStack Query hooks, live prices, currency formatting
@@ -106,7 +114,7 @@ scripts/fetch-fixtures.ts snapshot generator (CoinGecko public API, same mappers
 - **Stay inside 10,000 CoinGecko calls a month.** Every response is cached in Redis with a per-endpoint TTL (5 min to 6 h), and concurrent misses share one upstream call. Above 80% of the monthly budget all TTLs triple. Prices are fetched in USD only, and IDR/EUR are converted with hourly rates. Coin pages render on demand (ISR) instead of 100 at build time, and list links do not prefetch coin pages.
 - **Degrade, don't fail.** The last good response for each key is saved in Postgres. When CoinGecko rate-limits, the API serves that snapshot with `stale: true` and the UI shows a "Data delayed" badge. A coin page without a snapshot falls back to its row from the top-250 list.
 - **Sessions.** argon2id password hashes. A 15-minute JWT access cookie plus a 7-day opaque refresh token, stored hashed and rotated on every use. Reusing an old refresh token revokes all of the user's sessions. Login is throttled per IP and email, and unknown emails take the same time as wrong passwords.
-- **AI that cannot make up prices.** Ask TRIYU only gets numbers through seven tools (`getMarketOverview`, `getCoinDetails`, `getTopMovers`, `searchCoin`, `compareCoins`, `getSentiment`, `getSectorPerformance`) backed by the cached market service. Groq is tried first; if it fails before any output is streamed, Gemini takes over. Quotas are 10 messages a day per hashed IP for guests and 30 for signed-in users, enforced in Redis.
+- **AI that cannot make up prices.** Ask TRIYU only gets numbers through eight tools (`getMarketOverview`, `getCoinDetails`, `getTopMovers`, `searchCoin`, `compareCoins`, `getSentiment`, `getSectorPerformance`, `getNews`) backed by the cached market service. Groq is tried first; if it fails before any output is streamed, Gemini takes over. Quotas are 10 messages a day per hashed IP for guests and 30 for signed-in users, enforced in Redis.
 - **MSW starts lazily.** The service worker only starts on the first client-side API call, so server-rendered HTML is never blocked by it.
 - **Real snapshot, honest gaps.** Top-250 market data, global stats, trending and FX rates come from a real CoinGecko snapshot, and the top 20 coins also have full details and one year of price history. Charts for other coins are simulated from their real 7-day sparkline and labelled as such in the UI. The keyless API caps history at 365 days, so MAX shows one year.
 - **Binance host.** Live prices use `data-stream.binance.vision`, Binance's market-data-only endpoint, with `stream.binance.com` as the fallback. `binance.com` is blocked by many Indonesian ISPs; the `binance.vision` host is not.
@@ -115,6 +123,8 @@ scripts/fetch-fixtures.ts snapshot generator (CoinGecko public API, same mappers
 - **Liquidation heatmap is a model, and says so.** Positions opened in each candle (from rising Binance open interest) are spread over 5–100x leverage; a level clears once price trades through it. Where `fapi.binance.com` is blocked, spot candles from `binance.vision` stand in, with volume as the proxy.
 - **Sectors are data, not guesses.** `pnpm sectors` pulls each sector's members from CoinGecko's category endpoints; a short, reviewed override list (`scripts/sector-overrides.ts`) fixes the few coins whose tags would give them the wrong primary sector.
 - **One API, one Vercel Function.** esbuild bundles the Express app and the workspace's TypeScript packages into `dist/server.mjs`; `api/index.mjs` re-exports it. Production builds run `prisma migrate deploy` over Neon's direct connection, and the API project only deploys from `main`.
+- **Sign in with Google without a library.** Authorization code + PKCE, with state, verifier and return path in a 10-minute `httpOnly` cookie. The ID token is verified with `jose` against Google's keys (audience, issuer, verified email). The callback goes through the web origin's proxy, so the session cookies stay first-party. Accounts link by email; the demo account never can.
+- **Monitoring that costs nothing when idle.** Sentry is off until a DSN is set. On the API it reports only unexpected 500s (and flushes before answering, since serverless instances freeze); in the browser the SDK loads after the page is idle and also receives errors caught by React error boundaries. No cookies, headers, bodies or user info are sent. Uptime is a scheduled GitHub Actions check.
 - **The chart is lazy-loaded.** Lightweight Charts loads after first paint, which keeps the coin page at about 181 kB of first-load JS (budget: 200 kB).
 
 ## Testing
@@ -150,11 +160,11 @@ CI (`.github/workflows/ci.yml`) runs four parallel jobs on every PR and on every
 - Coin descriptions lost links whose `href` contained `'`.
 - (Phase 3) List links prefetched every visible coin page, so each homepage visit triggered dozens of CoinGecko calls and hit the rate limit.
 - (Phase 3) Starring a coin before `/auth/me` returned saved it to the device instead of the account.
+- The session-hint cookie check only matched when it was the browser's first cookie (a regex lost its `s`).
 - (Phase 3) One malformed logo URL in CoinGecko data made their CDN hang, which stalled `networkidle` in E2E runs. Logos are now stubbed in E2E.
 
 ## Known limitations
 
-- Upstash Redis isn't connected yet, so cache, rate limits and chat quotas live in each function instance's memory.
 - Free tiers: CoinGecko Demo (10,000 calls a month) and Groq/Gemini rate limits. When CoinGecko throttles, the API serves its saved snapshot and the UI says "Data delayed".
 - Binance futures (`fapi.binance.com`) is blocked on some networks; funding rates and the live liquidation feed then show a notice.
 - Prototype mode (`NEXT_PUBLIC_API_MOCKING=enabled`, used by previews and E2E) still runs the rule-based Ask TRIYU and simulated accounts.

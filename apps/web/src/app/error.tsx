@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { ErrorState } from "@/components/common/states";
+import { captureError } from "@/lib/monitoring";
 
 /** FR-06: route-level error boundary — never a blank error page. */
 export default function Error({
@@ -13,6 +14,7 @@ export default function Error({
 }) {
   useEffect(() => {
     console.error(error);
+    captureError(error);
   }, [error]);
   return (
     <ErrorState

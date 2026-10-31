@@ -6,6 +6,7 @@ import { createCache } from "./cache";
 import { createDb } from "./db";
 import type { Env } from "./env";
 import { createLogger } from "./lib/logger";
+import { createReporter } from "./lib/reporter";
 import { createAuthService } from "./services/auth";
 import { createChatHistoryService } from "./services/chats";
 import { createCoinGecko } from "./services/coingecko";
@@ -54,6 +55,7 @@ export async function buildDeps(env: Env): Promise<Deps> {
       coingecko: env.COINGECKO_API_KEY ? "demo-key" : "keyless",
       ai: models.map((m) => m.name),
       google: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
+      sentry: !!env.SENTRY_DSN,
     },
     "services configured",
   );
@@ -70,6 +72,13 @@ export async function buildDeps(env: Env): Promise<Deps> {
         })
       : null;
 
+  const reporter = await createReporter({
+    dsn: env.SENTRY_DSN,
+    environment: process.env.VERCEL_ENV ?? env.NODE_ENV,
+    release: process.env.VERCEL_GIT_COMMIT_SHA,
+    logger,
+  });
+
   return {
     env,
     logger,
@@ -82,5 +91,6 @@ export async function buildDeps(env: Env): Promise<Deps> {
     portfolio: createPortfolioService(db),
     news,
     google,
+    reporter,
   };
 }
